@@ -1,0 +1,6 @@
+{
+  "name": "Nexus Trading Exchange",
+  "description": "Full-featured demo crypto trading exchange clone with modern minimalist aesthetic, real-time candlestick charts, order books, spot & futures trading with leverage, positions management, and AI market analysis.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

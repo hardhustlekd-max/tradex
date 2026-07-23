@@ -448,14 +448,14 @@ export const TradingChart: React.FC<TradingChartProps> = ({
         <span className="text-[#facc15]">DEA:-92.4</span>
       </div>
 
-      {/* 5. Floating Action Buttons (Exact match to screenshot bottom bar: Open long / Open short) */}
-      <div className="p-3 bg-gradient-to-t from-black via-black/90 to-transparent sticky bottom-0 left-0 right-0 z-30 flex items-center justify-center gap-3">
+      {/* 5. Floating Action Buttons (Open long / Open short) */}
+      <div className="px-3 py-2 bg-[#000000] border-t border-zinc-900 shrink-0 flex items-center justify-center gap-2">
         <button
           onClick={() => {
             soundFx.playClick();
             if (onOpenLong) onOpenLong();
           }}
-          className="flex-1 max-w-xs py-3 rounded-2xl bg-[#00c076] hover:bg-[#00d080] active:scale-[0.98] text-white font-extrabold text-sm font-sans text-center transition-all shadow-lg shadow-[#00c076]/20 cursor-pointer"
+          className="flex-1 py-2 rounded-xl bg-[#00c076] hover:bg-[#00d080] active:scale-[0.98] text-white font-bold text-xs font-sans text-center transition-all cursor-pointer shadow-sm"
         >
           Open long
         </button>
@@ -465,7 +465,7 @@ export const TradingChart: React.FC<TradingChartProps> = ({
             soundFx.playClick();
             if (onOpenShort) onOpenShort();
           }}
-          className="flex-1 max-w-xs py-3 rounded-2xl bg-[#f6465d] hover:bg-[#f8556c] active:scale-[0.98] text-white font-extrabold text-sm font-sans text-center transition-all shadow-lg shadow-[#f6465d]/20 cursor-pointer"
+          className="flex-1 py-2 rounded-xl bg-[#f6465d] hover:bg-[#f8556c] active:scale-[0.98] text-white font-bold text-xs font-sans text-center transition-all cursor-pointer shadow-sm"
         >
           Open short
         </button>

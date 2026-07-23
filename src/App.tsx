@@ -527,23 +527,7 @@ export default function App() {
             />
           )}
 
-          {/* Mobile Quick Trade Bar floating button when on Chart/Book view */}
-          {(mobileTab === 'chart' || mobileTab === 'orderbook') && (
-            <div className="p-2 bg-zinc-950/90 border-t border-zinc-800 flex items-center justify-between gap-2 shrink-0">
-              <button
-                onClick={() => setMobileTab('order')}
-                className="flex-1 py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold text-xs uppercase font-mono cursor-pointer transition-colors text-center shadow-md shadow-emerald-500/20"
-              >
-                Buy / Long {activePair.baseAsset}
-              </button>
-              <button
-                onClick={() => setMobileTab('order')}
-                className="flex-1 py-2.5 rounded-lg bg-rose-500 hover:bg-rose-400 text-zinc-950 font-bold text-xs uppercase font-mono cursor-pointer transition-colors text-center shadow-md shadow-rose-500/20"
-              >
-                Sell / Short {activePair.baseAsset}
-              </button>
-            </div>
-          )}
+          {/* Mobile Tab Content ends cleanly without duplicate floating buttons */}
         </div>
 
         {/* Bottom Positions & Orders Panel */}

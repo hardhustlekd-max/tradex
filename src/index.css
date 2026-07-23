@@ -1,29 +1,27 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: 'Plus Jakarta Sans', 'Inter', 'Space Grotesk', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', 'IBM Plex Mono', monospace;
+  --font-sans: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
 }
 
 @layer base {
   :root, body {
-    font-family: var(--font-sans);
-    font-feature-settings: "cv02", "cv03", "cv04", "cv11", "tnum" 1, "zero" 1;
-    font-variant-numeric: tabular-nums lining-nums;
+    font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    letter-spacing: -0.012em;
+    letter-spacing: -0.01em;
     background-color: #0b0e11;
     color: #eaedf0;
   }
 
   code, pre, .font-mono {
-    font-family: var(--font-mono);
+    font-family: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
     font-variant-numeric: tabular-nums;
   }
 }
 
-/* Tabular numbers helper */
+/* Tabular numbers helper for orderbook tables & price displays */
 .tabular-nums {
   font-variant-numeric: tabular-nums;
 }
@@ -51,4 +49,5 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
 

@@ -66,9 +66,9 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
   const isPositionsPanelVisible = activeNavDock === 'futures' || activeNavDock === 'trade';
 
   return (
-    <div className="bg-[#000000] border-t border-zinc-900 flex flex-col shrink-0 text-xs font-sans select-none overflow-hidden pb-1">
+    <>
       {isPositionsPanelVisible && (
-        <>
+        <div className="bg-[#000000] border-t border-zinc-900 flex flex-col shrink-0 text-xs font-sans select-none overflow-hidden pb-1">
           {/* 1. Header Row Tabs: Positions (1) | Orders (0) | Copy trades */}
       <div className="h-8 px-3 bg-[#000000] border-b border-zinc-900 flex items-center justify-between text-zinc-400 shrink-0">
         <div className="flex items-center gap-4 font-medium text-xs">
@@ -311,27 +311,27 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
             No active copy trading positions
           </div>
         )}
+        </div>
       </div>
-        </>
-      )}
+    )}
 
       {/* 4. Bottom Floating Navigation Dock Bar */}
-      <div className="sticky bottom-0 z-30 bg-[#000000]/95 backdrop-blur-md border-t border-zinc-900/60 px-2 pt-1 pb-1">
-        <div className="bg-[#1c1c1e] backdrop-blur-xl border border-zinc-800/60 rounded-2xl p-1 flex items-center justify-around text-zinc-400 text-[9px] font-sans">
+      <div className="fixed bottom-3 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-[390px] pointer-events-auto select-none">
+        <div className="bg-[#18181b]/80 backdrop-blur-2xl border border-white/10 rounded-full p-1 flex items-center justify-between text-zinc-400 text-[10px] font-sans shadow-[0_12px_36px_rgba(0,0,0,0.85)]">
           {/* 1. Home */}
           <button
             onClick={() => {
               soundFx.playClick();
               if (onSelectNavDock) onSelectNavDock('home');
             }}
-            className={`flex flex-col items-center gap-0.5 cursor-pointer px-2 py-0.5 transition-colors ${
+            className={`flex flex-col items-center justify-center gap-0.5 cursor-pointer transition-all ${
               activeNavDock === 'home'
-                ? 'bg-[#2c2c2e] text-white rounded-xl px-3 py-1 font-bold shadow-sm'
-                : 'text-zinc-400 hover:text-zinc-200'
+                ? 'bg-[#38383c] text-white rounded-full px-3.5 py-1 font-bold shadow-md shadow-black/40'
+                : 'text-zinc-400 hover:text-zinc-200 px-2.5 py-1'
             }`}
           >
             <Home className="w-4 h-4 text-current" />
-            <span>Home</span>
+            <span className="text-[10px]">Home</span>
           </button>
 
           {/* 2. Markets */}
@@ -340,14 +340,14 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
               soundFx.playClick();
               if (onSelectNavDock) onSelectNavDock('markets');
             }}
-            className={`flex flex-col items-center gap-0.5 cursor-pointer px-2 py-0.5 transition-colors ${
+            className={`flex flex-col items-center justify-center gap-0.5 cursor-pointer transition-all ${
               activeNavDock === 'markets'
-                ? 'bg-[#2c2c2e] text-white rounded-xl px-3 py-1 font-bold shadow-sm'
-                : 'text-zinc-400 hover:text-zinc-200'
+                ? 'bg-[#38383c] text-white rounded-full px-3.5 py-1 font-bold shadow-md shadow-black/40'
+                : 'text-zinc-400 hover:text-zinc-200 px-2.5 py-1'
             }`}
           >
             <BarChart2 className="w-4 h-4 text-current" />
-            <span>Markets</span>
+            <span className="text-[10px]">Markets</span>
           </button>
 
           {/* 3. Futures */}
@@ -356,16 +356,16 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
               soundFx.playClick();
               if (onSelectNavDock) onSelectNavDock('futures');
             }}
-            className={`flex flex-col items-center gap-0.5 cursor-pointer px-2 py-0.5 transition-colors ${
+            className={`flex flex-col items-center justify-center gap-0.5 cursor-pointer transition-all ${
               activeNavDock === 'futures'
-                ? 'bg-[#2c2c2e] text-white rounded-xl px-3 py-1 font-bold shadow-sm'
-                : 'text-zinc-400 hover:text-zinc-200'
+                ? 'bg-[#38383c] text-white rounded-full px-3.5 py-1 font-bold shadow-md shadow-black/40'
+                : 'text-zinc-400 hover:text-zinc-200 px-2.5 py-1'
             }`}
           >
-            <div className="w-4 h-3.5 border border-current rounded-xs flex items-center justify-center p-[1px]">
-              <div className="w-1.5 h-1 bg-current rounded-xs" />
+            <div className="w-4 h-3.5 border-1.5 border-current rounded-[3px] flex items-center justify-center p-[1px]">
+              <div className="w-1.5 h-1 bg-current rounded-[1px]" />
             </div>
-            <span>Futures</span>
+            <span className="text-[10px]">Futures</span>
           </button>
 
           {/* 4. Trade */}
@@ -374,14 +374,14 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
               soundFx.playClick();
               if (onSelectNavDock) onSelectNavDock('trade');
             }}
-            className={`flex flex-col items-center gap-0.5 cursor-pointer px-2 py-0.5 transition-colors ${
+            className={`flex flex-col items-center justify-center gap-0.5 cursor-pointer transition-all ${
               activeNavDock === 'trade'
-                ? 'bg-[#2c2c2e] text-white rounded-xl px-3 py-1 font-bold shadow-sm'
-                : 'text-zinc-400 hover:text-zinc-200'
+                ? 'bg-[#38383c] text-white rounded-full px-3.5 py-1 font-bold shadow-md shadow-black/40'
+                : 'text-zinc-400 hover:text-zinc-200 px-2.5 py-1'
             }`}
           >
             <ArrowLeftRight className="w-4 h-4 text-current" />
-            <span>Trade</span>
+            <span className="text-[10px]">Trade</span>
           </button>
 
           {/* 5. Assets */}
@@ -390,18 +390,18 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
               soundFx.playClick();
               if (onSelectNavDock) onSelectNavDock('assets');
             }}
-            className={`flex flex-col items-center gap-0.5 cursor-pointer px-2 py-0.5 transition-colors ${
+            className={`flex flex-col items-center justify-center gap-0.5 cursor-pointer transition-all ${
               activeNavDock === 'assets'
-                ? 'bg-[#2c2c2e] text-white rounded-xl px-3 py-1 font-bold shadow-sm'
-                : 'text-zinc-400 hover:text-zinc-200'
+                ? 'bg-[#38383c] text-white rounded-full px-3.5 py-1 font-bold shadow-md shadow-black/40'
+                : 'text-zinc-400 hover:text-zinc-200 px-2.5 py-1'
             }`}
           >
             <Wallet className="w-4 h-4 text-current" />
-            <span>Assets</span>
+            <span className="text-[10px]">Assets</span>
           </button>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

@@ -399,20 +399,22 @@ export default function App() {
 
   return (
     <div className="h-screen w-screen bg-zinc-950 flex flex-col overflow-hidden font-sans text-zinc-100 select-none">
-      {/* Top Main Navigation Header */}
-      <Header
-        activePair={activePair}
-        portfolio={portfolio}
-        onOpenPairModal={() => setIsPairModalOpen(true)}
-        onOpenFaucetModal={() => setIsFaucetModalOpen(true)}
-        onToggleAiAnalyst={() => setIsAiAnalystOpen(!isAiAnalystOpen)}
-        soundEnabled={soundEnabled}
-        onToggleSound={() => {
-          soundFx.enabled = !soundEnabled;
-          setSoundEnabled(!soundEnabled);
-        }}
-        onGoHome={() => setActiveDockTab('home')}
-      />
+      {/* Top Main Navigation Header (Shown on Futures/Trading screens) */}
+      {activeDockTab !== 'home' && (
+        <Header
+          activePair={activePair}
+          portfolio={portfolio}
+          onOpenPairModal={() => setIsPairModalOpen(true)}
+          onOpenFaucetModal={() => setIsFaucetModalOpen(true)}
+          onToggleAiAnalyst={() => setIsAiAnalystOpen(!isAiAnalystOpen)}
+          soundEnabled={soundEnabled}
+          onToggleSound={() => {
+            soundFx.enabled = !soundEnabled;
+            setSoundEnabled(!soundEnabled);
+          }}
+          onGoHome={() => setActiveDockTab('home')}
+        />
+      )}
 
       {/* Main Workspace Body Layout */}
       <div className="flex-1 flex flex-col min-h-0 overflow-y-auto lg:overflow-hidden">

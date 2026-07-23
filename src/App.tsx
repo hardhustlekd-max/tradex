@@ -545,20 +545,27 @@ export default function App() {
             </div>
           </>
         )}
-
-        {/* Bottom Positions & Orders Panel */}
-        <BottomPanels
-          positions={positions}
-          orders={orders}
-          orderHistory={orderHistory}
-          portfolio={portfolio}
-          pairs={pairs}
-          onClosePosition={handleClosePosition}
-          onCancelOrder={handleCancelOrder}
-          activeNavDock={activeDockTab}
-          onSelectNavDock={setActiveDockTab}
-        />
       </div>
+
+      {/* Bottom Floating Menu & Positions Panel (Fixed at viewport bottom) */}
+      <BottomPanels
+        positions={positions}
+        orders={orders}
+        orderHistory={orderHistory}
+        portfolio={portfolio}
+        pairs={pairs}
+        onClosePosition={handleClosePosition}
+        onCancelOrder={handleCancelOrder}
+        activeNavDock={activeDockTab}
+        onSelectNavDock={(tab) => {
+          setActiveDockTab(tab);
+          if (tab === 'markets') {
+            setIsPairModalOpen(true);
+          } else if (tab === 'assets') {
+            setIsFaucetModalOpen(true);
+          }
+        }}
+      />
 
       {/* Modals & Drawers */}
       <PairSelectorModal

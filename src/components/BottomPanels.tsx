@@ -62,9 +62,14 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
     }
   ];
 
+  // Only show open positions/orders panel when on Futures or Trade tab
+  const isPositionsPanelVisible = activeNavDock === 'futures' || activeNavDock === 'trade';
+
   return (
     <div className="bg-[#000000] border-t border-zinc-900 flex flex-col shrink-0 text-xs font-sans select-none overflow-hidden pb-1">
-      {/* 1. Header Row Tabs: Positions (1) | Orders (0) | Copy trades */}
+      {isPositionsPanelVisible && (
+        <>
+          {/* 1. Header Row Tabs: Positions (1) | Orders (0) | Copy trades */}
       <div className="h-8 px-3 bg-[#000000] border-b border-zinc-900 flex items-center justify-between text-zinc-400 shrink-0">
         <div className="flex items-center gap-4 font-medium text-xs">
           <button
@@ -307,6 +312,8 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
           </div>
         )}
       </div>
+        </>
+      )}
 
       {/* 4. Bottom Floating Navigation Dock Bar */}
       <div className="sticky bottom-0 z-30 bg-[#000000]/95 backdrop-blur-md border-t border-zinc-900/60 px-2 pt-1 pb-1">

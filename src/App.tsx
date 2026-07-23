@@ -410,9 +410,9 @@ export default function App() {
       />
 
       {/* Main Workspace Body Layout */}
-      <div className="flex-1 flex flex-col min-h-0">
+      <div className="flex-1 flex flex-col min-h-0 overflow-y-auto lg:overflow-hidden">
         {/* Mobile Navigation Tab Bar (< lg) */}
-        <div className="flex lg:hidden bg-[#000000] border-b border-zinc-900 text-xs font-semibold shrink-0">
+        <div className="flex lg:hidden bg-[#000000] border-b border-zinc-900 text-xs font-semibold shrink-0 sticky top-0 z-20">
           <button
             onClick={() => setMobileTab('chart')}
             className={`flex-1 py-2 text-center transition-colors border-b-2 cursor-pointer ${
@@ -485,7 +485,7 @@ export default function App() {
         </div>
 
         {/* Mobile View Active Tab Content (< lg) */}
-        <div className="flex lg:hidden flex-1 min-h-0 flex-col overflow-hidden relative bg-[#000000]">
+        <div className="flex lg:hidden flex-col shrink-0 relative bg-[#000000]">
           {mobileTab === 'chart' && (
             <TradingChart
               candles={candles}
@@ -526,8 +526,6 @@ export default function App() {
               }}
             />
           )}
-
-          {/* Mobile Tab Content ends cleanly without duplicate floating buttons */}
         </div>
 
         {/* Bottom Positions & Orders Panel */}

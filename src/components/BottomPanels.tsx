@@ -140,7 +140,7 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
       </div>
 
       {/* 3. Position Items Content */}
-      <div className="flex-1 overflow-y-auto px-3 py-1 space-y-3 max-h-56">
+      <div className="px-3 py-1 space-y-3">
         {activeTab === 'positions' && (
           <>
             {displayPositions.map((pos) => {
@@ -306,7 +306,7 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
       </div>
 
       {/* 4. Bottom Floating Navigation Dock Bar */}
-      <div className="px-2 pt-1 pb-0.5">
+      <div className="sticky bottom-0 z-30 bg-[#000000]/95 backdrop-blur-md border-t border-zinc-900/60 px-2 pt-1 pb-1">
         <div className="bg-[#1c1c1e] backdrop-blur-xl border border-zinc-800/60 rounded-2xl p-1 flex items-center justify-around text-zinc-400 text-[9px] font-sans">
           {/* 1. Home */}
           <button

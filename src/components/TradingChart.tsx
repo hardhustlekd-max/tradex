@@ -382,7 +382,7 @@ export const TradingChart: React.FC<TradingChartProps> = ({
   const ema20Val = calculateEMA(candles, 20).pop() || currentPrice;
 
   return (
-    <div className="flex-1 flex flex-col bg-[#000000] min-w-0 select-none relative">
+    <div className="flex-1 flex flex-col bg-[#000000] min-w-0 select-none relative h-[420px] lg:h-auto lg:flex-1 shrink-0">
       {/* 1. Timeframe Navigation Toolbar */}
       <div className="h-10 px-3 bg-[#000000] border-b border-zinc-900 flex items-center justify-between gap-1 text-xs font-sans text-zinc-300 shrink-0">
         <div className="flex items-center gap-4">
@@ -429,7 +429,7 @@ export const TradingChart: React.FC<TradingChartProps> = ({
       </div>
 
       {/* 3. Main Chart Canvas */}
-      <div ref={containerRef} className="flex-1 relative w-full h-full min-h-[300px]">
+      <div ref={containerRef} className="flex-1 relative w-full h-full min-h-[220px]">
         <canvas
           ref={canvasRef}
           onMouseMove={handleMouseMove}

@@ -53,9 +53,9 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <div className="bg-[#000000] border-b border-zinc-900 select-none text-zinc-100 shrink-0 z-40">
+    <div className="bg-[#050508]/90 backdrop-blur-xl border-b border-white/10 select-none text-zinc-100 shrink-0 z-40">
       {/* 1. Top Bar */}
-      <header className="h-12 px-3 flex items-center justify-between border-b border-zinc-900/60">
+      <header className="h-12 px-3 flex items-center justify-between border-b border-white/5">
         {/* Left: Back Arrow + Pair Selector Dropdown */}
         <div className="flex items-center gap-2">
           <button
@@ -64,7 +64,7 @@ export const Header: React.FC<HeaderProps> = ({
               if (onGoHome) onGoHome();
               else onOpenPairModal();
             }}
-            className="text-zinc-300 hover:text-white transition-colors cursor-pointer p-1 -ml-1"
+            className="text-zinc-300 hover:text-white transition-colors cursor-pointer p-1 -ml-1 active:scale-95"
             title="Back to Home"
           >
             <ChevronLeft className="w-5 h-5 text-zinc-200 stroke-[2.5]" />
@@ -78,10 +78,10 @@ export const Header: React.FC<HeaderProps> = ({
             }}
             className="flex items-center gap-1.5 cursor-pointer group"
           >
-            <span className="font-extrabold text-base sm:text-lg tracking-tight text-white group-hover:text-amber-400 transition-colors font-sans">
+            <span className="font-extrabold text-base sm:text-lg tracking-tight text-white group-hover:text-blue-400 transition-colors font-sans">
               {activePair.symbol}
             </span>
-            <ChevronDown className="w-4 h-4 text-zinc-300 fill-zinc-300" />
+            <ChevronDown className="w-4 h-4 text-zinc-300 fill-zinc-300 group-hover:text-blue-400" />
           </button>
         </div>
 
@@ -128,9 +128,9 @@ export const Header: React.FC<HeaderProps> = ({
               soundFx.playClick();
               onToggleAiAnalyst();
             }}
-            className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-semibold cursor-pointer"
+            className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/30 text-xs font-semibold cursor-pointer shadow-sm shadow-blue-500/10 active:scale-95 transition-all"
           >
-            <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+            <Sparkles className="w-3.5 h-3.5 text-blue-400" />
             <span>AI Analyst</span>
           </button>
 
@@ -141,9 +141,9 @@ export const Header: React.FC<HeaderProps> = ({
               soundFx.playClick();
               onOpenFaucetModal();
             }}
-            className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-zinc-900 border border-zinc-800 text-xs font-mono cursor-pointer"
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-900/80 border border-white/10 text-xs font-mono cursor-pointer hover:border-white/20 active:scale-95 transition-all"
           >
-            <Wallet className="w-3.5 h-3.5 text-teal-400" />
+            <Wallet className="w-3.5 h-3.5 text-blue-400" />
             <span className="font-bold text-zinc-100 text-xs">
               ${formatCompactNumber(portfolio.usdtBalance)}
             </span>
@@ -160,7 +160,7 @@ export const Header: React.FC<HeaderProps> = ({
       </header>
 
       {/* 2. Sub-Tabs Bar: Chart, Info, Parameters, Limits */}
-      <div className="flex items-center gap-6 px-4 h-9 border-b border-zinc-900 text-sm font-semibold">
+      <div className="flex items-center gap-6 px-4 h-9 border-b border-white/5 text-sm font-semibold">
         {['Chart', 'Info', 'Parameters', 'Limits'].map((tab) => {
           const isActive = currentSubTab === tab;
           return (
@@ -173,15 +173,15 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <span>{tab}</span>
               {isActive && (
-                <span className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-white rounded-full" />
+                <span className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full shadow-sm shadow-blue-500/50" />
               )}
             </button>
           );
         })}
       </div>
 
-      {/* 3. Price & 24h Stats Header Row (Exact match to screenshot) */}
-      <div className="px-4 py-3 flex items-start justify-between gap-4 bg-[#000000]">
+      {/* 3. Price & 24h Stats Header Row */}
+      <div className="px-4 py-3 flex items-start justify-between gap-4 bg-transparent">
         {/* Left Column: Last price, Big Price, Equivalent $, Mark price */}
         <div className="space-y-1">
           {/* Label */}
@@ -198,7 +198,7 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Equivalent Price & Percentage Change */}
           <div className="flex items-center gap-2 text-xs font-mono font-medium">
             <span className="text-zinc-300 font-sans">≈ ${formatNumber(activePair.price, 2)}</span>
-            <span className={`font-semibold ${isPositive ? 'text-[#00c076]' : 'text-[#f6465d]'}`}>
+            <span className={`font-semibold px-2 py-0.5 rounded-full ${isPositive ? 'text-emerald-400 bg-emerald-500/10 border border-emerald-500/20' : 'text-rose-400 bg-rose-500/10 border border-rose-500/20'}`}>
               {isPositive ? '+' : ''}{activePair.change24h.toFixed(2)}%
             </span>
           </div>

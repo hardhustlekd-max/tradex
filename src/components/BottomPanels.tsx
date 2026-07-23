@@ -315,23 +315,23 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
       </div>
     )}
 
-      {/* 4. Bottom Floating Navigation Dock Bar */}
-      <div className="fixed bottom-3 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-[390px] pointer-events-auto select-none">
-        <div className="bg-[#18181b]/80 backdrop-blur-2xl border border-white/10 rounded-full p-1 flex items-center justify-between text-zinc-400 text-[10px] font-sans shadow-[0_12px_36px_rgba(0,0,0,0.85)]">
+      {/* 4. Bottom Floating Navigation Dock Bar - Apple Liquid Glass Style */}
+      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-[400px] pointer-events-auto select-none">
+        <div className="bg-zinc-900/70 backdrop-blur-2xl border border-white/15 rounded-full p-1.5 flex items-center justify-between text-zinc-400 text-[10px] font-sans shadow-[0_20px_50px_rgba(0,0,0,0.85),inset_0_1px_1px_rgba(255,255,255,0.25)]">
           {/* 1. Home */}
           <button
             onClick={() => {
               soundFx.playClick();
               if (onSelectNavDock) onSelectNavDock('home');
             }}
-            className={`flex flex-col items-center justify-center gap-0.5 cursor-pointer transition-all ${
+            className={`flex flex-col items-center justify-center gap-0.5 cursor-pointer transition-all duration-200 active:scale-95 ${
               activeNavDock === 'home'
-                ? 'bg-[#38383c] text-white rounded-full px-3.5 py-1 font-bold shadow-md shadow-black/40'
-                : 'text-zinc-400 hover:text-zinc-200 px-2.5 py-1'
+                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full px-3.5 py-1.5 font-bold shadow-lg shadow-blue-500/30 border border-white/20'
+                : 'text-zinc-400 hover:text-zinc-100 px-3 py-1.5'
             }`}
           >
             <Home className="w-4 h-4 text-current" />
-            <span className="text-[10px]">Home</span>
+            <span className="text-[10px] tracking-tight">Home</span>
           </button>
 
           {/* 2. Markets */}
@@ -340,14 +340,14 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
               soundFx.playClick();
               if (onSelectNavDock) onSelectNavDock('markets');
             }}
-            className={`flex flex-col items-center justify-center gap-0.5 cursor-pointer transition-all ${
+            className={`flex flex-col items-center justify-center gap-0.5 cursor-pointer transition-all duration-200 active:scale-95 ${
               activeNavDock === 'markets'
-                ? 'bg-[#38383c] text-white rounded-full px-3.5 py-1 font-bold shadow-md shadow-black/40'
-                : 'text-zinc-400 hover:text-zinc-200 px-2.5 py-1'
+                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full px-3.5 py-1.5 font-bold shadow-lg shadow-blue-500/30 border border-white/20'
+                : 'text-zinc-400 hover:text-zinc-100 px-3 py-1.5'
             }`}
           >
             <BarChart2 className="w-4 h-4 text-current" />
-            <span className="text-[10px]">Markets</span>
+            <span className="text-[10px] tracking-tight">Markets</span>
           </button>
 
           {/* 3. Futures */}
@@ -356,16 +356,16 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
               soundFx.playClick();
               if (onSelectNavDock) onSelectNavDock('futures');
             }}
-            className={`flex flex-col items-center justify-center gap-0.5 cursor-pointer transition-all ${
+            className={`flex flex-col items-center justify-center gap-0.5 cursor-pointer transition-all duration-200 active:scale-95 ${
               activeNavDock === 'futures'
-                ? 'bg-[#38383c] text-white rounded-full px-3.5 py-1 font-bold shadow-md shadow-black/40'
-                : 'text-zinc-400 hover:text-zinc-200 px-2.5 py-1'
+                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full px-3.5 py-1.5 font-bold shadow-lg shadow-blue-500/30 border border-white/20'
+                : 'text-zinc-400 hover:text-zinc-100 px-3 py-1.5'
             }`}
           >
-            <div className="w-4 h-3.5 border-1.5 border-current rounded-[3px] flex items-center justify-center p-[1px]">
+            <div className="w-4 h-3.5 border-[1.5px] border-current rounded-[3px] flex items-center justify-center p-[1px]">
               <div className="w-1.5 h-1 bg-current rounded-[1px]" />
             </div>
-            <span className="text-[10px]">Futures</span>
+            <span className="text-[10px] tracking-tight">Futures</span>
           </button>
 
           {/* 4. Trade */}
@@ -374,14 +374,14 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
               soundFx.playClick();
               if (onSelectNavDock) onSelectNavDock('trade');
             }}
-            className={`flex flex-col items-center justify-center gap-0.5 cursor-pointer transition-all ${
+            className={`flex flex-col items-center justify-center gap-0.5 cursor-pointer transition-all duration-200 active:scale-95 ${
               activeNavDock === 'trade'
-                ? 'bg-[#38383c] text-white rounded-full px-3.5 py-1 font-bold shadow-md shadow-black/40'
-                : 'text-zinc-400 hover:text-zinc-200 px-2.5 py-1'
+                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full px-3.5 py-1.5 font-bold shadow-lg shadow-blue-500/30 border border-white/20'
+                : 'text-zinc-400 hover:text-zinc-100 px-3 py-1.5'
             }`}
           >
             <ArrowLeftRight className="w-4 h-4 text-current" />
-            <span className="text-[10px]">Trade</span>
+            <span className="text-[10px] tracking-tight">Trade</span>
           </button>
 
           {/* 5. Assets */}
@@ -390,14 +390,14 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
               soundFx.playClick();
               if (onSelectNavDock) onSelectNavDock('assets');
             }}
-            className={`flex flex-col items-center justify-center gap-0.5 cursor-pointer transition-all ${
+            className={`flex flex-col items-center justify-center gap-0.5 cursor-pointer transition-all duration-200 active:scale-95 ${
               activeNavDock === 'assets'
-                ? 'bg-[#38383c] text-white rounded-full px-3.5 py-1 font-bold shadow-md shadow-black/40'
-                : 'text-zinc-400 hover:text-zinc-200 px-2.5 py-1'
+                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full px-3.5 py-1.5 font-bold shadow-lg shadow-blue-500/30 border border-white/20'
+                : 'text-zinc-400 hover:text-zinc-100 px-3 py-1.5'
             }`}
           >
             <Wallet className="w-4 h-4 text-current" />
-            <span className="text-[10px]">Assets</span>
+            <span className="text-[10px] tracking-tight">Assets</span>
           </button>
         </div>
       </div>

@@ -49,6 +49,7 @@ export interface Order {
   type: OrderType;
   side: OrderSide;
   mode: TradingMode;
+  marginMode?: MarginMode;
   price: number;
   amount: number;
   filled: number;
@@ -82,6 +83,8 @@ export interface Portfolio {
   usdtBalance: number;
   spotBalances: Record<string, number>; // e.g. { BTC: 0.25, ETH: 2.1 }
 }
+
+export type UserPortfolio = Portfolio;
 
 export type ChartTimeframe = '1m' | '5m' | '15m' | '1h' | '4h' | '1D';
 export type ChartMode = 'candles' | 'line' | 'depth';

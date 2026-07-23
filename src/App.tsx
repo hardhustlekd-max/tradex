@@ -400,7 +400,7 @@ export default function App() {
   };
 
   return (
-    <div className="h-screen w-screen bg-zinc-950 flex flex-col overflow-hidden font-sans text-zinc-100 select-none">
+    <div className="h-screen w-screen bg-[#050508] flex flex-col overflow-hidden font-sans text-zinc-100 select-none">
       {/* Top Main Navigation Header (Shown on Futures/Trading screens) */}
       {(activeDockTab === 'futures' || activeDockTab === 'trade') && (
         <Header

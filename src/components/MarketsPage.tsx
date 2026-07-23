@@ -77,38 +77,42 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({
   };
 
   return (
-    <div className="flex-1 bg-[#000000] text-white flex flex-col overflow-y-auto select-none pb-36 font-sans">
+    <div className="flex-1 bg-[#050508] text-white flex flex-col overflow-y-auto select-none pb-36 font-sans relative">
+      {/* Background Ambient Liquid Glow */}
+      <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-1/3 left-0 w-80 h-80 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none" />
+
       {/* 1. Top Search Bar */}
-      <div className="px-3 pt-3 pb-1">
-        <div className="bg-[#18181b] border border-zinc-800/60 rounded-full px-3.5 py-2 flex items-center gap-2 text-sm text-zinc-300">
+      <div className="px-3 pt-3 pb-1 sticky top-0 z-20 backdrop-blur-md bg-zinc-950/40">
+        <div className="bg-zinc-900/80 border border-white/10 rounded-full px-4 py-2 flex items-center gap-2 text-sm text-zinc-300 shadow-inner">
           <Search className="w-4 h-4 text-zinc-400 shrink-0" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="🔥 SNDK"
+            placeholder="🔥 Search market pairs (e.g. BTC, ETH, BLUAI)"
             className="bg-transparent text-xs font-medium text-white placeholder-zinc-500 focus:outline-none w-full"
           />
         </div>
       </div>
 
       {/* 2. Primary Header Tabs: Markets | Insights | Data | Bubbles */}
-      <div className="px-4 border-b border-zinc-900 flex items-center gap-6 pt-2 text-base font-medium">
+      <div className="px-4 border-b border-white/10 flex items-center gap-6 pt-2 text-base font-semibold">
         <button
           onClick={() => setTopTab('markets')}
-          className={`pb-2 transition-colors relative cursor-pointer ${
+          className={`pb-2.5 transition-colors relative cursor-pointer ${
             topTab === 'markets' ? 'text-white font-bold' : 'text-zinc-400 hover:text-zinc-200'
           }`}
         >
           Markets
           {topTab === 'markets' && (
-            <div className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-white rounded-full" />
+            <div className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full shadow-sm shadow-blue-500/50" />
           )}
         </button>
 
         <button
           onClick={() => setTopTab('insights')}
-          className={`pb-2 transition-colors cursor-pointer ${
+          className={`pb-2.5 transition-colors relative cursor-pointer ${
             topTab === 'insights' ? 'text-white font-bold' : 'text-zinc-400 hover:text-zinc-200'
           }`}
         >
@@ -117,7 +121,7 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({
 
         <button
           onClick={() => setTopTab('data')}
-          className={`pb-2 transition-colors cursor-pointer ${
+          className={`pb-2.5 transition-colors relative cursor-pointer ${
             topTab === 'data' ? 'text-white font-bold' : 'text-zinc-400 hover:text-zinc-200'
           }`}
         >
@@ -126,12 +130,12 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({
 
         <button
           onClick={() => setTopTab('bubbles')}
-          className={`pb-2 transition-colors flex items-center gap-1 cursor-pointer ${
+          className={`pb-2.5 transition-colors flex items-center gap-1.5 cursor-pointer ${
             topTab === 'bubbles' ? 'text-white font-bold' : 'text-zinc-400 hover:text-zinc-200'
           }`}
         >
           <span>Bubbles</span>
-          <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-sm shadow-emerald-400" />
         </button>
       </div>
 
@@ -177,10 +181,10 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({
         <div className="flex items-center gap-2">
           <button
             onClick={() => setFilterPill('futures')}
-            className={`px-3.5 py-1 rounded-full text-xs font-semibold cursor-pointer transition-all ${
+            className={`px-3.5 py-1 rounded-full text-xs font-semibold cursor-pointer transition-all duration-200 ${
               filterPill === 'futures'
-                ? 'bg-[#1c1c1e] text-white border border-zinc-700 shadow-sm'
-                : 'text-zinc-400 hover:text-zinc-200'
+                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white border border-white/20 shadow-md shadow-blue-500/20'
+                : 'bg-zinc-900/60 text-zinc-400 hover:text-zinc-200 border border-white/5'
             }`}
           >
             Futures
@@ -188,10 +192,10 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({
 
           <button
             onClick={() => setFilterPill('tradfi')}
-            className={`px-3.5 py-1 rounded-full text-xs font-semibold cursor-pointer transition-all ${
+            className={`px-3.5 py-1 rounded-full text-xs font-semibold cursor-pointer transition-all duration-200 ${
               filterPill === 'tradfi'
-                ? 'bg-[#1c1c1e] text-white border border-zinc-700 shadow-sm'
-                : 'text-zinc-400 hover:text-zinc-200'
+                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white border border-white/20 shadow-md shadow-blue-500/20'
+                : 'bg-zinc-900/60 text-zinc-400 hover:text-zinc-200 border border-white/5'
             }`}
           >
             TradFi
@@ -199,10 +203,10 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({
 
           <button
             onClick={() => setFilterPill('spot')}
-            className={`px-3.5 py-1 rounded-full text-xs font-semibold cursor-pointer transition-all ${
+            className={`px-3.5 py-1 rounded-full text-xs font-semibold cursor-pointer transition-all duration-200 ${
               filterPill === 'spot'
-                ? 'bg-[#1c1c1e] text-white border border-zinc-700 shadow-sm'
-                : 'text-zinc-400 hover:text-zinc-200'
+                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white border border-white/20 shadow-md shadow-blue-500/20'
+                : 'bg-zinc-900/60 text-zinc-400 hover:text-zinc-200 border border-white/5'
             }`}
           >
             Spot
@@ -215,7 +219,7 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({
       </div>
 
       {/* 5. Column Table Header */}
-      <div className="px-4 py-2 border-b border-zinc-900 flex items-center justify-between text-[11px] text-zinc-500 font-medium">
+      <div className="px-4 py-2 border-b border-white/5 flex items-center justify-between text-[11px] text-zinc-400 font-medium">
         <button
           onClick={() => handleSort('pair')}
           className="flex items-center gap-1 hover:text-zinc-300 cursor-pointer"
@@ -244,7 +248,7 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({
       </div>
 
       {/* 6. Market Pairs List */}
-      <div className="divide-y divide-zinc-900/60">
+      <div className="divide-y divide-white/5">
         {sortedPairs.map((pair) => {
           const formattedSym = formatSymbolName(pair.symbol);
           const isNegative = pair.change24h < 0;
@@ -262,7 +266,7 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({
               {/* Left: Icon, Symbol, 24h Vol */}
               <div className="flex items-center gap-3">
                 <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs shrink-0 ${getLogoColor(
+                  className={`w-9 h-9 rounded-2xl flex items-center justify-center font-bold text-xs shrink-0 shadow-sm ${getLogoColor(
                     pair.symbol
                   )}`}
                 >
@@ -272,7 +276,7 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({
                   <span className="font-bold text-sm text-white tracking-wide">
                     {formattedSym}
                   </span>
-                  <span className="text-[11px] text-zinc-400 font-medium">
+                  <span className="text-[11px] text-zinc-400 font-medium font-mono">
                     {formatVol(pair.volume24h)}
                   </span>
                 </div>
@@ -286,14 +290,16 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({
                       ? pair.price.toLocaleString('en-US', { minimumFractionDigits: 1 })
                       : pair.price.toFixed(pair.precision)}
                   </span>
-                  <span className="text-[11px] text-zinc-400 font-medium">
+                  <span className="text-[11px] text-zinc-400 font-medium font-mono">
                     ${pair.price >= 1000 ? pair.price.toLocaleString('en-US', { minimumFractionDigits: 2 }) : pair.price.toFixed(2)}
                   </span>
                 </div>
 
                 <div
-                  className={`min-w-[76px] py-1.5 px-2.5 rounded-lg text-xs font-bold text-center text-white transition-all ${
-                    isNegative ? 'bg-[#f6465d]' : 'bg-[#0ecb81]'
+                  className={`min-w-[76px] py-1.5 px-2.5 rounded-xl text-xs font-bold text-center text-white transition-all shadow-sm ${
+                    isNegative 
+                      ? 'bg-gradient-to-r from-rose-600 to-red-600 border border-red-500/30 shadow-red-500/10' 
+                      : 'bg-gradient-to-r from-emerald-600 to-teal-600 border border-emerald-500/30 shadow-emerald-500/10'
                   }`}
                 >
                   {isNegative ? '' : '+'}

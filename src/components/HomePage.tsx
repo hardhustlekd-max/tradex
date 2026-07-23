@@ -53,53 +53,56 @@ export const HomePage: React.FC<HomePageProps> = ({
   ];
 
   return (
-    <div className="flex-1 overflow-y-auto bg-[#000000] text-white font-sans px-4 pt-3 pb-24 max-w-lg mx-auto w-full select-none">
+    <div className="flex-1 overflow-y-auto bg-[#050508] text-white font-sans px-4 pt-3 pb-36 max-w-lg mx-auto w-full select-none relative">
+      {/* Background Ambient Liquid Glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-80 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
+
       {/* 1. Top Header Row */}
-      <div className="flex items-center justify-between gap-3 mb-4">
+      <div className="flex items-center justify-between gap-3 mb-4 sticky top-0 z-20 backdrop-blur-md bg-zinc-950/40 py-2">
         {/* Profile Avatar Icon */}
-        <div className="w-10 h-10 rounded-full bg-[#f3e000] flex items-center justify-center shrink-0 cursor-pointer shadow-sm">
-          <div className="w-5 h-5 rounded-full bg-black/80 flex items-center justify-center overflow-hidden">
-            <div className="w-2.5 h-2.5 rounded-full bg-[#f3e000] translate-y-[2px]" />
+        <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-500 to-indigo-500 p-[1.5px] flex items-center justify-center shrink-0 cursor-pointer shadow-md shadow-blue-500/20 active:scale-95 transition-all">
+          <div className="w-full h-full rounded-full bg-zinc-950 flex items-center justify-center overflow-hidden">
+            <Sparkles className="w-5 h-5 text-blue-400" />
           </div>
         </div>
 
         {/* Search Bar */}
-        <div className="flex-1 bg-[#1c1c1e] h-9 rounded-full px-3.5 flex items-center gap-2 text-zinc-400 text-xs">
+        <div className="flex-1 bg-zinc-900/80 border border-white/10 h-9 rounded-full px-3.5 flex items-center gap-2 text-zinc-400 text-xs shadow-inner">
           <Search className="w-4 h-4 text-zinc-400 shrink-0" />
           <span className="flex items-center gap-1 text-zinc-300 font-medium">
-            <span className="text-amber-500">🔥</span> SNDK
+            <span className="text-amber-400">🔥</span> SNDK
           </span>
         </div>
 
         {/* Right Header Icons */}
         <div className="flex items-center gap-3 text-white">
-          <button onClick={() => soundFx.playClick()} className="p-1 hover:text-zinc-300 transition-colors">
+          <button onClick={() => soundFx.playClick()} className="p-1 hover:text-blue-400 transition-colors active:scale-95">
             <Scan className="w-5 h-5" />
           </button>
-          <button onClick={() => soundFx.playClick()} className="p-1 hover:text-zinc-300 transition-colors">
+          <button onClick={() => soundFx.playClick()} className="p-1 hover:text-blue-400 transition-colors active:scale-95">
             <Headphones className="w-5 h-5" />
           </button>
-          <button onClick={() => soundFx.playClick()} className="p-1 hover:text-zinc-300 transition-colors relative">
+          <button onClick={() => soundFx.playClick()} className="p-1 hover:text-blue-400 transition-colors relative active:scale-95">
             <Bell className="w-5 h-5" />
-            <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#f3e000]" />
+            <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-blue-500 shadow-sm shadow-blue-500" />
           </button>
         </div>
       </div>
 
       {/* 2. Total Balance & Mini Sparkline Chart */}
-      <div className="flex items-start justify-between mb-4">
+      <div className="flex items-start justify-between mb-4 px-1">
         <div>
           {/* Label + Eye Toggle */}
           <div className="flex items-center gap-1.5 text-zinc-400 text-xs font-medium mb-1">
-            <span>Total</span>
-            <button onClick={() => setHideBalance(!hideBalance)} className="hover:text-zinc-200">
+            <span>Total Balance</span>
+            <button onClick={() => setHideBalance(!hideBalance)} className="hover:text-zinc-200 cursor-pointer">
               {hideBalance ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
             </button>
           </div>
 
           {/* Amount */}
           <div className="flex items-baseline gap-1.5">
-            <span className="text-3xl font-extrabold tracking-tight">
+            <span className="text-3xl sm:text-4xl font-extrabold tracking-tight font-sans">
               {hideBalance ? '••••' : '2.40'}
             </span>
             <span className="text-xs font-semibold text-zinc-300 flex items-center gap-0.5">
@@ -108,9 +111,9 @@ export const HomePage: React.FC<HomePageProps> = ({
           </div>
 
           {/* Profit ROI Badge */}
-          <div className="text-xs font-semibold text-[#00c076] mt-1 flex items-center gap-1">
+          <div className="text-xs font-semibold text-emerald-400 mt-1.5 flex items-center gap-1 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-full w-fit">
             <span>+2.3745 USDT (+32,829.11%)</span>
-            <span className="text-zinc-400 font-normal">1W</span>
+            <span className="text-zinc-400 font-normal ml-1">1W</span>
           </div>
         </div>
 
@@ -127,7 +130,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             <path
               d="M 0 18 L 15 18 L 25 22 L 35 15 L 45 28 L 50 10 L 60 22 L 70 8 L 85 12 L 100 2"
               fill="none"
-              stroke="#f3e000"
+              stroke="#0a84ff"
               strokeWidth="2.5"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -136,13 +139,13 @@ export const HomePage: React.FC<HomePageProps> = ({
         </div>
       </div>
 
-      {/* 3. Big Yellow Deposit Button */}
+      {/* 3. Big Apple Liquid Blue Deposit Button */}
       <button
         onClick={() => {
           soundFx.playClick();
           onOpenDeposit();
         }}
-        className="w-full py-3.5 rounded-full bg-[#f3e000] hover:bg-[#e2d000] active:scale-[0.99] text-black font-extrabold text-base tracking-wide shadow-md transition-all cursor-pointer mb-6"
+        className="w-full py-3.5 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 active:scale-[0.98] text-white font-extrabold text-base tracking-wide shadow-lg shadow-blue-500/25 border border-white/20 transition-all cursor-pointer mb-6"
       >
         Deposit
       </button>
@@ -151,76 +154,76 @@ export const HomePage: React.FC<HomePageProps> = ({
       <div className="grid grid-cols-4 gap-y-5 gap-x-2 mb-6">
         {/* Row 1 */}
         <div className="flex flex-col items-center gap-1.5 cursor-pointer group" onClick={() => soundFx.playClick()}>
-          <div className="w-12 h-12 rounded-2xl bg-[#1c1c1e] group-hover:bg-[#2c2c2e] flex items-center justify-center transition-colors">
-            <Zap className="w-5 h-5 text-zinc-200" />
+          <div className="w-12 h-12 rounded-2xl bg-zinc-900/80 border border-white/10 group-hover:border-blue-500/40 group-hover:bg-blue-600/10 flex items-center justify-center transition-all shadow-sm active:scale-95">
+            <Zap className="w-5 h-5 text-zinc-200 group-hover:text-blue-400 transition-colors" />
           </div>
           <span className="text-[11px] text-zinc-300 font-medium">Power-up</span>
         </div>
 
         <div className="flex flex-col items-center gap-1.5 cursor-pointer group" onClick={() => soundFx.playClick()}>
-          <div className="w-12 h-12 rounded-2xl bg-[#1c1c1e] group-hover:bg-[#2c2c2e] flex items-center justify-center transition-colors">
-            <RefreshCw className="w-5 h-5 text-zinc-200" />
+          <div className="w-12 h-12 rounded-2xl bg-zinc-900/80 border border-white/10 group-hover:border-blue-500/40 group-hover:bg-blue-600/10 flex items-center justify-center transition-all shadow-sm active:scale-95">
+            <RefreshCw className="w-5 h-5 text-zinc-200 group-hover:text-blue-400 transition-colors" />
           </div>
           <span className="text-[11px] text-zinc-300 font-medium">P2P</span>
         </div>
 
         <div className="flex flex-col items-center gap-1.5 cursor-pointer group relative" onClick={() => soundFx.playClick()}>
-          <div className="absolute -top-1.5 right-1 px-1.5 py-0.2 rounded-full bg-[#f3e000] text-black text-[9px] font-extrabold z-10">
+          <div className="absolute -top-1.5 right-1 px-1.5 py-0.2 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[9px] font-extrabold z-10 shadow-sm">
             $50K
           </div>
-          <div className="w-12 h-12 rounded-2xl bg-[#1c1c1e] group-hover:bg-[#2c2c2e] flex items-center justify-center transition-colors">
-            <Monitor className="w-5 h-5 text-zinc-200" />
+          <div className="w-12 h-12 rounded-2xl bg-zinc-900/80 border border-white/10 group-hover:border-blue-500/40 group-hover:bg-blue-600/10 flex items-center justify-center transition-all shadow-sm active:scale-95">
+            <Monitor className="w-5 h-5 text-zinc-200 group-hover:text-blue-400 transition-colors" />
           </div>
           <span className="text-[11px] text-zinc-300 font-medium">Tradfi</span>
         </div>
 
         <div className="flex flex-col items-center gap-1.5 cursor-pointer group" onClick={() => soundFx.playClick()}>
-          <div className="w-12 h-12 rounded-2xl bg-[#1c1c1e] group-hover:bg-[#2c2c2e] flex items-center justify-center transition-colors">
-            <UserPlus className="w-5 h-5 text-zinc-200" />
+          <div className="w-12 h-12 rounded-2xl bg-zinc-900/80 border border-white/10 group-hover:border-blue-500/40 group-hover:bg-blue-600/10 flex items-center justify-center transition-all shadow-sm active:scale-95">
+            <UserPlus className="w-5 h-5 text-zinc-200 group-hover:text-blue-400 transition-colors" />
           </div>
           <span className="text-[11px] text-zinc-300 font-medium">Referral</span>
         </div>
 
         {/* Row 2 */}
         <div className="flex flex-col items-center gap-1.5 cursor-pointer group" onClick={() => soundFx.playClick()}>
-          <div className="w-12 h-12 rounded-2xl bg-[#1c1c1e] group-hover:bg-[#2c2c2e] flex items-center justify-center transition-colors">
-            <CloudRain className="w-5 h-5 text-zinc-200" />
+          <div className="w-12 h-12 rounded-2xl bg-zinc-900/80 border border-white/10 group-hover:border-blue-500/40 group-hover:bg-blue-600/10 flex items-center justify-center transition-all shadow-sm active:scale-95">
+            <CloudRain className="w-5 h-5 text-zinc-200 group-hover:text-blue-400 transition-colors" />
           </div>
           <span className="text-[11px] text-zinc-300 font-medium">Airdrops</span>
         </div>
 
         <div className="flex flex-col items-center gap-1.5 cursor-pointer group" onClick={() => soundFx.playClick()}>
-          <div className="w-12 h-12 rounded-2xl bg-[#1c1c1e] group-hover:bg-[#2c2c2e] flex items-center justify-center transition-colors">
-            <Gift className="w-5 h-5 text-zinc-200" />
+          <div className="w-12 h-12 rounded-2xl bg-zinc-900/80 border border-white/10 group-hover:border-blue-500/40 group-hover:bg-blue-600/10 flex items-center justify-center transition-all shadow-sm active:scale-95">
+            <Gift className="w-5 h-5 text-zinc-200 group-hover:text-blue-400 transition-colors" />
           </div>
           <span className="text-[11px] text-zinc-300 font-medium">Promotions</span>
         </div>
 
         <div className="flex flex-col items-center gap-1.5 cursor-pointer group relative" onClick={() => soundFx.playClick()}>
-          <div className="absolute -top-1.5 right-1 px-1.5 py-0.2 rounded-full bg-[#f3e000] text-black text-[9px] font-extrabold z-10">
+          <div className="absolute -top-1.5 right-1 px-1.5 py-0.2 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-[9px] font-extrabold z-10 shadow-sm">
             New
           </div>
-          <div className="w-12 h-12 rounded-2xl bg-[#1c1c1e] group-hover:bg-[#2c2c2e] flex items-center justify-center transition-colors">
-            <Gamepad2 className="w-5 h-5 text-zinc-200" />
+          <div className="w-12 h-12 rounded-2xl bg-zinc-900/80 border border-white/10 group-hover:border-blue-500/40 group-hover:bg-blue-600/10 flex items-center justify-center transition-all shadow-sm active:scale-95">
+            <Gamepad2 className="w-5 h-5 text-zinc-200 group-hover:text-blue-400 transition-colors" />
           </div>
           <span className="text-[11px] text-zinc-300 font-medium">Poker</span>
         </div>
 
         <div className="flex flex-col items-center gap-1.5 cursor-pointer group" onClick={() => soundFx.playClick()}>
-          <div className="w-12 h-12 rounded-2xl bg-[#1c1c1e] group-hover:bg-[#2c2c2e] flex items-center justify-center transition-colors">
-            <LayoutGrid className="w-5 h-5 text-zinc-200" />
+          <div className="w-12 h-12 rounded-2xl bg-zinc-900/80 border border-white/10 group-hover:border-blue-500/40 group-hover:bg-blue-600/10 flex items-center justify-center transition-all shadow-sm active:scale-95">
+            <LayoutGrid className="w-5 h-5 text-zinc-200 group-hover:text-blue-400 transition-colors" />
           </div>
           <span className="text-[11px] text-zinc-300 font-medium">More</span>
         </div>
       </div>
 
       {/* 5. Promotional Hero Banner Card */}
-      <div className="bg-[#18181a] rounded-2xl p-4 flex items-center justify-between gap-3 mb-6 cursor-pointer border border-zinc-800/60 hover:border-zinc-700 transition-colors">
+      <div className="liquid-card rounded-2xl p-4 flex items-center justify-between gap-3 mb-6 cursor-pointer border border-white/10 hover:border-blue-500/30 transition-all">
         {/* Left Graphic Badge */}
-        <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-zinc-800 to-zinc-900 border border-zinc-700 flex items-center justify-center relative shrink-0 overflow-hidden p-1 shadow-inner">
+        <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-900/40 to-indigo-900/40 border border-blue-500/30 flex items-center justify-center relative shrink-0 overflow-hidden p-1 shadow-inner">
           <div className="text-center font-extrabold text-[10px] text-emerald-400 leading-tight">
             <span className="block text-white text-xs">NVDA</span>
-            <span className="text-[#f3e000]">TSLA</span>
+            <span className="text-amber-400">TSLA</span>
           </div>
         </div>
 
@@ -237,7 +240,7 @@ export const HomePage: React.FC<HomePageProps> = ({
       </div>
 
       {/* 6. Favorites / Market Lists Section */}
-      <div className="bg-[#141416] rounded-3xl p-4 border border-zinc-800/80">
+      <div className="liquid-card rounded-3xl p-4 border border-white/10">
         {/* Category Header Tabs */}
         <div className="flex items-center gap-5 text-sm font-semibold border-b border-zinc-800/80 pb-3 mb-3 text-zinc-400 overflow-x-auto whitespace-nowrap no-scrollbar">
           <button

@@ -1,24 +1,55 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: 'Inter', 'Chivo', -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
-  --font-mono: 'Roboto Mono', 'SF Mono', Consolas, monospace;
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Inter", system-ui, sans-serif;
+  --font-mono: 'SF Mono', 'Roboto Mono', Consolas, monospace;
 }
 
 @layer base {
   :root, body {
-    font-family: 'Inter', 'Chivo', -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Inter", system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-feature-settings: "tnum" 1, "cv05" 1;
-    background-color: #000000;
+    background-color: #050508;
     color: #ffffff;
   }
 
   code, pre, .font-mono {
-    font-family: 'Roboto Mono', 'SF Mono', Consolas, monospace;
+    font-family: 'SF Mono', 'Roboto Mono', Consolas, monospace;
     font-variant-numeric: tabular-nums;
   }
+}
+
+/* Apple Liquid Design Glass Utilities */
+.liquid-glass {
+  background: rgba(20, 20, 26, 0.7);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.liquid-card {
+  background: linear-gradient(135deg, rgba(30, 30, 38, 0.6) 0%, rgba(18, 18, 24, 0.8) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5), inset 0 1px 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.liquid-btn-blue {
+  background: linear-gradient(135deg, #0a84ff 0%, #0066cc 100%);
+  box-shadow: 0 4px 16px rgba(10, 132, 255, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+}
+
+.liquid-btn-green {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+}
+
+.liquid-btn-red {
+  background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+  box-shadow: 0 4px 16px rgba(244, 63, 94, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.3);
 }
 
 /* Tabular numbers helper for orderbook tables & price displays */
@@ -26,17 +57,17 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* Custom minimal sleek WEEX exchange terminal scrollbar */
+/* Custom minimal sleek liquid scrollbar */
 ::-webkit-scrollbar {
-  width: 3px;
-  height: 3px;
+  width: 4px;
+  height: 4px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.15);
-  border-radius: 2px;
+  border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.3);
@@ -49,5 +80,6 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
 
 

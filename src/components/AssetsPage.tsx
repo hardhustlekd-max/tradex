@@ -27,12 +27,12 @@ export const AssetsPage: React.FC<AssetsPageProps> = ({
   const futuresUsdt = (totalUsdt * 0.995).toFixed(2);
 
   return (
-    <div className="flex-1 bg-[#000000] text-white flex flex-col overflow-y-auto select-none pb-28 font-sans">
+    <div className="flex-1 bg-[#000000] text-white flex flex-col overflow-y-auto select-none pb-36 font-sans">
       {/* 1. Top Navigation Bar: Overview | Futures | Copy | Spot | Funding */}
-      <div className="px-4 border-b border-zinc-900 flex items-center gap-6 pt-3 text-base font-semibold overflow-x-auto no-scrollbar">
+      <div className="px-4 border-b border-zinc-900/80 flex items-center gap-6 pt-3 text-base font-semibold overflow-x-auto no-scrollbar shrink-0">
         <button
           onClick={() => setActiveTab('overview')}
-          className={`pb-2 transition-colors relative whitespace-nowrap cursor-pointer ${
+          className={`pb-2.5 transition-colors relative whitespace-nowrap cursor-pointer ${
             activeTab === 'overview' ? 'text-white font-bold' : 'text-zinc-400 hover:text-zinc-200'
           }`}
         >
@@ -44,7 +44,7 @@ export const AssetsPage: React.FC<AssetsPageProps> = ({
 
         <button
           onClick={() => setActiveTab('futures')}
-          className={`pb-2 transition-colors relative whitespace-nowrap cursor-pointer ${
+          className={`pb-2.5 transition-colors relative whitespace-nowrap cursor-pointer ${
             activeTab === 'futures' ? 'text-white font-bold' : 'text-zinc-400 hover:text-zinc-200'
           }`}
         >
@@ -56,29 +56,38 @@ export const AssetsPage: React.FC<AssetsPageProps> = ({
 
         <button
           onClick={() => setActiveTab('copy')}
-          className={`pb-2 transition-colors relative whitespace-nowrap cursor-pointer ${
+          className={`pb-2.5 transition-colors relative whitespace-nowrap cursor-pointer ${
             activeTab === 'copy' ? 'text-white font-bold' : 'text-zinc-400 hover:text-zinc-200'
           }`}
         >
           Copy
+          {activeTab === 'copy' && (
+            <div className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-white rounded-full" />
+          )}
         </button>
 
         <button
           onClick={() => setActiveTab('spot')}
-          className={`pb-2 transition-colors relative whitespace-nowrap cursor-pointer ${
+          className={`pb-2.5 transition-colors relative whitespace-nowrap cursor-pointer ${
             activeTab === 'spot' ? 'text-white font-bold' : 'text-zinc-400 hover:text-zinc-200'
           }`}
         >
           Spot
+          {activeTab === 'spot' && (
+            <div className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-white rounded-full" />
+          )}
         </button>
 
         <button
           onClick={() => setActiveTab('funding')}
-          className={`pb-2 transition-colors relative whitespace-nowrap cursor-pointer ${
+          className={`pb-2.5 transition-colors relative whitespace-nowrap cursor-pointer ${
             activeTab === 'funding' ? 'text-white font-bold' : 'text-zinc-400 hover:text-zinc-200'
           }`}
         >
           Funding
+          {activeTab === 'funding' && (
+            <div className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-white rounded-full" />
+          )}
         </button>
       </div>
 
@@ -111,7 +120,7 @@ export const AssetsPage: React.FC<AssetsPageProps> = ({
         </div>
 
         {/* PnL Change pill */}
-        <div className="flex items-center gap-1 text-xs font-semibold text-[#0ecb81] mt-2">
+        <div className="flex items-center gap-1.5 text-xs font-semibold text-[#0ecb81] mt-2">
           <span>+2.3745 USDT (+32,829.11%)</span>
           <button className="flex items-center gap-0.5 text-zinc-400 hover:text-white cursor-pointer">
             <span>1W</span>
@@ -121,7 +130,7 @@ export const AssetsPage: React.FC<AssetsPageProps> = ({
       </div>
 
       {/* 3. Quick Action Circular Buttons */}
-      <div className="px-4 py-5 grid grid-cols-4 gap-2">
+      <div className="px-4 py-4 grid grid-cols-4 gap-2">
         {/* Buy Crypto */}
         <button
           onClick={() => {
@@ -133,7 +142,7 @@ export const AssetsPage: React.FC<AssetsPageProps> = ({
           <div className="w-12 h-12 rounded-full bg-[#1c1c1e] group-hover:bg-[#2c2c2e] border border-zinc-800 flex items-center justify-center transition-colors">
             <Wallet className="w-5 h-5 text-white" />
           </div>
-          <span className="text-[11px] font-medium text-zinc-300 group-hover:text-white transition-colors text-center">
+          <span className="text-[11px] font-medium text-zinc-300 group-hover:text-white transition-colors text-center whitespace-nowrap">
             Buy crypto
           </span>
         </button>
@@ -149,7 +158,7 @@ export const AssetsPage: React.FC<AssetsPageProps> = ({
           <div className="w-12 h-12 rounded-full bg-[#1c1c1e] group-hover:bg-[#2c2c2e] border border-zinc-800 flex items-center justify-center transition-colors">
             <ArrowDownLeft className="w-5 h-5 text-white" />
           </div>
-          <span className="text-[11px] font-medium text-zinc-300 group-hover:text-white transition-colors text-center">
+          <span className="text-[11px] font-medium text-zinc-300 group-hover:text-white transition-colors text-center whitespace-nowrap">
             Deposit
           </span>
         </button>
@@ -165,7 +174,7 @@ export const AssetsPage: React.FC<AssetsPageProps> = ({
           <div className="w-12 h-12 rounded-full bg-[#1c1c1e] group-hover:bg-[#2c2c2e] border border-zinc-800 flex items-center justify-center transition-colors">
             <ArrowUpRight className="w-5 h-5 text-white" />
           </div>
-          <span className="text-[11px] font-medium text-zinc-300 group-hover:text-white transition-colors text-center">
+          <span className="text-[11px] font-medium text-zinc-300 group-hover:text-white transition-colors text-center whitespace-nowrap">
             Withdraw
           </span>
         </button>
@@ -181,14 +190,14 @@ export const AssetsPage: React.FC<AssetsPageProps> = ({
           <div className="w-12 h-12 rounded-full bg-[#1c1c1e] group-hover:bg-[#2c2c2e] border border-zinc-800 flex items-center justify-center transition-colors">
             <ArrowLeftRight className="w-5 h-5 text-white" />
           </div>
-          <span className="text-[11px] font-medium text-zinc-300 group-hover:text-white transition-colors text-center">
+          <span className="text-[11px] font-medium text-zinc-300 group-hover:text-white transition-colors text-center whitespace-nowrap">
             Transfer
           </span>
         </button>
       </div>
 
       {/* 4. Auto Earn Banner Card */}
-      <div className="px-4 my-2">
+      <div className="px-4 my-1">
         <div className="bg-[#18181b] border border-zinc-800/80 rounded-2xl p-4 flex items-center justify-between shadow-lg">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-full bg-[#26a17b] flex items-center justify-center text-white font-bold text-sm shrink-0">
@@ -206,13 +215,16 @@ export const AssetsPage: React.FC<AssetsPageProps> = ({
 
       {/* 5. Account Sub-Balances Section */}
       <div className="px-4 pt-5">
-        <div className="border-b border-zinc-900 pb-2">
-          <span className="text-base font-bold text-white relative pb-2 border-b-2 border-white">
-            Account
-          </span>
+        <div className="border-b border-zinc-900/80 flex items-center">
+          <div className="relative pb-2">
+            <span className="text-base font-bold text-white">
+              Account
+            </span>
+            <div className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-white rounded-full" />
+          </div>
         </div>
 
-        <div className="divide-y divide-zinc-900/80 mt-2">
+        <div className="divide-y divide-zinc-900/80 mt-1">
           {/* Futures Account */}
           <div className="py-3.5 flex items-center justify-between">
             <span className="font-semibold text-sm text-white">Futures</span>

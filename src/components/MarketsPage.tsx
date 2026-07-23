@@ -77,7 +77,7 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({
   };
 
   return (
-    <div className="flex-1 bg-[#000000] text-white flex flex-col overflow-y-auto select-none pb-28 font-sans">
+    <div className="flex-1 bg-[#000000] text-white flex flex-col overflow-y-auto select-none pb-36 font-sans">
       {/* 1. Top Search Bar */}
       <div className="px-3 pt-3 pb-1">
         <div className="bg-[#18181b] border border-zinc-800/60 rounded-full px-3.5 py-2 flex items-center gap-2 text-sm text-zinc-300">

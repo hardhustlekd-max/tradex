@@ -30,6 +30,8 @@ import { RecentTrades } from './components/RecentTrades';
 import { OrderForm } from './components/OrderForm';
 import { BottomPanels } from './components/BottomPanels';
 import { HomePage } from './components/HomePage';
+import { MarketsPage } from './components/MarketsPage';
+import { AssetsPage } from './components/AssetsPage';
 import { PairSelectorModal } from './components/PairSelectorModal';
 import { FaucetModal } from './components/FaucetModal';
 import { AiAnalystDrawer } from './components/AiAnalystDrawer';
@@ -400,7 +402,7 @@ export default function App() {
   return (
     <div className="h-screen w-screen bg-zinc-950 flex flex-col overflow-hidden font-sans text-zinc-100 select-none">
       {/* Top Main Navigation Header (Shown on Futures/Trading screens) */}
-      {activeDockTab !== 'home' && (
+      {(activeDockTab === 'futures' || activeDockTab === 'trade') && (
         <Header
           activePair={activePair}
           portfolio={portfolio}
@@ -418,14 +420,31 @@ export default function App() {
 
       {/* Main Workspace Body Layout */}
       <div className="flex-1 flex flex-col min-h-0 overflow-y-auto lg:overflow-hidden">
-        {activeDockTab === 'home' ? (
+        {activeDockTab === 'home' && (
           <HomePage
             pairs={pairs}
             onSelectPair={handleSelectPair}
             onNavigateToFutures={() => setActiveDockTab('futures')}
             onOpenDeposit={() => setIsFaucetModalOpen(true)}
           />
-        ) : (
+        )}
+
+        {activeDockTab === 'markets' && (
+          <MarketsPage
+            pairs={pairs}
+            onSelectPair={handleSelectPair}
+            onNavigateToFutures={() => setActiveDockTab('futures')}
+          />
+        )}
+
+        {activeDockTab === 'assets' && (
+          <AssetsPage
+            portfolio={portfolio}
+            onOpenDeposit={() => setIsFaucetModalOpen(true)}
+          />
+        )}
+
+        {(activeDockTab === 'futures' || activeDockTab === 'trade') && (
           <>
             {/* Mobile Navigation Tab Bar (< lg) */}
             <div className="flex lg:hidden bg-[#000000] border-b border-zinc-900 text-xs font-semibold shrink-0 sticky top-0 z-20">
@@ -559,11 +578,6 @@ export default function App() {
         activeNavDock={activeDockTab}
         onSelectNavDock={(tab) => {
           setActiveDockTab(tab);
-          if (tab === 'markets') {
-            setIsPairModalOpen(true);
-          } else if (tab === 'assets') {
-            setIsFaucetModalOpen(true);
-          }
         }}
       />
 

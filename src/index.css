@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: 'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, 'DIN Pro', system-ui, sans-serif;
-  --font-mono: 'IBM Plex Mono', 'Fira Code', 'JetBrains Mono', monospace;
+  --font-sans: 'Plus Jakarta Sans', 'Inter', 'Space Grotesk', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'IBM Plex Mono', monospace;
 }
 
 @layer base {

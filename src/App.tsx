@@ -64,6 +64,9 @@ export default function App() {
   // Selected price from orderbook click
   const [selectedBookPrice, setSelectedBookPrice] = useState<number | null>(null);
 
+  // Mobile View Navigation State ('chart' | 'orderbook' | 'trades' | 'order')
+  const [mobileTab, setMobileTab] = useState<'chart' | 'orderbook' | 'trades' | 'order'>('chart');
+
   // Modals & Drawers
   const [isPairModalOpen, setIsPairModalOpen] = useState(false);
   const [isFaucetModalOpen, setIsFaucetModalOpen] = useState(false);
@@ -408,7 +411,44 @@ export default function App() {
 
       {/* Main Workspace Body Layout */}
       <div className="flex-1 flex flex-col min-h-0">
-        <div className="flex-1 flex min-h-0">
+        {/* Mobile Navigation Tab Bar (< lg) */}
+        <div className="flex lg:hidden bg-zinc-900 border-b border-zinc-800 text-xs font-mono font-medium shrink-0">
+          <button
+            onClick={() => setMobileTab('chart')}
+            className={`flex-1 py-2 text-center transition-colors border-b-2 cursor-pointer ${
+              mobileTab === 'chart' ? 'border-emerald-400 text-emerald-400 font-bold bg-zinc-950/50' : 'border-transparent text-zinc-400 hover:text-zinc-200'
+            }`}
+          >
+            Chart
+          </button>
+          <button
+            onClick={() => setMobileTab('orderbook')}
+            className={`flex-1 py-2 text-center transition-colors border-b-2 cursor-pointer ${
+              mobileTab === 'orderbook' ? 'border-emerald-400 text-emerald-400 font-bold bg-zinc-950/50' : 'border-transparent text-zinc-400 hover:text-zinc-200'
+            }`}
+          >
+            Order Book
+          </button>
+          <button
+            onClick={() => setMobileTab('trades')}
+            className={`flex-1 py-2 text-center transition-colors border-b-2 cursor-pointer ${
+              mobileTab === 'trades' ? 'border-emerald-400 text-emerald-400 font-bold bg-zinc-950/50' : 'border-transparent text-zinc-400 hover:text-zinc-200'
+            }`}
+          >
+            Trades
+          </button>
+          <button
+            onClick={() => setMobileTab('order')}
+            className={`flex-1 py-2 text-center transition-colors border-b-2 cursor-pointer ${
+              mobileTab === 'order' ? 'border-emerald-400 text-emerald-400 font-bold bg-zinc-950/50' : 'border-transparent text-zinc-400 hover:text-zinc-200'
+            }`}
+          >
+            Trade
+          </button>
+        </div>
+
+        {/* Desktop Layout (lg:flex) */}
+        <div className="hidden lg:flex flex-1 min-h-0">
           {/* Main Candlestick Chart Workspace */}
           <TradingChart
             candles={candles}
@@ -425,7 +465,9 @@ export default function App() {
             bids={orderBook.bids}
             currentPrice={activePair.price}
             precision={activePair.precision}
-            onSelectPrice={(price) => setSelectedBookPrice(price)}
+            onSelectPrice={(price) => {
+              setSelectedBookPrice(price);
+            }}
           />
 
           {/* Recent Trades Stream */}
@@ -438,6 +480,66 @@ export default function App() {
             selectedPrice={selectedBookPrice}
             onSubmitOrder={handleSubmitOrder}
           />
+        </div>
+
+        {/* Mobile View Active Tab Content (< lg) */}
+        <div className="flex lg:hidden flex-1 min-h-0 flex-col overflow-hidden relative">
+          {mobileTab === 'chart' && (
+            <TradingChart
+              candles={candles}
+              symbol={activePair.symbol}
+              precision={activePair.precision}
+              timeframe={timeframe}
+              onChangeTimeframe={handleChangeTimeframe}
+              currentPrice={activePair.price}
+            />
+          )}
+
+          {mobileTab === 'orderbook' && (
+            <OrderBook
+              asks={orderBook.asks}
+              bids={orderBook.bids}
+              currentPrice={activePair.price}
+              precision={activePair.precision}
+              onSelectPrice={(price) => {
+                setSelectedBookPrice(price);
+                setMobileTab('order');
+              }}
+            />
+          )}
+
+          {mobileTab === 'trades' && (
+            <RecentTrades trades={trades} precision={activePair.precision} />
+          )}
+
+          {mobileTab === 'order' && (
+            <OrderForm
+              activePair={activePair}
+              portfolio={portfolio}
+              selectedPrice={selectedBookPrice}
+              onSubmitOrder={(ord) => {
+                handleSubmitOrder(ord);
+              }}
+            />
+          )}
+
+          {/* Mobile Quick Trade Bar floating button when on Chart/Book view */}
+          {(mobileTab === 'chart' || mobileTab === 'orderbook') && (
+            <div className="p-2 bg-zinc-950/90 border-t border-zinc-800 flex items-center justify-between gap-2 shrink-0">
+              <button
+                onClick={() => setMobileTab('order')}
+                className="flex-1 py-2.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold text-xs uppercase font-mono cursor-pointer transition-colors text-center shadow-md shadow-emerald-500/20"
+              >
+                Buy / Long {activePair.baseAsset}
+              </button>
+              <button
+                onClick={() => setMobileTab('order')}
+                className="flex-1 py-2.5 rounded-lg bg-rose-500 hover:bg-rose-400 text-zinc-950 font-bold text-xs uppercase font-mono cursor-pointer transition-colors text-center shadow-md shadow-rose-500/20"
+              >
+                Sell / Short {activePair.baseAsset}
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Bottom Positions & Orders Panel */}

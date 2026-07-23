@@ -28,15 +28,15 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
   const openOrdersCount = orders.filter((o) => o.status === 'open').length;
 
   return (
-    <div className="h-56 bg-zinc-950 border-t border-zinc-800/80 flex flex-col shrink-0 text-xs font-mono select-none overflow-hidden">
+    <div className="h-60 lg:h-56 bg-zinc-950 border-t border-zinc-800/80 flex flex-col shrink-0 text-xs font-mono select-none overflow-hidden">
       {/* Tab Navigation Header */}
-      <div className="h-9 px-3 bg-zinc-900/80 border-b border-zinc-800 flex items-center gap-4 text-zinc-400 shrink-0">
+      <div className="h-9 px-3 bg-zinc-900/80 border-b border-zinc-800 flex items-center gap-3 sm:gap-4 text-zinc-400 shrink-0 overflow-x-auto whitespace-nowrap no-scrollbar">
         <button
           onClick={() => {
             soundFx.playClick();
             setActiveTab('positions');
           }}
-          className={`flex items-center gap-1.5 py-2 border-b-2 font-semibold cursor-pointer transition-colors ${
+          className={`flex items-center gap-1.5 py-2 border-b-2 font-semibold cursor-pointer transition-colors shrink-0 ${
             activeTab === 'positions'
               ? 'border-emerald-400 text-emerald-400 font-bold'
               : 'border-transparent hover:text-zinc-200'
@@ -50,7 +50,7 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
             soundFx.playClick();
             setActiveTab('orders');
           }}
-          className={`flex items-center gap-1.5 py-2 border-b-2 font-semibold cursor-pointer transition-colors ${
+          className={`flex items-center gap-1.5 py-2 border-b-2 font-semibold cursor-pointer transition-colors shrink-0 ${
             activeTab === 'orders'
               ? 'border-emerald-400 text-emerald-400 font-bold'
               : 'border-transparent hover:text-zinc-200'
@@ -64,7 +64,7 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
             soundFx.playClick();
             setActiveTab('history');
           }}
-          className={`flex items-center gap-1.5 py-2 border-b-2 font-semibold cursor-pointer transition-colors ${
+          className={`flex items-center gap-1.5 py-2 border-b-2 font-semibold cursor-pointer transition-colors shrink-0 ${
             activeTab === 'history'
               ? 'border-emerald-400 text-emerald-400 font-bold'
               : 'border-transparent hover:text-zinc-200'
@@ -78,7 +78,7 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
             soundFx.playClick();
             setActiveTab('assets');
           }}
-          className={`flex items-center gap-1.5 py-2 border-b-2 font-semibold cursor-pointer transition-colors ${
+          className={`flex items-center gap-1.5 py-2 border-b-2 font-semibold cursor-pointer transition-colors shrink-0 ${
             activeTab === 'assets'
               ? 'border-emerald-400 text-emerald-400 font-bold'
               : 'border-transparent hover:text-zinc-200'
@@ -95,67 +95,69 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
         {activeTab === 'positions' && (
           <div>
             {positions.length === 0 ? (
-              <div className="h-32 flex flex-col items-center justify-center text-zinc-400">
+              <div className="h-32 flex flex-col items-center justify-center text-zinc-400 text-center px-4">
                 <p>No open futures positions</p>
-                <p className="text-[10px] text-zinc-400">Open a position in the right order panel to test demo leverage.</p>
+                <p className="text-[10px] text-zinc-400">Open a position in the order panel to test demo leverage.</p>
               </div>
             ) : (
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="border-b border-zinc-800/80 text-[10px] text-zinc-400">
-                    <th className="p-1.5">Symbol</th>
-                    <th className="p-1.5">Size / Leverage</th>
-                    <th className="p-1.5">Entry Price</th>
-                    <th className="p-1.5">Mark Price</th>
-                    <th className="p-1.5">Margin</th>
-                    <th className="p-1.5">Liq Price</th>
-                    <th className="p-1.5">Unrealized PnL (ROI %)</th>
-                    <th className="p-1.5 text-right">Action</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-zinc-900">
-                  {positions.map((pos) => {
-                    const isLong = pos.side === 'long';
-                    const isPnlPos = pos.pnl >= 0;
+              <div className="overflow-x-auto min-w-full">
+                <table className="w-full text-left border-collapse min-w-[640px]">
+                  <thead>
+                    <tr className="border-b border-zinc-800/80 text-[10px] text-zinc-400">
+                      <th className="p-1.5">Symbol</th>
+                      <th className="p-1.5">Size / Leverage</th>
+                      <th className="p-1.5">Entry Price</th>
+                      <th className="p-1.5">Mark Price</th>
+                      <th className="p-1.5">Margin</th>
+                      <th className="p-1.5">Liq Price</th>
+                      <th className="p-1.5">Unrealized PnL (ROI %)</th>
+                      <th className="p-1.5 text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-zinc-900">
+                    {positions.map((pos) => {
+                      const isLong = pos.side === 'long';
+                      const isPnlPos = pos.pnl >= 0;
 
-                    return (
-                      <tr key={pos.id} className="hover:bg-zinc-900/50 transition-colors">
-                        <td className="p-1.5 font-bold text-zinc-200 flex items-center gap-1.5">
-                          <span
-                            className={`px-1 rounded text-[10px] uppercase ${
-                              isLong ? 'bg-emerald-950 text-emerald-400 border border-emerald-500/30' : 'bg-rose-950 text-rose-400 border border-rose-500/30'
-                            }`}
-                          >
-                            {pos.side}
-                          </span>
-                          <span>{pos.symbol}</span>
-                        </td>
-                        <td className="p-1.5 text-zinc-300">
-                          {pos.size} ({pos.leverage}x)
-                        </td>
-                        <td className="p-1.5 text-zinc-300">${pos.entryPrice.toFixed(2)}</td>
-                        <td className="p-1.5 text-zinc-300">${pos.markPrice.toFixed(2)}</td>
-                        <td className="p-1.5 text-zinc-300">{formatCurrency(pos.margin)}</td>
-                        <td className="p-1.5 text-rose-400 font-semibold">${pos.liquidationPrice.toFixed(2)}</td>
-                        <td className={`p-1.5 font-bold ${isPnlPos ? 'text-emerald-400' : 'text-rose-400'}`}>
-                          {isPnlPos ? '+' : ''}{formatCurrency(pos.pnl)} ({isPnlPos ? '+' : ''}{pos.pnlPercentage.toFixed(2)}%)
-                        </td>
-                        <td className="p-1.5 text-right">
-                          <button
-                            onClick={() => {
-                              soundFx.playOrderFilled();
-                              onClosePosition(pos.id);
-                            }}
-                            className="px-2 py-1 rounded bg-zinc-800 hover:bg-rose-950 hover:text-rose-300 text-zinc-300 border border-zinc-700 hover:border-rose-500/40 cursor-pointer transition-colors"
-                          >
-                            Close
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+                      return (
+                        <tr key={pos.id} className="hover:bg-zinc-900/50 transition-colors">
+                          <td className="p-1.5 font-bold text-zinc-200 flex items-center gap-1.5">
+                            <span
+                              className={`px-1 rounded text-[10px] uppercase ${
+                                isLong ? 'bg-emerald-950 text-emerald-400 border border-emerald-500/30' : 'bg-rose-950 text-rose-400 border border-rose-500/30'
+                              }`}
+                            >
+                              {pos.side}
+                            </span>
+                            <span>{pos.symbol}</span>
+                          </td>
+                          <td className="p-1.5 text-zinc-300">
+                            {pos.size} ({pos.leverage}x)
+                          </td>
+                          <td className="p-1.5 text-zinc-300">${pos.entryPrice.toFixed(2)}</td>
+                          <td className="p-1.5 text-zinc-300">${pos.markPrice.toFixed(2)}</td>
+                          <td className="p-1.5 text-zinc-300">{formatCurrency(pos.margin)}</td>
+                          <td className="p-1.5 text-rose-400 font-semibold">${pos.liquidationPrice.toFixed(2)}</td>
+                          <td className={`p-1.5 font-bold ${isPnlPos ? 'text-emerald-400' : 'text-rose-400'}`}>
+                            {isPnlPos ? '+' : ''}{formatCurrency(pos.pnl)} ({isPnlPos ? '+' : ''}{pos.pnlPercentage.toFixed(2)}%)
+                          </td>
+                          <td className="p-1.5 text-right">
+                            <button
+                              onClick={() => {
+                                soundFx.playOrderFilled();
+                                onClosePosition(pos.id);
+                              }}
+                              className="px-2 py-1 rounded bg-zinc-800 hover:bg-rose-950 hover:text-rose-300 text-zinc-300 border border-zinc-700 hover:border-rose-500/40 cursor-pointer transition-colors"
+                            >
+                              Close
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
             )}
           </div>
         )}
@@ -168,44 +170,46 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
                 <p>No open limit or stop orders</p>
               </div>
             ) : (
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="border-b border-zinc-800/80 text-[10px] text-zinc-400">
-                    <th className="p-1.5">Date</th>
-                    <th className="p-1.5">Symbol</th>
-                    <th className="p-1.5">Type</th>
-                    <th className="p-1.5">Side</th>
-                    <th className="p-1.5">Price</th>
-                    <th className="p-1.5">Amount</th>
-                    <th className="p-1.5 text-right">Action</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-zinc-900">
-                  {orders.map((ord) => (
-                    <tr key={ord.id} className="hover:bg-zinc-900/50 transition-colors">
-                      <td className="p-1.5 text-zinc-400 text-[10px]">{ord.createdAt}</td>
-                      <td className="p-1.5 font-bold text-zinc-200">{ord.symbol}</td>
-                      <td className="p-1.5 text-zinc-400 uppercase">{ord.type}</td>
-                      <td className={`p-1.5 font-bold capitalize ${ord.side === 'buy' ? 'text-emerald-400' : 'text-rose-400'}`}>
-                        {ord.side}
-                      </td>
-                      <td className="p-1.5 text-zinc-200">${ord.price.toFixed(2)}</td>
-                      <td className="p-1.5 text-zinc-300">{ord.amount}</td>
-                      <td className="p-1.5 text-right">
-                        <button
-                          onClick={() => {
-                            soundFx.playClick();
-                            onCancelOrder(ord.id);
-                          }}
-                          className="px-2 py-0.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 cursor-pointer transition-colors"
-                        >
-                          Cancel
-                        </button>
-                      </td>
+              <div className="overflow-x-auto min-w-full">
+                <table className="w-full text-left border-collapse min-w-[500px]">
+                  <thead>
+                    <tr className="border-b border-zinc-800/80 text-[10px] text-zinc-400">
+                      <th className="p-1.5">Date</th>
+                      <th className="p-1.5">Symbol</th>
+                      <th className="p-1.5">Type</th>
+                      <th className="p-1.5">Side</th>
+                      <th className="p-1.5">Price</th>
+                      <th className="p-1.5">Amount</th>
+                      <th className="p-1.5 text-right">Action</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-zinc-900">
+                    {orders.map((ord) => (
+                      <tr key={ord.id} className="hover:bg-zinc-900/50 transition-colors">
+                        <td className="p-1.5 text-zinc-400 text-[10px]">{ord.createdAt}</td>
+                        <td className="p-1.5 font-bold text-zinc-200">{ord.symbol}</td>
+                        <td className="p-1.5 text-zinc-400 uppercase">{ord.type}</td>
+                        <td className={`p-1.5 font-bold capitalize ${ord.side === 'buy' ? 'text-emerald-400' : 'text-rose-400'}`}>
+                          {ord.side}
+                        </td>
+                        <td className="p-1.5 text-zinc-200">${ord.price.toFixed(2)}</td>
+                        <td className="p-1.5 text-zinc-300">{ord.amount}</td>
+                        <td className="p-1.5 text-right">
+                          <button
+                            onClick={() => {
+                              soundFx.playClick();
+                              onCancelOrder(ord.id);
+                            }}
+                            className="px-2 py-0.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-300 cursor-pointer transition-colors"
+                          >
+                            Cancel
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             )}
           </div>
         )}
@@ -218,38 +222,40 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
                 <p>No trade history yet</p>
               </div>
             ) : (
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="border-b border-zinc-800/80 text-[10px] text-zinc-400">
-                    <th className="p-1.5">Time</th>
-                    <th className="p-1.5">Symbol</th>
-                    <th className="p-1.5">Type / Mode</th>
-                    <th className="p-1.5">Side</th>
-                    <th className="p-1.5">Filled Price</th>
-                    <th className="p-1.5">Amount</th>
-                    <th className="p-1.5 text-right">Status</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-zinc-900">
-                  {orderHistory.map((hist) => (
-                    <tr key={hist.id} className="hover:bg-zinc-900/50 transition-colors">
-                      <td className="p-1.5 text-zinc-400 text-[10px]">{hist.createdAt}</td>
-                      <td className="p-1.5 font-bold text-zinc-200">{hist.symbol}</td>
-                      <td className="p-1.5 text-zinc-400 uppercase">{hist.mode} - {hist.type}</td>
-                      <td className={`p-1.5 font-bold capitalize ${hist.side === 'buy' ? 'text-emerald-400' : 'text-rose-400'}`}>
-                        {hist.side}
-                      </td>
-                      <td className="p-1.5 text-zinc-200">${hist.price.toFixed(2)}</td>
-                      <td className="p-1.5 text-zinc-300">{hist.amount}</td>
-                      <td className="p-1.5 text-right">
-                        <span className={`px-1.5 py-0.5 rounded text-[10px] ${hist.status === 'filled' ? 'bg-emerald-950 text-emerald-400' : 'bg-zinc-800 text-zinc-400'}`}>
-                          {hist.status}
-                        </span>
-                      </td>
+              <div className="overflow-x-auto min-w-full">
+                <table className="w-full text-left border-collapse min-w-[500px]">
+                  <thead>
+                    <tr className="border-b border-zinc-800/80 text-[10px] text-zinc-400">
+                      <th className="p-1.5">Time</th>
+                      <th className="p-1.5">Symbol</th>
+                      <th className="p-1.5">Type / Mode</th>
+                      <th className="p-1.5">Side</th>
+                      <th className="p-1.5">Filled Price</th>
+                      <th className="p-1.5">Amount</th>
+                      <th className="p-1.5 text-right">Status</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-zinc-900">
+                    {orderHistory.map((hist) => (
+                      <tr key={hist.id} className="hover:bg-zinc-900/50 transition-colors">
+                        <td className="p-1.5 text-zinc-400 text-[10px]">{hist.createdAt}</td>
+                        <td className="p-1.5 font-bold text-zinc-200">{hist.symbol}</td>
+                        <td className="p-1.5 text-zinc-400 uppercase">{hist.mode} - {hist.type}</td>
+                        <td className={`p-1.5 font-bold capitalize ${hist.side === 'buy' ? 'text-emerald-400' : 'text-rose-400'}`}>
+                          {hist.side}
+                        </td>
+                        <td className="p-1.5 text-zinc-200">${hist.price.toFixed(2)}</td>
+                        <td className="p-1.5 text-zinc-300">{hist.amount}</td>
+                        <td className="p-1.5 text-right">
+                          <span className={`px-1.5 py-0.5 rounded text-[10px] ${hist.status === 'filled' ? 'bg-emerald-950 text-emerald-400' : 'bg-zinc-800 text-zinc-400'}`}>
+                            {hist.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             )}
           </div>
         )}

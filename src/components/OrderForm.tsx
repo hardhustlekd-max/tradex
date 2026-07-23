@@ -109,7 +109,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
   };
 
   return (
-    <div className="w-72 bg-zinc-950 border-l border-zinc-800/80 flex flex-col shrink-0 text-xs font-mono select-none overflow-y-auto">
+    <div className="w-full lg:w-72 bg-zinc-950 border-t lg:border-t-0 lg:border-l border-zinc-800/80 flex flex-col shrink-0 text-xs font-mono select-none overflow-y-auto h-full">
       {/* Top Mode Selector: Spot vs Futures */}
       <div className="p-2 bg-zinc-900/90 border-b border-zinc-800 flex items-center justify-between gap-1 shrink-0">
         <div className="grid grid-cols-2 gap-1 w-full p-0.5 bg-zinc-950 rounded-lg border border-zinc-800">

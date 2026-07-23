@@ -8,7 +8,7 @@ interface RecentTradesProps {
 
 export const RecentTrades: React.FC<RecentTradesProps> = ({ trades, precision }) => {
   return (
-    <div className="w-48 bg-zinc-950 border-r border-zinc-800/80 flex flex-col shrink-0 text-xs font-mono select-none">
+    <div className="w-full lg:w-48 bg-zinc-950 border-b lg:border-b-0 lg:border-r border-zinc-800/80 flex flex-col shrink-0 text-xs font-mono select-none h-full min-h-[250px] lg:min-h-0">
       <div className="h-9 px-2 bg-zinc-900/80 border-b border-zinc-800/80 flex items-center justify-between text-zinc-300 font-semibold shrink-0">
         <span>Market Trades</span>
         <span className="text-[10px] text-zinc-400 font-normal">Real-time</span>

@@ -56,6 +56,27 @@ export const TradingChart: React.FC<TradingChartProps> = ({
 
   // Zoom & Visible window range
   const [visibleCount, setVisibleCount] = useState<number>(60);
+  const [containerDimensions, setContainerDimensions] = useState<{ width: number; height: number }>({ width: 0, height: 0 });
+
+  // Handle Container ResizeObserver
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.contentRect) {
+          setContainerDimensions({
+            width: entry.contentRect.width,
+            height: entry.contentRect.height,
+          });
+        }
+      }
+    });
+
+    resizeObserver.observe(container);
+    return () => resizeObserver.disconnect();
+  }, []);
 
   // Render Canvas
   useEffect(() => {
@@ -66,10 +87,11 @@ export const TradingChart: React.FC<TradingChartProps> = ({
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    const width = container.clientWidth || containerDimensions.width || 300;
+    const height = container.clientHeight || containerDimensions.height || 300;
+
     // Handle high DPI crisp canvas
     const dpr = window.devicePixelRatio || 1;
-    const width = container.clientWidth;
-    const height = container.clientHeight;
 
     canvas.width = width * dpr;
     canvas.height = height * dpr;
@@ -375,16 +397,16 @@ export const TradingChart: React.FC<TradingChartProps> = ({
         ctx.fillText(hoverData.price.toFixed(precision), chartWidth + paddingRight / 2, hoverData.y + 3);
       }
     }
-  }, [candles, visibleCount, chartMode, showMA, showRSI, showVolume, drawings, hoverData, currentPrice, precision]);
+  }, [candles, visibleCount, chartMode, showMA, showRSI, showVolume, drawings, hoverData, currentPrice, precision, containerDimensions]);
 
-  // Mouse move handler for hover tooltip
-  const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+  // Touch & Mouse move handler for hover tooltip
+  const handlePointerMove = (clientX: number, clientY: number) => {
     const canvas = canvasRef.current;
     if (!canvas || candles.length === 0) return;
 
     const rect = canvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
 
     const visibleCandles = candles.slice(-visibleCount);
     const chartWidth = rect.width - 65;
@@ -402,6 +424,16 @@ export const TradingChart: React.FC<TradingChartProps> = ({
     const hoveredPrice = maxPrice - (y / (mainChartHeight - 20)) * priceRange;
 
     setHoverData({ x, y, candle, price: hoveredPrice });
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLCanvasElement>) => {
+    handlePointerMove(e.clientX, e.clientY);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLCanvasElement>) => {
+    if (e.touches.length > 0) {
+      handlePointerMove(e.touches[0].clientX, e.touches[0].clientY);
+    }
   };
 
   const handleMouseLeave = () => {
@@ -562,13 +594,15 @@ export const TradingChart: React.FC<TradingChartProps> = ({
       </div>
 
       {/* Main Canvas Area */}
-      <div ref={containerRef} className="flex-1 relative w-full h-full min-h-[300px]">
+      <div ref={containerRef} className="flex-1 relative w-full h-full min-h-[280px] sm:min-h-[320px]">
         <canvas
           ref={canvasRef}
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleMouseLeave}
           onClick={handleCanvasClick}
-          className="absolute inset-0 w-full h-full cursor-crosshair"
+          className="absolute inset-0 w-full h-full cursor-crosshair touch-none"
         />
       </div>
     </div>

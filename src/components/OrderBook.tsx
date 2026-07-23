@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { OrderBookEntry } from '../types';
 import { formatNumber } from '../utils/calc';
 import { soundFx } from '../utils/audio';
+import { BookOpen } from 'lucide-react';
 
 interface OrderBookProps {
   asks: OrderBookEntry[];
@@ -35,8 +36,11 @@ export const OrderBook: React.FC<OrderBookProps> = ({
   return (
     <div className="w-full lg:w-60 bg-zinc-950 border-b lg:border-b-0 lg:border-r border-zinc-800/80 flex flex-col shrink-0 text-xs font-mono select-none h-full min-h-[250px] lg:min-h-0">
       {/* Orderbook Header Controls */}
-      <div className="h-9 px-2 bg-zinc-900/80 border-b border-zinc-800/80 flex items-center justify-between text-zinc-400 shrink-0">
-        <span className="font-semibold text-zinc-300">Order Book</span>
+      <div className="h-9 px-2.5 bg-zinc-900/80 border-b border-zinc-800/80 flex items-center justify-between text-zinc-400 shrink-0 font-sans">
+        <div className="flex items-center gap-1.5 font-bold text-zinc-200">
+          <BookOpen className="w-3.5 h-3.5 text-emerald-400" />
+          <span>Order Book</span>
+        </div>
 
         {/* View Mode Icons */}
         <div className="flex items-center gap-1">

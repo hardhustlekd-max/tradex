@@ -27,6 +27,7 @@ interface HeaderProps {
   onToggleSound: () => void;
   activeSubTab?: string;
   onSelectSubTab?: (tab: string) => void;
+  onGoHome?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -39,6 +40,7 @@ export const Header: React.FC<HeaderProps> = ({
   onToggleSound,
   activeSubTab = 'Chart',
   onSelectSubTab,
+  onGoHome,
 }) => {
   const [isStarred, setIsStarred] = useState(true);
   const [currentSubTab, setCurrentSubTab] = useState(activeSubTab);
@@ -57,9 +59,13 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Left: Back Arrow + Pair Selector Dropdown */}
         <div className="flex items-center gap-2">
           <button
-            onClick={onOpenPairModal}
+            onClick={() => {
+              soundFx.playClick();
+              if (onGoHome) onGoHome();
+              else onOpenPairModal();
+            }}
             className="text-zinc-300 hover:text-white transition-colors cursor-pointer p-1 -ml-1"
-            title="Back / Pair List"
+            title="Back to Home"
           >
             <ChevronLeft className="w-5 h-5 text-zinc-200 stroke-[2.5]" />
           </button>

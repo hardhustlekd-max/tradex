@@ -411,6 +411,7 @@ export default function App() {
           soundFx.enabled = !soundEnabled;
           setSoundEnabled(!soundEnabled);
         }}
+        onGoHome={() => setActiveDockTab('home')}
       />
 
       {/* Main Workspace Body Layout */}

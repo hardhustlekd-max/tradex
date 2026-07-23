@@ -82,6 +82,72 @@ export function calculateRSI(candles: Candle[], period: number = 14): (number | 
   return rsiValues;
 }
 
+// Calculate Exponential Moving Average (EMA)
+export function calculateEMA(candles: Candle[], period: number): (number | null)[] {
+  const result: (number | null)[] = [];
+  if (candles.length === 0) return result;
+
+  const k = 2 / (period + 1);
+  let ema = candles[0].close;
+  result.push(ema);
+
+  for (let i = 1; i < candles.length; i++) {
+    ema = candles[i].close * k + ema * (1 - k);
+    result.push(ema);
+  }
+  return result;
+}
+
+// Calculate MACD (12, 26, 9)
+export function calculateMACD(
+  candles: Candle[],
+  fastPeriod: number = 12,
+  slowPeriod: number = 26,
+  signalPeriod: number = 9
+) {
+  const emaFast = calculateEMA(candles, fastPeriod);
+  const emaSlow = calculateEMA(candles, slowPeriod);
+
+  const macdLine: (number | null)[] = [];
+  for (let i = 0; i < candles.length; i++) {
+    if (emaFast[i] !== null && emaSlow[i] !== null) {
+      macdLine.push(emaFast[i]! - emaSlow[i]!);
+    } else {
+      macdLine.push(null);
+    }
+  }
+
+  const signalLine: (number | null)[] = [];
+  let signalEma = 0;
+  const k = 2 / (signalPeriod + 1);
+  let initialized = false;
+
+  for (let i = 0; i < macdLine.length; i++) {
+    const macdVal = macdLine[i];
+    if (macdVal === null) {
+      signalLine.push(null);
+    } else if (!initialized) {
+      signalEma = macdVal;
+      initialized = true;
+      signalLine.push(signalEma);
+    } else {
+      signalEma = macdVal * k + signalEma * (1 - k);
+      signalLine.push(signalEma);
+    }
+  }
+
+  const histogram: (number | null)[] = [];
+  for (let i = 0; i < macdLine.length; i++) {
+    if (macdLine[i] !== null && signalLine[i] !== null) {
+      histogram.push(macdLine[i]! - signalLine[i]!);
+    } else {
+      histogram.push(null);
+    }
+  }
+
+  return { macdLine, signalLine, histogram };
+}
+
 // Calculate Futures Liquidation Price
 export function calculateLiquidationPrice(
   entryPrice: number,

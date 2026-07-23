@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { TradingPair, Portfolio } from '../types';
-import { formatCurrency, formatCompactNumber } from '../utils/calc';
+import { formatCurrency, formatCompactNumber, formatNumber } from '../utils/calc';
 import { 
   ChevronDown, 
   Sparkles, 
@@ -9,10 +9,11 @@ import {
   Wallet, 
   TrendingUp, 
   TrendingDown, 
-  RefreshCw,
-  Activity,
-  Layers,
-  Zap
+  RotateCw,
+  Star,
+  Bell,
+  ChevronLeft,
+  RefreshCw
 } from 'lucide-react';
 import { soundFx } from '../utils/audio';
 
@@ -24,6 +25,8 @@ interface HeaderProps {
   onToggleAiAnalyst: () => void;
   soundEnabled: boolean;
   onToggleSound: () => void;
+  activeSubTab?: string;
+  onSelectSubTab?: (tab: string) => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -34,141 +37,192 @@ export const Header: React.FC<HeaderProps> = ({
   onToggleAiAnalyst,
   soundEnabled,
   onToggleSound,
+  activeSubTab = 'Chart',
+  onSelectSubTab,
 }) => {
+  const [isStarred, setIsStarred] = useState(true);
+  const [currentSubTab, setCurrentSubTab] = useState(activeSubTab);
   const isPositive = activePair.change24h >= 0;
 
-  return (
-    <header className="h-14 bg-zinc-950/90 backdrop-blur-md border-b border-zinc-800/80 px-3 flex items-center justify-between select-none text-zinc-100 shrink-0 sticky top-0 z-40">
-      {/* Left section: Logo & Pair selection */}
-      <div className="flex items-center gap-2 sm:gap-4">
-        {/* Brand Logo */}
-        <div className="flex items-center gap-2.5 pr-2 border-r border-zinc-800/80">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-emerald-500 via-teal-500 to-cyan-500 flex items-center justify-center text-zinc-950 font-black tracking-tight shadow-md shadow-emerald-500/20 shrink-0">
-            <Layers className="w-4 h-4 text-zinc-950 stroke-[2.5]" />
-          </div>
-          <div>
-            <div className="flex items-center gap-1.5">
-              <span className="font-extrabold tracking-tight text-sm font-sans bg-gradient-to-r from-zinc-100 via-zinc-200 to-zinc-400 bg-clip-text text-transparent">
-                NEXUS
-              </span>
-              <span className="hidden sm:inline-flex items-center gap-1 text-[9px] font-mono font-medium px-1.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                PRO DEMO
-              </span>
-            </div>
-            <p className="hidden sm:block text-[9px] text-zinc-400 -mt-0.5 font-sans tracking-wide">Spot & Perpetual Futures</p>
-          </div>
-        </div>
+  const handleSubTabClick = (tab: string) => {
+    soundFx.playClick();
+    setCurrentSubTab(tab);
+    if (onSelectSubTab) onSelectSubTab(tab);
+  };
 
-        {/* Active Pair Selector Trigger */}
-        <button
-          id="pair-selector-btn"
-          onClick={() => {
-            soundFx.playClick();
-            onOpenPairModal();
-          }}
-          className="flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 rounded-xl bg-zinc-900/80 hover:bg-zinc-800/90 border border-zinc-800/80 transition-all cursor-pointer group shrink-0 shadow-sm"
-        >
-          <div className="flex items-center gap-1 sm:gap-1.5">
-            <span className="font-bold text-xs sm:text-sm font-mono tracking-tight text-zinc-100 group-hover:text-emerald-400 transition-colors">
+  return (
+    <div className="bg-[#000000] border-b border-zinc-900 select-none text-zinc-100 shrink-0 z-40">
+      {/* 1. Top Bar */}
+      <header className="h-12 px-3 flex items-center justify-between border-b border-zinc-900/60">
+        {/* Left: Back Arrow + Pair Selector Dropdown */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={onOpenPairModal}
+            className="text-zinc-300 hover:text-white transition-colors cursor-pointer p-1 -ml-1"
+            title="Back / Pair List"
+          >
+            <ChevronLeft className="w-5 h-5 text-zinc-200 stroke-[2.5]" />
+          </button>
+
+          <button
+            id="pair-selector-btn"
+            onClick={() => {
+              soundFx.playClick();
+              onOpenPairModal();
+            }}
+            className="flex items-center gap-1.5 cursor-pointer group"
+          >
+            <span className="font-extrabold text-base sm:text-lg tracking-tight text-white group-hover:text-amber-400 transition-colors font-sans">
               {activePair.symbol}
             </span>
-            <span className="hidden xs:inline-block text-[10px] sm:text-xs px-1.5 py-0.5 rounded-md bg-zinc-800 text-zinc-400 font-mono">
-              {activePair.category}
-            </span>
-          </div>
-          <ChevronDown className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-zinc-400 group-hover:text-zinc-200 transition-colors" />
-        </button>
-
-        {/* Mobile Price Display */}
-        <div className="flex lg:hidden items-center gap-1 font-mono text-xs pl-1">
-          <span className={`font-bold ${isPositive ? 'text-emerald-400' : 'text-rose-400'}`}>
-            ${activePair.price.toFixed(activePair.precision)}
-          </span>
-          <span className={`text-[10px] font-medium hidden xs:inline ${isPositive ? 'text-emerald-400' : 'text-rose-400'}`}>
-            ({isPositive ? '+' : ''}{activePair.change24h.toFixed(1)}%)
-          </span>
+            <ChevronDown className="w-4 h-4 text-zinc-300 fill-zinc-300" />
+          </button>
         </div>
 
-        {/* Live Ticker Metrics (Desktop) */}
-        <div className="hidden lg:flex items-center gap-6 text-xs font-mono pl-3 border-l border-zinc-800/60">
-          <div>
-            <div className="text-[10px] text-zinc-400 uppercase tracking-wider font-sans font-medium">Index Price</div>
-            <div className={`font-bold text-sm ${isPositive ? 'text-emerald-400' : 'text-rose-400'}`}>
-              {formatCurrency(activePair.price, activePair.precision)}
-            </div>
+        {/* Right: Star, Refresh, Bell + Actions */}
+        <div className="flex items-center gap-3">
+          {/* Star Favorite Icon */}
+          <button
+            onClick={() => {
+              soundFx.playClick();
+              setIsStarred(!isStarred);
+            }}
+            className="cursor-pointer transition-transform active:scale-90"
+            title="Favorite Pair"
+          >
+            <Star className={`w-4 h-4 ${isStarred ? 'fill-amber-400 text-amber-400' : 'text-zinc-500'}`} />
+          </button>
+
+          {/* Refresh Icon */}
+          <button
+            onClick={() => {
+              soundFx.playClick();
+            }}
+            className="text-zinc-300 hover:text-white cursor-pointer active:rotate-180 transition-transform duration-300"
+            title="Refresh Market Ticker"
+          >
+            <RotateCw className="w-4 h-4 text-zinc-200" />
+          </button>
+
+          {/* Bell Alert Icon */}
+          <button
+            onClick={() => {
+              soundFx.playClick();
+            }}
+            className="text-zinc-300 hover:text-white cursor-pointer"
+            title="Price Alerts"
+          >
+            <Bell className="w-4 h-4 text-zinc-200" />
+          </button>
+
+          {/* AI Analyst Button */}
+          <button
+            id="ai-analyst-btn"
+            onClick={() => {
+              soundFx.playClick();
+              onToggleAiAnalyst();
+            }}
+            className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-semibold cursor-pointer"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+            <span>AI Analyst</span>
+          </button>
+
+          {/* Faucet / Equity */}
+          <button
+            id="faucet-modal-btn"
+            onClick={() => {
+              soundFx.playClick();
+              onOpenFaucetModal();
+            }}
+            className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-zinc-900 border border-zinc-800 text-xs font-mono cursor-pointer"
+          >
+            <Wallet className="w-3.5 h-3.5 text-teal-400" />
+            <span className="font-bold text-zinc-100 text-xs">
+              ${formatCompactNumber(portfolio.usdtBalance)}
+            </span>
+          </button>
+
+          {/* Sound Toggle */}
+          <button
+            onClick={onToggleSound}
+            className="p-1 rounded text-zinc-400 hover:text-zinc-200 cursor-pointer"
+          >
+            {soundEnabled ? <Volume2 className="w-4 h-4 text-emerald-400" /> : <VolumeX className="w-4 h-4 text-zinc-500" />}
+          </button>
+        </div>
+      </header>
+
+      {/* 2. Sub-Tabs Bar: Chart, Info, Parameters, Limits */}
+      <div className="flex items-center gap-6 px-4 h-9 border-b border-zinc-900 text-sm font-semibold">
+        {['Chart', 'Info', 'Parameters', 'Limits'].map((tab) => {
+          const isActive = currentSubTab === tab;
+          return (
+            <button
+              key={tab}
+              onClick={() => handleSubTabClick(tab)}
+              className={`relative py-1.5 cursor-pointer transition-colors ${
+                isActive ? 'text-white font-bold' : 'text-zinc-400 hover:text-zinc-200 font-medium'
+              }`}
+            >
+              <span>{tab}</span>
+              {isActive && (
+                <span className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-white rounded-full" />
+              )}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* 3. Price & 24h Stats Header Row (Exact match to screenshot) */}
+      <div className="px-4 py-3 flex items-start justify-between gap-4 bg-[#000000]">
+        {/* Left Column: Last price, Big Price, Equivalent $, Mark price */}
+        <div className="space-y-1">
+          {/* Label */}
+          <div className="flex items-center gap-1 text-[11px] text-zinc-400 font-sans">
+            <span>Last price</span>
+            <ChevronDown className="w-3 h-3 text-zinc-400 fill-zinc-400" />
           </div>
 
-          <div>
-            <div className="text-[10px] text-zinc-400 uppercase tracking-wider font-sans font-medium">24h Change</div>
-            <div className={`flex items-center gap-1 font-semibold ${isPositive ? 'text-emerald-400' : 'text-rose-400'}`}>
-              {isPositive ? <TrendingUp className="w-3 h-3 stroke-[2.5]" /> : <TrendingDown className="w-3 h-3 stroke-[2.5]" />}
+          {/* Big Bold Price */}
+          <div className="text-3xl sm:text-4xl font-black text-white tracking-tight font-sans">
+            {formatNumber(activePair.price, activePair.precision)}
+          </div>
+
+          {/* Equivalent Price & Percentage Change */}
+          <div className="flex items-center gap-2 text-xs font-mono font-medium">
+            <span className="text-zinc-300 font-sans">≈ ${formatNumber(activePair.price, 2)}</span>
+            <span className={`font-semibold ${isPositive ? 'text-[#00c076]' : 'text-[#f6465d]'}`}>
               {isPositive ? '+' : ''}{activePair.change24h.toFixed(2)}%
-            </div>
+            </span>
           </div>
 
-          <div>
-            <div className="text-[10px] text-zinc-400 uppercase tracking-wider font-sans font-medium">24h High</div>
-            <div className="text-zinc-200 font-medium">{formatCurrency(activePair.high24h, activePair.precision)}</div>
+          {/* Mark Price */}
+          <div className="text-[11px] text-zinc-400 font-sans pt-0.5">
+            Mark price <span className="text-zinc-200 font-medium font-mono ml-1">{formatNumber(activePair.price, activePair.precision)}</span>
+          </div>
+        </div>
+
+        {/* Right Column: Stacked 24h metrics (24h high, 24h low, 24h vol) */}
+        <div className="text-right space-y-1 text-xs font-mono pt-1">
+          <div className="flex items-center justify-end gap-3 text-[11px]">
+            <span className="text-zinc-400 font-sans">24h high</span>
+            <span className="text-zinc-100 font-semibold">{formatNumber(activePair.high24h, activePair.precision)}</span>
           </div>
 
-          <div>
-            <div className="text-[10px] text-zinc-400 uppercase tracking-wider font-sans font-medium">24h Low</div>
-            <div className="text-zinc-200 font-medium">{formatCurrency(activePair.low24h, activePair.precision)}</div>
+          <div className="flex items-center justify-end gap-3 text-[11px]">
+            <span className="text-zinc-400 font-sans">24h low</span>
+            <span className="text-zinc-100 font-semibold">{formatNumber(activePair.low24h, activePair.precision)}</span>
           </div>
 
-          <div>
-            <div className="text-[10px] text-zinc-400 uppercase tracking-wider font-sans font-medium">24h Volume</div>
-            <div className="text-zinc-200 font-medium">${formatCompactNumber(activePair.volume24h)}</div>
+          <div className="flex items-center justify-end gap-3 text-[11px]">
+            <span className="text-zinc-400 font-sans">24h vol (USDT)</span>
+            <span className="text-zinc-100 font-semibold">{formatCompactNumber(activePair.volume24h)}</span>
           </div>
         </div>
       </div>
-
-      {/* Right section: Wallet, AI Analyst, Sound, Faucet */}
-      <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
-        {/* Gemini AI Analyst Button */}
-        <button
-          id="ai-analyst-btn"
-          onClick={() => {
-            soundFx.playClick();
-            onToggleAiAnalyst();
-          }}
-          className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-semibold transition-all shadow-sm hover:shadow-emerald-500/10 cursor-pointer"
-        >
-          <Sparkles className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
-          <span className="hidden xs:inline">AI Analyst</span>
-        </button>
-
-        {/* Demo Faucet & Balance */}
-        <button
-          id="faucet-modal-btn"
-          onClick={() => {
-            soundFx.playClick();
-            onOpenFaucetModal();
-          }}
-          className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1.5 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 border border-zinc-800 text-xs font-mono transition-all cursor-pointer group shadow-sm"
-        >
-          <Wallet className="w-3.5 h-3.5 text-teal-400" />
-          <div className="text-left">
-            <span className="text-[9px] text-zinc-400 font-sans hidden sm:block -mb-0.5 font-medium">Equity</span>
-            <span className="font-bold text-zinc-100 group-hover:text-teal-300 text-xs">
-              {formatCompactNumber(portfolio.usdtBalance)}
-            </span>
-          </div>
-          <RefreshCw className="w-3 h-3 text-zinc-400 group-hover:rotate-180 transition-transform duration-500 ml-0.5 hidden sm:inline-block" />
-        </button>
-
-        {/* Audio FX Toggle */}
-        <button
-          id="sound-toggle-btn"
-          onClick={onToggleSound}
-          title={soundEnabled ? 'Mute Audio Effects' : 'Enable Audio Effects'}
-          className="p-1.5 sm:p-2 rounded-xl bg-zinc-900/90 hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 border border-zinc-800/80 transition-colors cursor-pointer shadow-sm"
-        >
-          {soundEnabled ? <Volume2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-emerald-400" /> : <VolumeX className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-zinc-400" />}
-        </button>
-      </div>
-    </header>
+    </div>
   );
 };
+
 

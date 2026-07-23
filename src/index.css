@@ -1,11 +1,23 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: 'Inter', 'Chivo', -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
+  --font-mono: 'Roboto Mono', 'SF Mono', Consolas, monospace;
+}
+
 @layer base {
   :root, body {
+    font-family: 'Inter', 'Chivo', -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    background-color: #0b0e11;
-    color: #eaedf0;
+    font-feature-settings: "tnum" 1, "cv05" 1;
+    background-color: #000000;
+    color: #ffffff;
+  }
+
+  code, pre, .font-mono {
+    font-family: 'Roboto Mono', 'SF Mono', Consolas, monospace;
+    font-variant-numeric: tabular-nums;
   }
 }
 

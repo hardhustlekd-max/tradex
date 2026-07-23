@@ -412,11 +412,11 @@ export default function App() {
       {/* Main Workspace Body Layout */}
       <div className="flex-1 flex flex-col min-h-0">
         {/* Mobile Navigation Tab Bar (< lg) */}
-        <div className="flex lg:hidden bg-zinc-900 border-b border-zinc-800 text-xs font-mono font-medium shrink-0">
+        <div className="flex lg:hidden bg-[#000000] border-b border-zinc-900 text-xs font-semibold shrink-0">
           <button
             onClick={() => setMobileTab('chart')}
             className={`flex-1 py-2 text-center transition-colors border-b-2 cursor-pointer ${
-              mobileTab === 'chart' ? 'border-emerald-400 text-emerald-400 font-bold bg-zinc-950/50' : 'border-transparent text-zinc-400 hover:text-zinc-200'
+              mobileTab === 'chart' ? 'border-white text-white font-bold bg-zinc-950/80' : 'border-transparent text-zinc-400 hover:text-zinc-200'
             }`}
           >
             Chart
@@ -424,7 +424,7 @@ export default function App() {
           <button
             onClick={() => setMobileTab('orderbook')}
             className={`flex-1 py-2 text-center transition-colors border-b-2 cursor-pointer ${
-              mobileTab === 'orderbook' ? 'border-emerald-400 text-emerald-400 font-bold bg-zinc-950/50' : 'border-transparent text-zinc-400 hover:text-zinc-200'
+              mobileTab === 'orderbook' ? 'border-white text-white font-bold bg-zinc-950/80' : 'border-transparent text-zinc-400 hover:text-zinc-200'
             }`}
           >
             Order Book
@@ -432,7 +432,7 @@ export default function App() {
           <button
             onClick={() => setMobileTab('trades')}
             className={`flex-1 py-2 text-center transition-colors border-b-2 cursor-pointer ${
-              mobileTab === 'trades' ? 'border-emerald-400 text-emerald-400 font-bold bg-zinc-950/50' : 'border-transparent text-zinc-400 hover:text-zinc-200'
+              mobileTab === 'trades' ? 'border-white text-white font-bold bg-zinc-950/80' : 'border-transparent text-zinc-400 hover:text-zinc-200'
             }`}
           >
             Trades
@@ -440,7 +440,7 @@ export default function App() {
           <button
             onClick={() => setMobileTab('order')}
             className={`flex-1 py-2 text-center transition-colors border-b-2 cursor-pointer ${
-              mobileTab === 'order' ? 'border-emerald-400 text-emerald-400 font-bold bg-zinc-950/50' : 'border-transparent text-zinc-400 hover:text-zinc-200'
+              mobileTab === 'order' ? 'border-white text-white font-bold bg-zinc-950/80' : 'border-transparent text-zinc-400 hover:text-zinc-200'
             }`}
           >
             Trade
@@ -448,7 +448,7 @@ export default function App() {
         </div>
 
         {/* Desktop Layout (lg:flex) */}
-        <div className="hidden lg:flex flex-1 min-h-0">
+        <div className="hidden lg:flex flex-1 min-h-0 bg-[#000000]">
           {/* Main Candlestick Chart Workspace */}
           <TradingChart
             candles={candles}
@@ -457,6 +457,8 @@ export default function App() {
             timeframe={timeframe}
             onChangeTimeframe={handleChangeTimeframe}
             currentPrice={activePair.price}
+            onOpenLong={() => setMobileTab('order')}
+            onOpenShort={() => setMobileTab('order')}
           />
 
           {/* Live Order Book */}
@@ -483,7 +485,7 @@ export default function App() {
         </div>
 
         {/* Mobile View Active Tab Content (< lg) */}
-        <div className="flex lg:hidden flex-1 min-h-0 flex-col overflow-hidden relative">
+        <div className="flex lg:hidden flex-1 min-h-0 flex-col overflow-hidden relative bg-[#000000]">
           {mobileTab === 'chart' && (
             <TradingChart
               candles={candles}
@@ -492,6 +494,8 @@ export default function App() {
               timeframe={timeframe}
               onChangeTimeframe={handleChangeTimeframe}
               currentPrice={activePair.price}
+              onOpenLong={() => setMobileTab('order')}
+              onOpenShort={() => setMobileTab('order')}
             />
           )}
 

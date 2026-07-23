@@ -34,11 +34,11 @@ export const OrderBook: React.FC<OrderBookProps> = ({
   const visibleBids = viewMode === 'asks' ? [] : viewMode === 'bids' ? bids.slice(0, 16) : bids.slice(0, 8);
 
   return (
-    <div className="w-full lg:w-60 bg-zinc-950 border-b lg:border-b-0 lg:border-r border-zinc-800/80 flex flex-col shrink-0 text-xs font-mono select-none h-full min-h-[250px] lg:min-h-0">
+    <div className="w-full lg:w-60 bg-[#000000] border-b lg:border-b-0 lg:border-r border-zinc-900 flex flex-col shrink-0 text-xs font-mono select-none h-full min-h-[250px] lg:min-h-0">
       {/* Orderbook Header Controls */}
-      <div className="h-9 px-2.5 bg-zinc-900/80 border-b border-zinc-800/80 flex items-center justify-between text-zinc-400 shrink-0 font-sans">
-        <div className="flex items-center gap-1.5 font-bold text-zinc-200">
-          <BookOpen className="w-3.5 h-3.5 text-emerald-400" />
+      <div className="h-9 px-2.5 bg-[#000000] border-b border-zinc-900 flex items-center justify-between text-zinc-400 shrink-0 font-sans">
+        <div className="flex items-center gap-1.5 font-bold text-zinc-100">
+          <BookOpen className="w-3.5 h-3.5 text-[#00c076]" />
           <span>Order Book</span>
         </div>
 
@@ -50,8 +50,8 @@ export const OrderBook: React.FC<OrderBookProps> = ({
             title="Show Both Asks & Bids"
           >
             <div className="w-3.5 h-3.5 flex flex-col justify-between py-0.5">
-              <div className="h-1 bg-rose-500 rounded-xs" />
-              <div className="h-1 bg-emerald-500 rounded-xs" />
+              <div className="h-1 bg-[#f6465d] rounded-xs" />
+              <div className="h-1 bg-[#00c076] rounded-xs" />
             </div>
           </button>
 
@@ -61,8 +61,8 @@ export const OrderBook: React.FC<OrderBookProps> = ({
             title="Show Asks Only"
           >
             <div className="w-3.5 h-3.5 flex flex-col justify-center gap-0.5">
-              <div className="h-1 bg-rose-500 rounded-xs" />
-              <div className="h-1 bg-rose-500/60 rounded-xs" />
+              <div className="h-1 bg-[#f6465d] rounded-xs" />
+              <div className="h-1 bg-[#f6465d]/60 rounded-xs" />
             </div>
           </button>
 
@@ -72,8 +72,8 @@ export const OrderBook: React.FC<OrderBookProps> = ({
             title="Show Bids Only"
           >
             <div className="w-3.5 h-3.5 flex flex-col justify-center gap-0.5">
-              <div className="h-1 bg-emerald-500/60 rounded-xs" />
-              <div className="h-1 bg-emerald-500 rounded-xs" />
+              <div className="h-1 bg-[#00c076]/60 rounded-xs" />
+              <div className="h-1 bg-[#00c076] rounded-xs" />
             </div>
           </button>
         </div>
@@ -103,11 +103,11 @@ export const OrderBook: React.FC<OrderBookProps> = ({
               >
                 {/* Visual Depth Bar */}
                 <div
-                  className="absolute right-0 top-0 bottom-0 bg-rose-950/40 border-l border-rose-500/20 transition-all duration-300 pointer-events-none"
+                  className="absolute right-0 top-0 bottom-0 bg-[#f6465d]/15 border-l border-[#f6465d]/30 transition-all duration-300 pointer-events-none"
                   style={{ width: `${depthPercent}%` }}
                 />
 
-                <span className="relative z-10 text-rose-400 font-semibold group-hover:underline">
+                <span className="relative z-10 text-[#f6465d] font-semibold group-hover:underline">
                   {ask.price.toFixed(precision)}
                 </span>
                 <span className="relative z-10 text-zinc-300">{ask.amount.toFixed(3)}</span>
@@ -118,7 +118,7 @@ export const OrderBook: React.FC<OrderBookProps> = ({
         </div>
 
         {/* Current Mid Price Banner */}
-        <div className="py-1.5 px-2 bg-zinc-900/90 border-y border-zinc-800 flex items-center justify-between shrink-0 my-0.5">
+        <div className="py-1.5 px-2 bg-zinc-950 border-y border-zinc-900 flex items-center justify-between shrink-0 my-0.5">
           <div className="flex items-center gap-1.5">
             <span className="text-sm font-bold text-zinc-100">{currentPrice.toFixed(precision)}</span>
             <span className="text-[10px] text-zinc-400">USDT</span>
@@ -141,11 +141,11 @@ export const OrderBook: React.FC<OrderBookProps> = ({
               >
                 {/* Visual Depth Bar */}
                 <div
-                  className="absolute right-0 top-0 bottom-0 bg-emerald-950/40 border-l border-emerald-500/20 transition-all duration-300 pointer-events-none"
+                  className="absolute right-0 top-0 bottom-0 bg-[#00c076]/15 border-l border-[#00c076]/30 transition-all duration-300 pointer-events-none"
                   style={{ width: `${depthPercent}%` }}
                 />
 
-                <span className="relative z-10 text-emerald-400 font-semibold group-hover:underline">
+                <span className="relative z-10 text-[#00c076] font-semibold group-hover:underline">
                   {bid.price.toFixed(precision)}
                 </span>
                 <span className="relative z-10 text-zinc-300">{bid.amount.toFixed(3)}</span>

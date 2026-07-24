@@ -109,17 +109,17 @@ export const OrderForm: React.FC<OrderFormProps> = ({
   };
 
   return (
-    <div className="w-full lg:w-72 bg-zinc-950 border-t lg:border-t-0 lg:border-l border-zinc-800/80 flex flex-col shrink-0 text-xs font-mono select-none overflow-y-auto h-full">
+    <div className="w-full lg:w-72 bg-[#131722] border-t lg:border-t-0 lg:border-l border-white/10 flex flex-col shrink-0 text-xs font-mono select-none overflow-y-auto h-full">
       {/* Top Mode Selector: Spot vs Futures */}
-      <div className="p-2 bg-zinc-900/90 border-b border-zinc-800 flex items-center justify-between gap-1 shrink-0">
-        <div className="grid grid-cols-2 gap-1 w-full p-0.5 bg-zinc-950 rounded-lg border border-zinc-800">
+      <div className="p-2 bg-[#1c2230] border-b border-white/10 flex items-center justify-between gap-1 shrink-0">
+        <div className="grid grid-cols-2 gap-1 w-full p-0.5 bg-[#131722] rounded-lg border border-white/10">
           <button
             onClick={() => {
               soundFx.playClick();
               setTradingMode('spot');
             }}
             className={`py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
-              tradingMode === 'spot' ? 'bg-zinc-800 text-emerald-400 shadow-sm' : 'text-zinc-400 hover:text-zinc-200'
+              tradingMode === 'spot' ? 'bg-[#1c2230] text-emerald-400 shadow-sm' : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
             Spot
@@ -130,7 +130,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
               setTradingMode('futures');
             }}
             className={`py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1 ${
-              tradingMode === 'futures' ? 'bg-zinc-800 text-teal-400 shadow-sm' : 'text-zinc-400 hover:text-zinc-200'
+              tradingMode === 'futures' ? 'bg-[#1c2230] text-teal-400 shadow-sm' : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
             <span>Futures</span>

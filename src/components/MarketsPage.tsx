@@ -77,15 +77,15 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({
   };
 
   return (
-    <div className="flex-1 bg-[#0b0e11] text-[#f0f3f8] flex flex-col overflow-y-auto select-none pb-24 font-sans relative">
+    <div className="flex-1 bg-[#131722] text-[#f0f3f8] flex flex-col overflow-y-auto select-none pb-24 font-sans relative">
       {/* Background Ambient Liquid Glow */}
       <div className="absolute top-0 right-1/4 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-1/3 left-0 w-80 h-80 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
 
       {/* 1. Top Search Bar */}
-      <div className="px-3 pt-3 pb-1 sticky top-0 z-20 backdrop-blur-xl bg-[#0b0e11]/80">
-        <div className="bg-zinc-900/80 border border-white/10 rounded-full px-4 py-2 flex items-center gap-2 text-sm text-zinc-300 shadow-inner">
-          <Search className="w-4 h-4 text-zinc-400 shrink-0" />
+      <div className="px-3 pt-3 pb-1 sticky top-0 z-20 backdrop-blur-xl bg-[#131722]/80">
+        <div className="bg-[#1c2230] border border-white/10 rounded-full px-3.5 py-1.5 flex items-center gap-2 text-sm text-zinc-300 shadow-inner">
+          <Search className="w-3.5 h-3.5 text-zinc-400 shrink-0" />
           <input
             type="text"
             value={searchTerm}

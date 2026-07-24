@@ -27,13 +27,13 @@ export const AssetsPage: React.FC<AssetsPageProps> = ({
   const futuresUsdt = (totalUsdt * 0.995).toFixed(2);
 
   return (
-    <div className="flex-1 bg-[#0b0e11] text-[#f0f3f8] flex flex-col overflow-y-auto select-none pb-24 font-sans relative">
+    <div className="flex-1 bg-[#131722] text-[#f0f3f8] flex flex-col overflow-y-auto select-none pb-24 font-sans relative">
       {/* Background Ambient Liquid Glow */}
       <div className="absolute top-0 left-1/4 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute top-1/3 right-0 w-80 h-80 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
 
       {/* 1. Top Navigation Bar: Overview | Futures | Copy | Spot | Funding */}
-      <div className="px-4 border-b border-white/10 flex items-center gap-6 pt-3 text-base font-semibold overflow-x-auto no-scrollbar shrink-0 backdrop-blur-xl bg-[#0b0e11]/80 sticky top-0 z-20">
+      <div className="px-4 border-b border-white/10 flex items-center gap-6 pt-3 text-base font-semibold overflow-x-auto no-scrollbar shrink-0 backdrop-blur-xl bg-[#131722]/80 sticky top-0 z-20">
         <button
           onClick={() => setActiveTab('overview')}
           className={`pb-2.5 transition-colors relative whitespace-nowrap cursor-pointer ${

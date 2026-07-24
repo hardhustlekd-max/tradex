@@ -60,9 +60,9 @@ export const AiAnalystDrawer: React.FC<AiAnalystDrawerProps> = ({
   };
 
   return (
-    <div className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-zinc-950 border-l border-zinc-800 shadow-2xl flex flex-col font-mono text-zinc-100 animate-in slide-in-from-right duration-200">
+    <div className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-[#131722] border-l border-white/10 shadow-2xl flex flex-col font-mono text-zinc-100 animate-in slide-in-from-right duration-200">
       {/* Drawer Header */}
-      <div className="p-4 border-b border-zinc-800 flex items-center justify-between bg-zinc-900/60">
+      <div className="p-4 border-b border-white/10 flex items-center justify-between bg-[#1c2230]">
         <div className="flex items-center gap-2">
           <div className="p-1.5 rounded-lg bg-emerald-950 text-emerald-400 border border-emerald-500/30">
             <Sparkles className="w-4 h-4 text-emerald-400 animate-pulse" />

@@ -11,7 +11,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-feature-settings: "tnum" 1, "cv05" 1;
-    background-color: #0b0e11;
+    background-color: #131722;
     color: #f0f3f8;
   }
 
@@ -21,35 +21,35 @@
   }
 }
 
-/* Apple Liquid Design Glass Utilities - Ergonomic Trading Palette */
+/* Glass & Card Utilities - Modern Trading Palette */
 .liquid-glass {
-  background: rgba(18, 22, 28, 0.75);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  background: rgba(25, 31, 44, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .liquid-card {
-  background: linear-gradient(180deg, rgba(24, 29, 38, 0.75) 0%, rgba(15, 18, 24, 0.85) 100%);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 12px 32px -8px rgba(0, 0, 0, 0.6), inset 0 1px 1px 0 rgba(255, 255, 255, 0.1);
+  background: linear-gradient(180deg, rgba(30, 37, 52, 0.8) 0%, rgba(22, 27, 38, 0.9) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.35), inset 0 1px 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .liquid-dock {
-  background: rgba(18, 22, 29, 0.82);
-  backdrop-filter: blur(28px);
-  -webkit-backdrop-filter: blur(28px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), inset 0 1px 1px 0 rgba(255, 255, 255, 0.15);
+  background: rgba(25, 31, 44, 0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.4);
 }
 
 .liquid-btn-primary {
   background: linear-gradient(135deg, #fcd535 0%, #f0b90b 100%);
   color: #000000;
   font-weight: 700;
-  box-shadow: 0 4px 18px rgba(252, 213, 53, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+  box-shadow: 0 4px 14px rgba(252, 213, 53, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.4);
 }
 
 .liquid-btn-primary:hover {
@@ -59,13 +59,13 @@
 .liquid-btn-green {
   background: linear-gradient(135deg, #0ecb81 0%, #059669 100%);
   color: #ffffff;
-  box-shadow: 0 4px 16px rgba(14, 203, 129, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 14px rgba(14, 203, 129, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.3);
 }
 
 .liquid-btn-red {
   background: linear-gradient(135deg, #f6465d 0%, #e11d48 100%);
   color: #ffffff;
-  box-shadow: 0 4px 16px rgba(246, 70, 93, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 14px rgba(246, 70, 93, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.3);
 }
 
 /* Tabular numbers helper for orderbook tables & price displays */
@@ -73,7 +73,7 @@
   font-variant-numeric: tabular-nums;
 }
 
-/* Custom minimal sleek liquid scrollbar */
+/* Custom minimal sleek scrollbar */
 ::-webkit-scrollbar {
   width: 4px;
   height: 4px;
@@ -82,11 +82,11 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.15);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.3);
 }
 
 .no-scrollbar::-webkit-scrollbar {

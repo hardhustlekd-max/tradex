@@ -40,9 +40,9 @@ export const FaucetModal: React.FC<FaucetModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-zinc-950 border border-zinc-800 rounded-xl shadow-2xl overflow-hidden font-mono text-zinc-100 animate-in fade-in zoom-in-95 duration-150">
+      <div className="w-full max-w-md bg-[#131722] border border-white/10 rounded-xl shadow-2xl overflow-hidden font-mono text-zinc-100 animate-in fade-in zoom-in-95 duration-150">
         {/* Modal Header */}
-        <div className="p-4 border-b border-zinc-800 flex items-center justify-between bg-zinc-900/50">
+        <div className="p-4 border-b border-white/10 flex items-center justify-between bg-[#1c2230]">
           <div className="flex items-center gap-2">
             <div className="p-1.5 rounded-lg bg-teal-950 text-teal-400 border border-teal-500/30">
               <Wallet className="w-4 h-4" />

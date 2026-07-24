@@ -69,9 +69,9 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
   return (
     <>
       {isPositionsPanelVisible && (
-        <div className="bg-[#000000] border-t border-zinc-900 flex flex-col shrink-0 text-xs font-sans select-none overflow-hidden pb-1 mb-16">
+        <div className="bg-[#131722] border-t border-white/10 flex flex-col shrink-0 text-xs font-sans select-none overflow-hidden pb-1 mb-16">
           {/* 1. Header Row Tabs: Positions (1) | Orders (0) | Copy trades */}
-      <div className="h-8 px-3 bg-[#000000] border-b border-zinc-900 flex items-center justify-between text-zinc-400 shrink-0">
+      <div className="h-8 px-3 bg-[#131722] border-b border-white/10 flex items-center justify-between text-zinc-400 shrink-0">
         <div className="flex items-center gap-4 font-medium text-xs">
           <button
             onClick={() => {
@@ -126,7 +126,7 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
       </div>
 
       {/* 2. Controls Row: [ ] Show current  |  Close all button */}
-      <div className="px-3 py-1.5 flex items-center justify-between bg-[#000000] shrink-0 text-xs text-zinc-300">
+      <div className="px-3 py-1.5 flex items-center justify-between bg-[#131722] shrink-0 text-xs text-zinc-300">
         <label className="flex items-center gap-1.5 cursor-pointer select-none">
           <input
             type="checkbox"
@@ -317,7 +317,7 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
     )}
 
       {/* 4. Bottom Navigation Bar - Flat Edge-to-Edge Rectangular Design */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 w-full bg-[#0b0e11]/95 backdrop-blur-xl border-t border-white/10 select-none">
+      <div className="fixed bottom-0 left-0 right-0 z-50 w-full bg-[#131722]/95 backdrop-blur-xl border-t border-white/10 select-none">
         <div className="max-w-lg mx-auto h-16 px-2 flex items-center justify-around text-[10px] font-sans">
           {/* 1. Home */}
           <button

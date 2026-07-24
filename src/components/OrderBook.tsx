@@ -34,9 +34,9 @@ export const OrderBook: React.FC<OrderBookProps> = ({
   const visibleBids = viewMode === 'asks' ? [] : viewMode === 'bids' ? bids.slice(0, 16) : bids.slice(0, 8);
 
   return (
-    <div className="w-full lg:w-60 bg-[#000000] border-b lg:border-b-0 lg:border-r border-zinc-900 flex flex-col shrink-0 text-xs font-mono select-none h-full min-h-[250px] lg:min-h-0">
+    <div className="w-full lg:w-60 bg-[#131722] border-b lg:border-b-0 lg:border-r border-white/10 flex flex-col shrink-0 text-xs font-mono select-none h-full min-h-[250px] lg:min-h-0">
       {/* Orderbook Header Controls */}
-      <div className="h-9 px-2.5 bg-[#000000] border-b border-zinc-900 flex items-center justify-between text-zinc-400 shrink-0 font-sans">
+      <div className="h-9 px-2.5 bg-[#131722] border-b border-white/10 flex items-center justify-between text-zinc-400 shrink-0 font-sans">
         <div className="flex items-center gap-1.5 font-bold text-zinc-100">
           <BookOpen className="w-3.5 h-3.5 text-[#00c076]" />
           <span>Order Book</span>
@@ -46,7 +46,7 @@ export const OrderBook: React.FC<OrderBookProps> = ({
         <div className="flex items-center gap-1">
           <button
             onClick={() => setViewMode('both')}
-            className={`p-1 rounded cursor-pointer ${viewMode === 'both' ? 'bg-zinc-800 text-zinc-100' : 'hover:text-zinc-200'}`}
+            className={`p-1 rounded cursor-pointer ${viewMode === 'both' ? 'bg-[#1c2230] text-zinc-100' : 'hover:text-zinc-200'}`}
             title="Show Both Asks & Bids"
           >
             <div className="w-3.5 h-3.5 flex flex-col justify-between py-0.5">
@@ -57,7 +57,7 @@ export const OrderBook: React.FC<OrderBookProps> = ({
 
           <button
             onClick={() => setViewMode('asks')}
-            className={`p-1 rounded cursor-pointer ${viewMode === 'asks' ? 'bg-zinc-800 text-zinc-100' : 'hover:text-zinc-200'}`}
+            className={`p-1 rounded cursor-pointer ${viewMode === 'asks' ? 'bg-[#1c2230] text-zinc-100' : 'hover:text-zinc-200'}`}
             title="Show Asks Only"
           >
             <div className="w-3.5 h-3.5 flex flex-col justify-center gap-0.5">
@@ -68,7 +68,7 @@ export const OrderBook: React.FC<OrderBookProps> = ({
 
           <button
             onClick={() => setViewMode('bids')}
-            className={`p-1 rounded cursor-pointer ${viewMode === 'bids' ? 'bg-zinc-800 text-zinc-100' : 'hover:text-zinc-200'}`}
+            className={`p-1 rounded cursor-pointer ${viewMode === 'bids' ? 'bg-[#1c2230] text-zinc-100' : 'hover:text-zinc-200'}`}
             title="Show Bids Only"
           >
             <div className="w-3.5 h-3.5 flex flex-col justify-center gap-0.5">
@@ -80,7 +80,7 @@ export const OrderBook: React.FC<OrderBookProps> = ({
       </div>
 
       {/* Table Column Headers */}
-      <div className="px-2 py-1 flex items-center justify-between text-[10px] text-zinc-400 border-b border-zinc-900 shrink-0">
+      <div className="px-2 py-1 flex items-center justify-between text-[10px] text-zinc-400 border-b border-white/10 shrink-0">
         <span>Price (USDT)</span>
         <span>Size</span>
         <span>Total</span>

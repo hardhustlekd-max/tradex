@@ -34,9 +34,9 @@ export const PairSelectorModal: React.FC<PairSelectorModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-xs flex items-center justify-center p-4">
-      <div className="w-full max-w-2xl bg-zinc-950 border border-zinc-800 rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh] font-mono text-zinc-100 animate-in fade-in zoom-in-95 duration-150">
+      <div className="w-full max-w-2xl bg-[#131722] border border-white/10 rounded-xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh] font-mono text-zinc-100 animate-in fade-in zoom-in-95 duration-150">
         {/* Modal Header */}
-        <div className="p-4 border-b border-zinc-800 flex items-center justify-between">
+        <div className="p-4 border-b border-white/10 flex items-center justify-between">
           <h2 className="text-base font-bold flex items-center gap-2">
             <span>Select Trading Market</span>
             <span className="text-xs font-normal text-zinc-400">({filteredPairs.length} Pairs)</span>

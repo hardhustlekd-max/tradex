@@ -74,8 +74,8 @@ export const TradingChart: React.FC<TradingChartProps> = ({
     canvas.height = height * dpr;
     ctx.scale(dpr, dpr);
 
-    // 1. Solid Pitch Black Background
-    ctx.fillStyle = '#000000';
+    // 1. Solid Dark Slate Background
+    ctx.fillStyle = '#131722';
     ctx.fillRect(0, 0, width, height);
 
     // Layout configuration
@@ -382,9 +382,9 @@ export const TradingChart: React.FC<TradingChartProps> = ({
   const ema20Val = calculateEMA(candles, 20).pop() || currentPrice;
 
   return (
-    <div className="flex-1 flex flex-col bg-[#000000] min-w-0 select-none relative h-[420px] lg:h-auto lg:flex-1 shrink-0">
+    <div className="flex-1 flex flex-col bg-[#131722] min-w-0 select-none relative h-[420px] lg:h-auto lg:flex-1 shrink-0">
       {/* 1. Timeframe Navigation Toolbar */}
-      <div className="h-10 px-3 bg-[#000000] border-b border-zinc-900 flex items-center justify-between gap-1 text-xs font-sans text-zinc-300 shrink-0">
+      <div className="h-9 px-3 bg-[#131722] border-b border-white/10 flex items-center justify-between gap-1 text-xs font-sans text-zinc-300 shrink-0">
         <div className="flex items-center gap-4">
           {(['Live', '15m', '1h', '4h', '1D'] as ChartTimeframe[]).map((tf) => {
             const isActive = timeframe === tf || (tf === '1h' && timeframe === '1h');
@@ -422,7 +422,7 @@ export const TradingChart: React.FC<TradingChartProps> = ({
       </div>
 
       {/* 2. Indicator Legend Header Row (EMA 5, EMA 10, EMA 20) */}
-      <div className="px-3 py-1 bg-[#000000] flex items-center gap-3 text-[11px] font-mono shrink-0">
+      <div className="px-3 py-1 bg-[#131722] flex items-center gap-3 text-[11px] font-mono shrink-0 border-b border-white/5">
         <span className="text-[#f59e0b]">EMA5:{formatNumber(ema5Val, 1)}</span>
         <span className="text-[#facc15]">EMA10:{formatNumber(ema10Val, 1)}</span>
         <span className="text-[#d946ef]">EMA20:{formatNumber(ema20Val, 1)}</span>
@@ -441,7 +441,7 @@ export const TradingChart: React.FC<TradingChartProps> = ({
       </div>
 
       {/* 4. Sub-chart Indicators Text (VOL & MACD) */}
-      <div className="px-3 py-1 bg-[#000000] flex items-center gap-3 text-[10px] font-mono text-zinc-400 shrink-0 border-t border-zinc-900">
+      <div className="px-3 py-1 bg-[#131722] flex items-center gap-3 text-[10px] font-mono text-zinc-400 shrink-0 border-t border-white/10">
         <span>VOL:3.7056K</span>
         <span className="text-[#f59e0b]">MACD(12,26,9)</span>
         <span className="text-[#38bdf8]">DIF:-110.4</span>
@@ -449,7 +449,7 @@ export const TradingChart: React.FC<TradingChartProps> = ({
       </div>
 
       {/* 5. Floating Action Buttons (Open long / Open short) */}
-      <div className="px-3 py-2 bg-[#000000] border-t border-zinc-900 shrink-0 flex items-center justify-center gap-2">
+      <div className="px-3 py-2 bg-[#131722] border-t border-white/10 shrink-0 flex items-center justify-center gap-2">
         <button
           onClick={() => {
             soundFx.playClick();

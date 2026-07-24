@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import { 
   TradingPair, 
   Candle, 
@@ -419,109 +420,107 @@ export default function App() {
       )}
 
       {/* Main Workspace Body Layout */}
-      <div className="flex-1 flex flex-col min-h-0 overflow-y-auto lg:overflow-hidden">
-        {activeDockTab === 'home' && (
-          <HomePage
-            pairs={pairs}
-            onSelectPair={handleSelectPair}
-            onNavigateToFutures={() => setActiveDockTab('futures')}
-            onOpenDeposit={() => setIsFaucetModalOpen(true)}
-          />
-        )}
-
-        {activeDockTab === 'markets' && (
-          <MarketsPage
-            pairs={pairs}
-            onSelectPair={handleSelectPair}
-            onNavigateToFutures={() => setActiveDockTab('futures')}
-          />
-        )}
-
-        {activeDockTab === 'assets' && (
-          <AssetsPage
-            portfolio={portfolio}
-            onOpenDeposit={() => setIsFaucetModalOpen(true)}
-          />
-        )}
-
-        {(activeDockTab === 'futures' || activeDockTab === 'trade') && (
-          <>
-            {/* Mobile Navigation Tab Bar (< lg) */}
-            <div className="flex lg:hidden bg-[#000000] border-b border-zinc-900 text-xs font-semibold shrink-0 sticky top-0 z-20">
-              <button
-                onClick={() => setMobileTab('chart')}
-                className={`flex-1 py-2 text-center transition-colors border-b-2 cursor-pointer ${
-                  mobileTab === 'chart' ? 'border-white text-white font-bold bg-zinc-950/80' : 'border-transparent text-zinc-400 hover:text-zinc-200'
-                }`}
-              >
-                Chart
-              </button>
-              <button
-                onClick={() => setMobileTab('orderbook')}
-                className={`flex-1 py-2 text-center transition-colors border-b-2 cursor-pointer ${
-                  mobileTab === 'orderbook' ? 'border-white text-white font-bold bg-zinc-950/80' : 'border-transparent text-zinc-400 hover:text-zinc-200'
-                }`}
-              >
-                Order Book
-              </button>
-              <button
-                onClick={() => setMobileTab('trades')}
-                className={`flex-1 py-2 text-center transition-colors border-b-2 cursor-pointer ${
-                  mobileTab === 'trades' ? 'border-white text-white font-bold bg-zinc-950/80' : 'border-transparent text-zinc-400 hover:text-zinc-200'
-                }`}
-              >
-                Trades
-              </button>
-              <button
-                onClick={() => setMobileTab('order')}
-                className={`flex-1 py-2 text-center transition-colors border-b-2 cursor-pointer ${
-                  mobileTab === 'order' ? 'border-white text-white font-bold bg-zinc-950/80' : 'border-transparent text-zinc-400 hover:text-zinc-200'
-                }`}
-              >
-                Trade
-              </button>
-            </div>
-
-            {/* Desktop Layout (lg:flex) */}
-            <div className="hidden lg:flex flex-1 min-h-0 bg-[#000000]">
-              {/* Main Candlestick Chart Workspace */}
-              <TradingChart
-                candles={candles}
-                symbol={activePair.symbol}
-                precision={activePair.precision}
-                timeframe={timeframe}
-                onChangeTimeframe={handleChangeTimeframe}
-                currentPrice={activePair.price}
-                onOpenLong={() => setMobileTab('order')}
-                onOpenShort={() => setMobileTab('order')}
+      <div className="flex-1 flex flex-col min-h-0 overflow-y-auto lg:overflow-hidden relative pb-16">
+        <AnimatePresence mode="wait">
+          {activeDockTab === 'home' && (
+            <motion.div
+              key="home"
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.18, ease: "easeOut" }}
+              className="flex-1 flex flex-col min-h-0 w-full"
+            >
+              <HomePage
+                pairs={pairs}
+                onSelectPair={handleSelectPair}
+                onNavigateToFutures={() => setActiveDockTab('futures')}
+                onOpenDeposit={() => setIsFaucetModalOpen(true)}
               />
+            </motion.div>
+          )}
 
-              {/* Live Order Book */}
-              <OrderBook
-                asks={orderBook.asks}
-                bids={orderBook.bids}
-                currentPrice={activePair.price}
-                precision={activePair.precision}
-                onSelectPrice={(price) => {
-                  setSelectedBookPrice(price);
-                }}
+          {activeDockTab === 'markets' && (
+            <motion.div
+              key="markets"
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.18, ease: "easeOut" }}
+              className="flex-1 flex flex-col min-h-0 w-full"
+            >
+              <MarketsPage
+                pairs={pairs}
+                onSelectPair={handleSelectPair}
+                onNavigateToFutures={() => setActiveDockTab('futures')}
               />
+            </motion.div>
+          )}
 
-              {/* Recent Trades Stream */}
-              <RecentTrades trades={trades} precision={activePair.precision} />
-
-              {/* Order Placement Form */}
-              <OrderForm
-                activePair={activePair}
+          {activeDockTab === 'assets' && (
+            <motion.div
+              key="assets"
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.18, ease: "easeOut" }}
+              className="flex-1 flex flex-col min-h-0 w-full"
+            >
+              <AssetsPage
                 portfolio={portfolio}
-                selectedPrice={selectedBookPrice}
-                onSubmitOrder={handleSubmitOrder}
+                onOpenDeposit={() => setIsFaucetModalOpen(true)}
               />
-            </div>
+            </motion.div>
+          )}
 
-            {/* Mobile View Active Tab Content (< lg) */}
-            <div className="flex lg:hidden flex-col shrink-0 relative bg-[#000000]">
-              {mobileTab === 'chart' && (
+          {(activeDockTab === 'futures' || activeDockTab === 'trade') && (
+            <motion.div
+              key="trading"
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.18, ease: "easeOut" }}
+              className="flex-1 flex flex-col min-h-0 w-full"
+            >
+              {/* Mobile Navigation Tab Bar (< lg) */}
+              <div className="flex lg:hidden bg-[#000000] border-b border-zinc-900 text-xs font-semibold shrink-0 sticky top-0 z-20">
+                <button
+                  onClick={() => setMobileTab('chart')}
+                  className={`flex-1 py-2 text-center transition-colors border-b-2 cursor-pointer ${
+                    mobileTab === 'chart' ? 'border-amber-400 text-amber-400 font-bold bg-zinc-950/80' : 'border-transparent text-zinc-400 hover:text-zinc-200'
+                  }`}
+                >
+                  Chart
+                </button>
+                <button
+                  onClick={() => setMobileTab('orderbook')}
+                  className={`flex-1 py-2 text-center transition-colors border-b-2 cursor-pointer ${
+                    mobileTab === 'orderbook' ? 'border-amber-400 text-amber-400 font-bold bg-zinc-950/80' : 'border-transparent text-zinc-400 hover:text-zinc-200'
+                  }`}
+                >
+                  Order Book
+                </button>
+                <button
+                  onClick={() => setMobileTab('trades')}
+                  className={`flex-1 py-2 text-center transition-colors border-b-2 cursor-pointer ${
+                    mobileTab === 'trades' ? 'border-amber-400 text-amber-400 font-bold bg-zinc-950/80' : 'border-transparent text-zinc-400 hover:text-zinc-200'
+                  }`}
+                >
+                  Trades
+                </button>
+                <button
+                  onClick={() => setMobileTab('order')}
+                  className={`flex-1 py-2 text-center transition-colors border-b-2 cursor-pointer ${
+                    mobileTab === 'order' ? 'border-amber-400 text-amber-400 font-bold bg-zinc-950/80' : 'border-transparent text-zinc-400 hover:text-zinc-200'
+                  }`}
+                >
+                  Trade
+                </button>
+              </div>
+
+              {/* Desktop Layout (lg:flex) */}
+              <div className="hidden lg:flex flex-1 min-h-0 bg-[#000000]">
+                {/* Main Candlestick Chart Workspace */}
                 <TradingChart
                   candles={candles}
                   symbol={activePair.symbol}
@@ -532,9 +531,8 @@ export default function App() {
                   onOpenLong={() => setMobileTab('order')}
                   onOpenShort={() => setMobileTab('order')}
                 />
-              )}
 
-              {mobileTab === 'orderbook' && (
+                {/* Live Order Book */}
                 <OrderBook
                   asks={orderBook.asks}
                   bids={orderBook.bids}
@@ -542,28 +540,101 @@ export default function App() {
                   precision={activePair.precision}
                   onSelectPrice={(price) => {
                     setSelectedBookPrice(price);
-                    setMobileTab('order');
                   }}
                 />
-              )}
 
-              {mobileTab === 'trades' && (
+                {/* Recent Trades Stream */}
                 <RecentTrades trades={trades} precision={activePair.precision} />
-              )}
 
-              {mobileTab === 'order' && (
+                {/* Order Placement Form */}
                 <OrderForm
                   activePair={activePair}
                   portfolio={portfolio}
                   selectedPrice={selectedBookPrice}
-                  onSubmitOrder={(ord) => {
-                    handleSubmitOrder(ord);
-                  }}
+                  onSubmitOrder={handleSubmitOrder}
                 />
-              )}
-            </div>
-          </>
-        )}
+              </div>
+
+              {/* Mobile View Active Tab Content (< lg) */}
+              <div className="flex lg:hidden flex-col shrink-0 relative bg-[#000000]">
+                <AnimatePresence mode="wait">
+                  {mobileTab === 'chart' && (
+                    <motion.div
+                      key="mobile-chart"
+                      initial={{ opacity: 0, x: -6 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 6 }}
+                      transition={{ duration: 0.15 }}
+                    >
+                      <TradingChart
+                        candles={candles}
+                        symbol={activePair.symbol}
+                        precision={activePair.precision}
+                        timeframe={timeframe}
+                        onChangeTimeframe={handleChangeTimeframe}
+                        currentPrice={activePair.price}
+                        onOpenLong={() => setMobileTab('order')}
+                        onOpenShort={() => setMobileTab('order')}
+                      />
+                    </motion.div>
+                  )}
+
+                  {mobileTab === 'orderbook' && (
+                    <motion.div
+                      key="mobile-orderbook"
+                      initial={{ opacity: 0, x: -6 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 6 }}
+                      transition={{ duration: 0.15 }}
+                    >
+                      <OrderBook
+                        asks={orderBook.asks}
+                        bids={orderBook.bids}
+                        currentPrice={activePair.price}
+                        precision={activePair.precision}
+                        onSelectPrice={(price) => {
+                          setSelectedBookPrice(price);
+                          setMobileTab('order');
+                        }}
+                      />
+                    </motion.div>
+                  )}
+
+                  {mobileTab === 'trades' && (
+                    <motion.div
+                      key="mobile-trades"
+                      initial={{ opacity: 0, x: -6 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 6 }}
+                      transition={{ duration: 0.15 }}
+                    >
+                      <RecentTrades trades={trades} precision={activePair.precision} />
+                    </motion.div>
+                  )}
+
+                  {mobileTab === 'order' && (
+                    <motion.div
+                      key="mobile-order"
+                      initial={{ opacity: 0, x: -6 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 6 }}
+                      transition={{ duration: 0.15 }}
+                    >
+                      <OrderForm
+                        activePair={activePair}
+                        portfolio={portfolio}
+                        selectedPrice={selectedBookPrice}
+                        onSubmitOrder={(ord) => {
+                          handleSubmitOrder(ord);
+                        }}
+                      />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Bottom Floating Menu & Positions Panel (Fixed at viewport bottom) */}

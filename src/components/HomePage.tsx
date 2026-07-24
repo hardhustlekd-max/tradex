@@ -53,7 +53,7 @@ export const HomePage: React.FC<HomePageProps> = ({
   ];
 
   return (
-    <div className="flex-1 overflow-y-auto bg-[#0b0e11] text-[#f0f3f8] font-sans px-4 pt-3 pb-36 max-w-lg mx-auto w-full select-none relative">
+    <div className="flex-1 overflow-y-auto bg-[#0b0e11] text-[#f0f3f8] font-sans px-4 pt-3 pb-24 max-w-lg mx-auto w-full select-none relative">
       {/* Background Ambient Liquid Glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-80 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
 

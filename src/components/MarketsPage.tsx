@@ -77,7 +77,7 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({
   };
 
   return (
-    <div className="flex-1 bg-[#0b0e11] text-[#f0f3f8] flex flex-col overflow-y-auto select-none pb-36 font-sans relative">
+    <div className="flex-1 bg-[#0b0e11] text-[#f0f3f8] flex flex-col overflow-y-auto select-none pb-24 font-sans relative">
       {/* Background Ambient Liquid Glow */}
       <div className="absolute top-0 right-1/4 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-1/3 left-0 w-80 h-80 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'motion/react';
 import { Position, Order, Portfolio, TradingPair } from '../types';
 import { formatCurrency, formatNumber } from '../utils/calc';
 import { soundFx } from '../utils/audio';
@@ -68,7 +69,7 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
   return (
     <>
       {isPositionsPanelVisible && (
-        <div className="bg-[#000000] border-t border-zinc-900 flex flex-col shrink-0 text-xs font-sans select-none overflow-hidden pb-1">
+        <div className="bg-[#000000] border-t border-zinc-900 flex flex-col shrink-0 text-xs font-sans select-none overflow-hidden pb-1 mb-16">
           {/* 1. Header Row Tabs: Positions (1) | Orders (0) | Copy trades */}
       <div className="h-8 px-3 bg-[#000000] border-b border-zinc-900 flex items-center justify-between text-zinc-400 shrink-0">
         <div className="flex items-center gap-4 font-medium text-xs">
@@ -315,23 +316,30 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
       </div>
     )}
 
-      {/* 4. Bottom Floating Navigation Dock Bar - Apple Liquid Glass Style */}
-      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-[400px] pointer-events-auto select-none">
-        <div className="liquid-dock rounded-full p-1.5 flex items-center justify-between text-zinc-400 text-[10px] font-sans">
+      {/* 4. Bottom Navigation Bar - Flat Edge-to-Edge Rectangular Design */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 w-full bg-[#0b0e11]/95 backdrop-blur-xl border-t border-white/10 select-none">
+        <div className="max-w-lg mx-auto h-16 px-2 flex items-center justify-around text-[10px] font-sans">
           {/* 1. Home */}
           <button
             onClick={() => {
               soundFx.playClick();
               if (onSelectNavDock) onSelectNavDock('home');
             }}
-            className={`flex flex-col items-center justify-center gap-0.5 cursor-pointer transition-all duration-200 active:scale-95 ${
+            className={`flex-1 h-full flex flex-col items-center justify-center gap-1 cursor-pointer transition-colors relative ${
               activeNavDock === 'home'
-                ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-black rounded-full px-3.5 py-1.5 font-extrabold shadow-md shadow-amber-500/25 border border-yellow-300/40'
-                : 'text-zinc-400 hover:text-zinc-100 px-3 py-1.5'
+                ? 'text-amber-400 font-bold'
+                : 'text-zinc-400 hover:text-zinc-200 font-medium'
             }`}
           >
-            <Home className="w-4 h-4 text-current" />
-            <span className="text-[10px] tracking-tight">Home</span>
+            {activeNavDock === 'home' && (
+              <motion.span
+                layoutId="activeDockIndicator"
+                className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-[2px] bg-gradient-to-r from-amber-400 to-yellow-500 shadow-sm shadow-amber-400/50"
+                transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+              />
+            )}
+            <Home className="w-5 h-5 text-current" />
+            <span className="text-[11px] tracking-tight">Home</span>
           </button>
 
           {/* 2. Markets */}
@@ -340,14 +348,21 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
               soundFx.playClick();
               if (onSelectNavDock) onSelectNavDock('markets');
             }}
-            className={`flex flex-col items-center justify-center gap-0.5 cursor-pointer transition-all duration-200 active:scale-95 ${
+            className={`flex-1 h-full flex flex-col items-center justify-center gap-1 cursor-pointer transition-colors relative ${
               activeNavDock === 'markets'
-                ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-black rounded-full px-3.5 py-1.5 font-extrabold shadow-md shadow-amber-500/25 border border-yellow-300/40'
-                : 'text-zinc-400 hover:text-zinc-100 px-3 py-1.5'
+                ? 'text-amber-400 font-bold'
+                : 'text-zinc-400 hover:text-zinc-200 font-medium'
             }`}
           >
-            <BarChart2 className="w-4 h-4 text-current" />
-            <span className="text-[10px] tracking-tight">Markets</span>
+            {activeNavDock === 'markets' && (
+              <motion.span
+                layoutId="activeDockIndicator"
+                className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-[2px] bg-gradient-to-r from-amber-400 to-yellow-500 shadow-sm shadow-amber-400/50"
+                transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+              />
+            )}
+            <BarChart2 className="w-5 h-5 text-current" />
+            <span className="text-[11px] tracking-tight">Markets</span>
           </button>
 
           {/* 3. Futures */}
@@ -356,16 +371,23 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
               soundFx.playClick();
               if (onSelectNavDock) onSelectNavDock('futures');
             }}
-            className={`flex flex-col items-center justify-center gap-0.5 cursor-pointer transition-all duration-200 active:scale-95 ${
+            className={`flex-1 h-full flex flex-col items-center justify-center gap-1 cursor-pointer transition-colors relative ${
               activeNavDock === 'futures'
-                ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-black rounded-full px-3.5 py-1.5 font-extrabold shadow-md shadow-amber-500/25 border border-yellow-300/40'
-                : 'text-zinc-400 hover:text-zinc-100 px-3 py-1.5'
+                ? 'text-amber-400 font-bold'
+                : 'text-zinc-400 hover:text-zinc-200 font-medium'
             }`}
           >
-            <div className="w-4 h-3.5 border-[1.5px] border-current rounded-[3px] flex items-center justify-center p-[1px]">
-              <div className="w-1.5 h-1 bg-current rounded-[1px]" />
+            {activeNavDock === 'futures' && (
+              <motion.span
+                layoutId="activeDockIndicator"
+                className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-[2px] bg-gradient-to-r from-amber-400 to-yellow-500 shadow-sm shadow-amber-400/50"
+                transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+              />
+            )}
+            <div className="w-5 h-4 border-[1.5px] border-current rounded-[2px] flex items-center justify-center p-[1px]">
+              <div className="w-2 h-1.5 bg-current rounded-[1px]" />
             </div>
-            <span className="text-[10px] tracking-tight">Futures</span>
+            <span className="text-[11px] tracking-tight">Futures</span>
           </button>
 
           {/* 4. Trade */}
@@ -374,14 +396,21 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
               soundFx.playClick();
               if (onSelectNavDock) onSelectNavDock('trade');
             }}
-            className={`flex flex-col items-center justify-center gap-0.5 cursor-pointer transition-all duration-200 active:scale-95 ${
+            className={`flex-1 h-full flex flex-col items-center justify-center gap-1 cursor-pointer transition-colors relative ${
               activeNavDock === 'trade'
-                ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-black rounded-full px-3.5 py-1.5 font-extrabold shadow-md shadow-amber-500/25 border border-yellow-300/40'
-                : 'text-zinc-400 hover:text-zinc-100 px-3 py-1.5'
+                ? 'text-amber-400 font-bold'
+                : 'text-zinc-400 hover:text-zinc-200 font-medium'
             }`}
           >
-            <ArrowLeftRight className="w-4 h-4 text-current" />
-            <span className="text-[10px] tracking-tight">Trade</span>
+            {activeNavDock === 'trade' && (
+              <motion.span
+                layoutId="activeDockIndicator"
+                className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-[2px] bg-gradient-to-r from-amber-400 to-yellow-500 shadow-sm shadow-amber-400/50"
+                transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+              />
+            )}
+            <ArrowLeftRight className="w-5 h-5 text-current" />
+            <span className="text-[11px] tracking-tight">Trade</span>
           </button>
 
           {/* 5. Assets */}
@@ -390,14 +419,21 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
               soundFx.playClick();
               if (onSelectNavDock) onSelectNavDock('assets');
             }}
-            className={`flex flex-col items-center justify-center gap-0.5 cursor-pointer transition-all duration-200 active:scale-95 ${
+            className={`flex-1 h-full flex flex-col items-center justify-center gap-1 cursor-pointer transition-colors relative ${
               activeNavDock === 'assets'
-                ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-black rounded-full px-3.5 py-1.5 font-extrabold shadow-md shadow-amber-500/25 border border-yellow-300/40'
-                : 'text-zinc-400 hover:text-zinc-100 px-3 py-1.5'
+                ? 'text-amber-400 font-bold'
+                : 'text-zinc-400 hover:text-zinc-200 font-medium'
             }`}
           >
-            <Wallet className="w-4 h-4 text-current" />
-            <span className="text-[10px] tracking-tight">Assets</span>
+            {activeNavDock === 'assets' && (
+              <motion.span
+                layoutId="activeDockIndicator"
+                className="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-[2px] bg-gradient-to-r from-amber-400 to-yellow-500 shadow-sm shadow-amber-400/50"
+                transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+              />
+            )}
+            <Wallet className="w-5 h-5 text-current" />
+            <span className="text-[11px] tracking-tight">Assets</span>
           </button>
         </div>
       </div>

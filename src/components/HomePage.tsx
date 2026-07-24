@@ -151,15 +151,15 @@ export const HomePage: React.FC<HomePageProps> = ({
       <div className="grid grid-cols-4 gap-y-4 gap-x-2 mb-5">
         {/* Row 1 */}
         <div className="flex flex-col items-center gap-1 cursor-pointer group" onClick={() => soundFx.playClick()}>
-          <div className="w-10 h-10 rounded-xl bg-[#1c2230] border border-white/10 group-hover:border-blue-500/40 group-hover:bg-blue-600/10 flex items-center justify-center transition-all shadow-sm active:scale-95">
-            <Zap className="w-4 h-4 text-zinc-200 group-hover:text-blue-400 transition-colors" />
+          <div className="w-10 h-10 rounded-xl bg-[#1c2230] border border-white/10 group-hover:border-amber-400/50 group-hover:bg-amber-400/10 flex items-center justify-center transition-all shadow-sm active:scale-95">
+            <Zap className="w-4 h-4 text-zinc-200 group-hover:text-amber-400 transition-colors" />
           </div>
           <span className="text-[11px] text-zinc-300 font-medium">Power-up</span>
         </div>
 
         <div className="flex flex-col items-center gap-1 cursor-pointer group" onClick={() => soundFx.playClick()}>
-          <div className="w-10 h-10 rounded-xl bg-[#1c2230] border border-white/10 group-hover:border-blue-500/40 group-hover:bg-blue-600/10 flex items-center justify-center transition-all shadow-sm active:scale-95">
-            <RefreshCw className="w-4 h-4 text-zinc-200 group-hover:text-blue-400 transition-colors" />
+          <div className="w-10 h-10 rounded-xl bg-[#1c2230] border border-white/10 group-hover:border-amber-400/50 group-hover:bg-amber-400/10 flex items-center justify-center transition-all shadow-sm active:scale-95">
+            <RefreshCw className="w-4 h-4 text-zinc-200 group-hover:text-amber-400 transition-colors" />
           </div>
           <span className="text-[11px] text-zinc-300 font-medium">P2P</span>
         </div>
@@ -168,56 +168,56 @@ export const HomePage: React.FC<HomePageProps> = ({
           <div className="absolute -top-1 right-0.5 px-1 py-0.1 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 text-white text-[8px] font-extrabold z-10 shadow-sm">
             $50K
           </div>
-          <div className="w-10 h-10 rounded-xl bg-[#1c2230] border border-white/10 group-hover:border-blue-500/40 group-hover:bg-blue-600/10 flex items-center justify-center transition-all shadow-sm active:scale-95">
-            <Monitor className="w-4 h-4 text-zinc-200 group-hover:text-blue-400 transition-colors" />
+          <div className="w-10 h-10 rounded-xl bg-[#1c2230] border border-white/10 group-hover:border-amber-400/50 group-hover:bg-amber-400/10 flex items-center justify-center transition-all shadow-sm active:scale-95">
+            <Monitor className="w-4 h-4 text-zinc-200 group-hover:text-amber-400 transition-colors" />
           </div>
           <span className="text-[11px] text-zinc-300 font-medium">Tradfi</span>
         </div>
 
         <div className="flex flex-col items-center gap-1 cursor-pointer group" onClick={() => soundFx.playClick()}>
-          <div className="w-10 h-10 rounded-xl bg-[#1c2230] border border-white/10 group-hover:border-blue-500/40 group-hover:bg-blue-600/10 flex items-center justify-center transition-all shadow-sm active:scale-95">
-            <UserPlus className="w-4 h-4 text-zinc-200 group-hover:text-blue-400 transition-colors" />
+          <div className="w-10 h-10 rounded-xl bg-[#1c2230] border border-white/10 group-hover:border-amber-400/50 group-hover:bg-amber-400/10 flex items-center justify-center transition-all shadow-sm active:scale-95">
+            <UserPlus className="w-4 h-4 text-zinc-200 group-hover:text-amber-400 transition-colors" />
           </div>
           <span className="text-[11px] text-zinc-300 font-medium">Referral</span>
         </div>
 
         {/* Row 2 */}
         <div className="flex flex-col items-center gap-1 cursor-pointer group" onClick={() => soundFx.playClick()}>
-          <div className="w-10 h-10 rounded-xl bg-[#1c2230] border border-white/10 group-hover:border-blue-500/40 group-hover:bg-blue-600/10 flex items-center justify-center transition-all shadow-sm active:scale-95">
-            <CloudRain className="w-4 h-4 text-zinc-200 group-hover:text-blue-400 transition-colors" />
+          <div className="w-10 h-10 rounded-xl bg-[#1c2230] border border-white/10 group-hover:border-amber-400/50 group-hover:bg-amber-400/10 flex items-center justify-center transition-all shadow-sm active:scale-95">
+            <CloudRain className="w-4 h-4 text-zinc-200 group-hover:text-amber-400 transition-colors" />
           </div>
           <span className="text-[11px] text-zinc-300 font-medium">Airdrops</span>
         </div>
 
         <div className="flex flex-col items-center gap-1 cursor-pointer group" onClick={() => soundFx.playClick()}>
-          <div className="w-10 h-10 rounded-xl bg-[#1c2230] border border-white/10 group-hover:border-blue-500/40 group-hover:bg-blue-600/10 flex items-center justify-center transition-all shadow-sm active:scale-95">
-            <Gift className="w-4 h-4 text-zinc-200 group-hover:text-blue-400 transition-colors" />
+          <div className="w-10 h-10 rounded-xl bg-[#1c2230] border border-white/10 group-hover:border-amber-400/50 group-hover:bg-amber-400/10 flex items-center justify-center transition-all shadow-sm active:scale-95">
+            <Gift className="w-4 h-4 text-zinc-200 group-hover:text-amber-400 transition-colors" />
           </div>
           <span className="text-[11px] text-zinc-300 font-medium">Promotions</span>
         </div>
 
         <div className="flex flex-col items-center gap-1 cursor-pointer group relative" onClick={() => soundFx.playClick()}>
-          <div className="absolute -top-1 right-0.5 px-1 py-0.1 rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-[8px] font-extrabold z-10 shadow-sm">
+          <div className="absolute -top-1 right-0.5 px-1 py-0.1 rounded-full bg-gradient-to-r from-amber-500 to-yellow-500 text-black text-[8px] font-extrabold z-10 shadow-sm">
             New
           </div>
-          <div className="w-10 h-10 rounded-xl bg-[#1c2230] border border-white/10 group-hover:border-blue-500/40 group-hover:bg-blue-600/10 flex items-center justify-center transition-all shadow-sm active:scale-95">
-            <Gamepad2 className="w-4 h-4 text-zinc-200 group-hover:text-blue-400 transition-colors" />
+          <div className="w-10 h-10 rounded-xl bg-[#1c2230] border border-white/10 group-hover:border-amber-400/50 group-hover:bg-amber-400/10 flex items-center justify-center transition-all shadow-sm active:scale-95">
+            <Gamepad2 className="w-4 h-4 text-zinc-200 group-hover:text-amber-400 transition-colors" />
           </div>
           <span className="text-[11px] text-zinc-300 font-medium">Poker</span>
         </div>
 
         <div className="flex flex-col items-center gap-1 cursor-pointer group" onClick={() => soundFx.playClick()}>
-          <div className="w-10 h-10 rounded-xl bg-[#1c2230] border border-white/10 group-hover:border-blue-500/40 group-hover:bg-blue-600/10 flex items-center justify-center transition-all shadow-sm active:scale-95">
-            <LayoutGrid className="w-4 h-4 text-zinc-200 group-hover:text-blue-400 transition-colors" />
+          <div className="w-10 h-10 rounded-xl bg-[#1c2230] border border-white/10 group-hover:border-amber-400/50 group-hover:bg-amber-400/10 flex items-center justify-center transition-all shadow-sm active:scale-95">
+            <LayoutGrid className="w-4 h-4 text-zinc-200 group-hover:text-amber-400 transition-colors" />
           </div>
           <span className="text-[11px] text-zinc-300 font-medium">More</span>
         </div>
       </div>
 
       {/* 5. Promotional Hero Banner Card */}
-      <div className="liquid-card rounded-2xl p-4 flex items-center justify-between gap-3 mb-6 cursor-pointer border border-white/10 hover:border-blue-500/30 transition-all">
+      <div className="liquid-card rounded-2xl p-4 flex items-center justify-between gap-3 mb-6 cursor-pointer border border-white/10 hover:border-amber-400/40 transition-all">
         {/* Left Graphic Badge */}
-        <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-blue-900/40 to-indigo-900/40 border border-blue-500/30 flex items-center justify-center relative shrink-0 overflow-hidden p-1 shadow-inner">
+        <div className="w-16 h-16 rounded-xl bg-gradient-to-br from-amber-900/30 to-yellow-900/30 border border-amber-500/30 flex items-center justify-center relative shrink-0 overflow-hidden p-1 shadow-inner">
           <div className="text-center font-extrabold text-[10px] text-emerald-400 leading-tight">
             <span className="block text-white text-xs">NVDA</span>
             <span className="text-amber-400">TSLA</span>
@@ -329,7 +329,7 @@ export const HomePage: React.FC<HomePageProps> = ({
               >
                 {/* Left: Icon + Symbol */}
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white font-extrabold text-xs shadow-sm">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-500 to-orange-500 flex items-center justify-center text-black font-extrabold text-xs shadow-sm">
                     {item.symbol.substring(0, 2)}
                   </div>
                   <div>

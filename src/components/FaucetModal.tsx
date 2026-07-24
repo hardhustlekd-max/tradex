@@ -44,8 +44,8 @@ export const FaucetModal: React.FC<FaucetModalProps> = ({
         {/* Modal Header */}
         <div className="p-4 border-b border-white/10 flex items-center justify-between bg-[#1c2230]">
           <div className="flex items-center gap-2">
-            <div className="p-1.5 rounded-lg bg-teal-950 text-teal-400 border border-teal-500/30">
-              <Wallet className="w-4 h-4" />
+            <div className="p-1.5 rounded-lg bg-amber-950/60 text-amber-400 border border-amber-500/30">
+              <Wallet className="w-4 h-4 text-amber-400" />
             </div>
             <h2 className="text-sm font-bold">Demo Balance Faucet</h2>
           </div>
@@ -117,10 +117,10 @@ export const FaucetModal: React.FC<FaucetModalProps> = ({
 
               <button
                 onClick={() => handleClaim('ETH', 10.0)}
-                className="py-2 px-3 rounded-lg bg-sky-950/40 hover:bg-sky-900/60 text-sky-300 border border-sky-500/30 text-xs font-semibold cursor-pointer transition-colors flex flex-col items-center"
+                className="py-2 px-3 rounded-lg bg-orange-950/40 hover:bg-orange-900/60 text-orange-300 border border-orange-500/30 text-xs font-semibold cursor-pointer transition-colors flex flex-col items-center"
               >
                 <span>+10.0 ETH</span>
-                <span className="text-[9px] text-sky-400/80">Ethereum</span>
+                <span className="text-[9px] text-orange-400/80">Ethereum</span>
               </button>
 
               <button

@@ -64,15 +64,15 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({
   // Icon color helpers for pair logos
   const getLogoColor = (symbol: string) => {
     const sym = symbol.toUpperCase();
-    if (sym.includes('BTC')) return 'bg-amber-500 text-white';
-    if (sym.includes('ETH')) return 'bg-indigo-600 text-white';
-    if (sym.includes('SOL')) return 'bg-teal-500 text-white';
-    if (sym.includes('BLU')) return 'bg-sky-500 text-white';
-    if (sym.includes('DODO')) return 'bg-yellow-400 text-black';
-    if (sym.includes('SYN')) return 'bg-purple-600 text-white';
-    if (sym.includes('WOO')) return 'bg-slate-700 text-white';
-    if (sym.includes('OG')) return 'bg-blue-600 text-white';
-    if (sym.includes('MOODENG')) return 'bg-emerald-600 text-white';
+    if (sym.includes('BTC')) return 'bg-amber-500 text-black font-extrabold';
+    if (sym.includes('ETH')) return 'bg-amber-600/80 text-white font-bold';
+    if (sym.includes('SOL')) return 'bg-orange-500 text-white font-bold';
+    if (sym.includes('BLU')) return 'bg-amber-400 text-black font-bold';
+    if (sym.includes('DODO')) return 'bg-yellow-400 text-black font-bold';
+    if (sym.includes('SYN')) return 'bg-amber-700/80 text-white font-bold';
+    if (sym.includes('WOO')) return 'bg-zinc-800 text-zinc-200';
+    if (sym.includes('OG')) return 'bg-amber-500/90 text-black font-extrabold';
+    if (sym.includes('MOODENG')) return 'bg-emerald-600 text-white font-bold';
     return 'bg-zinc-800 text-zinc-200';
   };
 

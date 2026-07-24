@@ -37,7 +37,7 @@ export const NotificationToast: React.FC<NotificationToastProps> = ({
               {isSuccess && <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />}
               {isWarning && <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />}
               {isError && <XCircle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />}
-              {!isSuccess && !isWarning && !isError && <Info className="w-4 h-4 text-sky-400 shrink-0 mt-0.5" />}
+              {!isSuccess && !isWarning && !isError && <Info className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />}
 
               <div>
                 <span className="font-bold block text-zinc-100">{notif.title}</span>

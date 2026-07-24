@@ -133,9 +133,9 @@ export const Header: React.FC<HeaderProps> = ({
               soundFx.playClick();
               onToggleAiAnalyst();
             }}
-            className="hidden sm:flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/30 text-[11px] font-semibold cursor-pointer shadow-sm shadow-blue-500/10 active:scale-95 transition-all"
+            className="hidden sm:flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-400/10 hover:bg-amber-400/20 text-amber-400 border border-amber-400/30 text-[11px] font-semibold cursor-pointer shadow-sm shadow-amber-500/10 active:scale-95 transition-all"
           >
-            <Sparkles className="w-3 h-3 text-blue-400" />
+            <Sparkles className="w-3 h-3 text-amber-400" />
             <span>AI Analyst</span>
           </button>
 
@@ -148,7 +148,7 @@ export const Header: React.FC<HeaderProps> = ({
             }}
             className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-zinc-800/80 border border-white/10 text-[11px] font-mono cursor-pointer hover:border-white/20 active:scale-95 transition-all"
           >
-            <Wallet className="w-3.5 h-3.5 text-blue-400" />
+            <Wallet className="w-3.5 h-3.5 text-amber-400" />
             <span className="font-bold text-zinc-100 text-[11px]">
               ${formatCompactNumber(portfolio.usdtBalance)}
             </span>

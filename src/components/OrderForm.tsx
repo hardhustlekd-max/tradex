@@ -119,7 +119,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
               setTradingMode('spot');
             }}
             className={`py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer ${
-              tradingMode === 'spot' ? 'bg-[#1c2230] text-emerald-400 shadow-sm' : 'text-zinc-400 hover:text-zinc-200'
+              tradingMode === 'spot' ? 'bg-[#1c2230] text-amber-400 shadow-sm' : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
             Spot
@@ -130,11 +130,11 @@ export const OrderForm: React.FC<OrderFormProps> = ({
               setTradingMode('futures');
             }}
             className={`py-1.5 rounded-md text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1 ${
-              tradingMode === 'futures' ? 'bg-[#1c2230] text-teal-400 shadow-sm' : 'text-zinc-400 hover:text-zinc-200'
+              tradingMode === 'futures' ? 'bg-[#1c2230] text-amber-400 shadow-sm' : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
             <span>Futures</span>
-            <span className="text-[9px] px-1 rounded bg-teal-950 text-teal-300 border border-teal-500/30">
+            <span className="text-[9px] px-1 rounded bg-amber-400/10 text-amber-400 border border-amber-400/30 font-extrabold">
               {leverage}x
             </span>
           </button>
@@ -143,15 +143,15 @@ export const OrderForm: React.FC<OrderFormProps> = ({
 
       {/* Futures Margin Mode & Leverage Selector */}
       {tradingMode === 'futures' && (
-        <div className="p-2.5 bg-zinc-900/40 border-b border-zinc-800 space-y-2">
+        <div className="p-2.5 bg-[#1c2230]/50 border-b border-white/10 space-y-2">
           <div className="flex items-center justify-between gap-2">
             {/* Cross / Isolated */}
-            <div className="flex rounded-md bg-zinc-900 p-0.5 border border-zinc-800">
+            <div className="flex rounded-md bg-[#131722] p-0.5 border border-white/10">
               <button
                 type="button"
                 onClick={() => setMarginMode('cross')}
                 className={`px-2 py-0.5 rounded text-[10px] font-semibold cursor-pointer ${
-                  marginMode === 'cross' ? 'bg-zinc-800 text-zinc-100' : 'text-zinc-400'
+                  marginMode === 'cross' ? 'bg-[#1c2230] text-white' : 'text-zinc-400'
                 }`}
               >
                 Cross
@@ -160,7 +160,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                 type="button"
                 onClick={() => setMarginMode('isolated')}
                 className={`px-2 py-0.5 rounded text-[10px] font-semibold cursor-pointer ${
-                  marginMode === 'isolated' ? 'bg-zinc-800 text-zinc-100' : 'text-zinc-400'
+                  marginMode === 'isolated' ? 'bg-[#1c2230] text-white' : 'text-zinc-400'
                 }`}
               >
                 Isolated
@@ -168,8 +168,8 @@ export const OrderForm: React.FC<OrderFormProps> = ({
             </div>
 
             {/* Leverage Preset Pill */}
-            <span className="text-zinc-300 font-bold bg-zinc-900 px-2 py-0.5 rounded border border-zinc-800">
-              {leverage}x Leverage
+            <span className="text-amber-400 font-extrabold bg-[#131722] px-2 py-0.5 rounded border border-white/10">
+              {leverage}x
             </span>
           </div>
 
@@ -181,7 +181,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
               max="100"
               value={leverage}
               onChange={(e) => setLeverage(Number(e.target.value))}
-              className="w-full accent-teal-400 cursor-pointer h-1.5 bg-zinc-800 rounded-lg"
+              className="w-full accent-amber-400 cursor-pointer h-1.5 bg-[#131722] rounded-lg"
             />
             <div className="flex justify-between text-[9px] text-zinc-400 font-mono">
               <span>1x</span>
@@ -196,15 +196,15 @@ export const OrderForm: React.FC<OrderFormProps> = ({
 
       {/* Order Side Selector: Buy/Long vs Sell/Short */}
       <div className="p-2.5 space-y-3">
-        <div className="grid grid-cols-2 gap-1.5 p-0.5 bg-zinc-900 rounded-lg border border-zinc-800">
+        <div className="grid grid-cols-2 gap-1.5 p-0.5 bg-[#1c2230] rounded-lg border border-white/10">
           <button
             type="button"
             onClick={() => {
               soundFx.playClick();
               setOrderSide('buy');
             }}
-            className={`py-2 rounded-md font-bold transition-all flex items-center justify-center gap-1 cursor-pointer ${
-              isBuy ? 'bg-emerald-600 text-zinc-950 shadow-md shadow-emerald-600/20' : 'text-zinc-400 hover:text-zinc-200'
+            className={`py-2 rounded-md font-extrabold transition-all flex items-center justify-center gap-1 cursor-pointer ${
+              isBuy ? 'bg-[#00c076] text-white shadow-md shadow-[#00c076]/20' : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
             <ArrowUpRight className="w-3.5 h-3.5" />
@@ -217,8 +217,8 @@ export const OrderForm: React.FC<OrderFormProps> = ({
               soundFx.playClick();
               setOrderSide('sell');
             }}
-            className={`py-2 rounded-md font-bold transition-all flex items-center justify-center gap-1 cursor-pointer ${
-              !isBuy ? 'bg-rose-600 text-zinc-950 shadow-md shadow-rose-600/20' : 'text-zinc-400 hover:text-zinc-200'
+            className={`py-2 rounded-md font-extrabold transition-all flex items-center justify-center gap-1 cursor-pointer ${
+              !isBuy ? 'bg-[#f6465d] text-white shadow-md shadow-[#f6465d]/20' : 'text-zinc-400 hover:text-zinc-200'
             }`}
           >
             <ArrowDownRight className="w-3.5 h-3.5" />
@@ -227,7 +227,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
         </div>
 
         {/* Order Type Tabs: Limit / Market / Stop Limit */}
-        <div className="flex items-center justify-between gap-1 border-b border-zinc-800 pb-2">
+        <div className="flex items-center justify-between gap-1 border-b border-white/5 pb-2">
           {(['limit', 'market', 'stop_limit'] as OrderType[]).map((type) => (
             <button
               key={type}
@@ -237,7 +237,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
                 setOrderType(type);
               }}
               className={`px-2 py-1 rounded text-[11px] font-semibold capitalize cursor-pointer transition-colors ${
-                orderType === type ? 'text-emerald-400 bg-zinc-900 border border-emerald-500/30' : 'text-zinc-400 hover:text-zinc-200'
+                orderType === type ? 'text-amber-400 bg-[#1c2230] border border-amber-400/20' : 'text-zinc-400 hover:text-zinc-200'
               }`}
             >
               {type.replace('_', ' ')}
@@ -364,10 +364,10 @@ export const OrderForm: React.FC<OrderFormProps> = ({
           <button
             type="submit"
             disabled={amountNum <= 0 || (marginRequired > availableUSDT && isBuy)}
-            className={`w-full py-2.5 rounded-lg font-bold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-md ${
+            className={`w-full py-2.5 rounded-lg font-extrabold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-md ${
               isBuy
-                ? 'bg-emerald-500 hover:bg-emerald-400 text-zinc-950 disabled:bg-zinc-800 disabled:text-zinc-600 shadow-emerald-500/20'
-                : 'bg-rose-500 hover:bg-rose-400 text-zinc-950 disabled:bg-zinc-800 disabled:text-zinc-600 shadow-rose-500/20'
+                ? 'bg-[#00c076] hover:bg-[#00c076]/90 text-white disabled:bg-zinc-800 disabled:text-zinc-600 shadow-[#00c076]/20'
+                : 'bg-[#f6465d] hover:bg-[#f6465d]/90 text-white disabled:bg-zinc-800 disabled:text-zinc-600 shadow-[#f6465d]/20'
             }`}
           >
             {isBuy

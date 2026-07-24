@@ -29,7 +29,7 @@ import { TradingChart } from './components/TradingChart';
 import { OrderBook } from './components/OrderBook';
 import { RecentTrades } from './components/RecentTrades';
 import { OrderForm } from './components/OrderForm';
-import { BottomPanels } from './components/BottomPanels';
+import { BottomPanels, PositionsPanel } from './components/BottomPanels';
 import { HomePage } from './components/HomePage';
 import { MarketsPage } from './components/MarketsPage';
 import { AssetsPage } from './components/AssetsPage';
@@ -401,7 +401,7 @@ export default function App() {
   };
 
   return (
-    <div className="h-screen w-screen bg-[#0b0e11] flex flex-col overflow-hidden font-sans text-zinc-100 select-none">
+    <div className="h-screen w-screen bg-[#131722] flex flex-col overflow-hidden font-sans text-zinc-100 select-none">
       {/* Top Main Navigation Header (Shown on Futures/Trading screens) */}
       {(activeDockTab === 'futures' || activeDockTab === 'trade') && (
         <Header
@@ -483,11 +483,11 @@ export default function App() {
               className="flex-1 flex flex-col min-h-0 w-full"
             >
               {/* Mobile Navigation Tab Bar (< lg) */}
-              <div className="flex lg:hidden bg-[#000000] border-b border-zinc-900 text-xs font-semibold shrink-0 sticky top-0 z-20">
+              <div className="flex lg:hidden bg-[#131722] border-b border-white/10 text-xs font-semibold shrink-0 sticky top-0 z-20">
                 <button
                   onClick={() => setMobileTab('chart')}
                   className={`flex-1 py-2 text-center transition-colors border-b-2 cursor-pointer ${
-                    mobileTab === 'chart' ? 'border-amber-400 text-amber-400 font-bold bg-zinc-950/80' : 'border-transparent text-zinc-400 hover:text-zinc-200'
+                    mobileTab === 'chart' ? 'border-amber-400 text-amber-400 font-bold bg-[#1c2230]' : 'border-transparent text-zinc-400 hover:text-zinc-200'
                   }`}
                 >
                   Chart
@@ -495,7 +495,7 @@ export default function App() {
                 <button
                   onClick={() => setMobileTab('orderbook')}
                   className={`flex-1 py-2 text-center transition-colors border-b-2 cursor-pointer ${
-                    mobileTab === 'orderbook' ? 'border-amber-400 text-amber-400 font-bold bg-zinc-950/80' : 'border-transparent text-zinc-400 hover:text-zinc-200'
+                    mobileTab === 'orderbook' ? 'border-amber-400 text-amber-400 font-bold bg-[#1c2230]' : 'border-transparent text-zinc-400 hover:text-zinc-200'
                   }`}
                 >
                   Order Book
@@ -503,7 +503,7 @@ export default function App() {
                 <button
                   onClick={() => setMobileTab('trades')}
                   className={`flex-1 py-2 text-center transition-colors border-b-2 cursor-pointer ${
-                    mobileTab === 'trades' ? 'border-amber-400 text-amber-400 font-bold bg-zinc-950/80' : 'border-transparent text-zinc-400 hover:text-zinc-200'
+                    mobileTab === 'trades' ? 'border-amber-400 text-amber-400 font-bold bg-[#1c2230]' : 'border-transparent text-zinc-400 hover:text-zinc-200'
                   }`}
                 >
                   Trades
@@ -511,7 +511,7 @@ export default function App() {
                 <button
                   onClick={() => setMobileTab('order')}
                   className={`flex-1 py-2 text-center transition-colors border-b-2 cursor-pointer ${
-                    mobileTab === 'order' ? 'border-amber-400 text-amber-400 font-bold bg-zinc-950/80' : 'border-transparent text-zinc-400 hover:text-zinc-200'
+                    mobileTab === 'order' ? 'border-amber-400 text-amber-400 font-bold bg-[#1c2230]' : 'border-transparent text-zinc-400 hover:text-zinc-200'
                   }`}
                 >
                   Trade
@@ -519,7 +519,7 @@ export default function App() {
               </div>
 
               {/* Desktop Layout (lg:flex) */}
-              <div className="hidden lg:flex flex-1 min-h-0 bg-[#000000]">
+              <div className="hidden lg:flex flex-1 min-h-[calc(100vh-7rem)] shrink-0 bg-[#131722]">
                 {/* Main Candlestick Chart Workspace */}
                 <TradingChart
                   candles={candles}
@@ -556,7 +556,7 @@ export default function App() {
               </div>
 
               {/* Mobile View Active Tab Content (< lg) */}
-              <div className="flex lg:hidden flex-col shrink-0 relative bg-[#000000]">
+              <div className="flex lg:hidden flex-col flex-1 min-h-[calc(100vh-9rem)] shrink-0 relative bg-[#131722]">
                 <AnimatePresence mode="wait">
                   {mobileTab === 'chart' && (
                     <motion.div
@@ -565,6 +565,7 @@ export default function App() {
                       animate={{ opacity: 1, x: 0 }}
                       exit={{ opacity: 0, x: 6 }}
                       transition={{ duration: 0.15 }}
+                      className="w-full flex-1 flex flex-col min-h-[540px]"
                     >
                       <TradingChart
                         candles={candles}
@@ -632,12 +633,23 @@ export default function App() {
                   )}
                 </AnimatePresence>
               </div>
+
+              {/* Positions and Open Orders Section (Revealed upon scrolling) */}
+              <PositionsPanel
+                positions={positions}
+                orders={orders}
+                orderHistory={orderHistory}
+                portfolio={portfolio}
+                pairs={pairs}
+                onClosePosition={handleClosePosition}
+                onCancelOrder={handleCancelOrder}
+              />
             </motion.div>
           )}
         </AnimatePresence>
       </div>
 
-      {/* Bottom Floating Menu & Positions Panel (Fixed at viewport bottom) */}
+      {/* Bottom Floating Navigation Dock (Fixed at viewport bottom) */}
       <BottomPanels
         positions={positions}
         orders={orders}

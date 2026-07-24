@@ -143,8 +143,8 @@ export const AssetsPage: React.FC<AssetsPageProps> = ({
           }}
           className="flex flex-col items-center gap-2 cursor-pointer group"
         >
-          <div className="w-13 h-13 rounded-2xl bg-gradient-to-b from-zinc-800/80 to-zinc-900/90 group-hover:from-blue-600/20 group-hover:to-indigo-600/30 border border-white/10 group-hover:border-blue-500/40 flex items-center justify-center transition-all duration-300 shadow-md group-hover:shadow-blue-500/20 active:scale-95">
-            <Wallet className="w-5 h-5 text-zinc-200 group-hover:text-blue-400 transition-colors" />
+          <div className="w-13 h-13 rounded-2xl bg-gradient-to-b from-zinc-800/80 to-zinc-900/90 group-hover:from-amber-600/20 group-hover:to-yellow-600/30 border border-white/10 group-hover:border-amber-400/50 flex items-center justify-center transition-all duration-300 shadow-md group-hover:shadow-amber-500/20 active:scale-95">
+            <Wallet className="w-5 h-5 text-zinc-200 group-hover:text-amber-400 transition-colors" />
           </div>
           <span className="text-[11px] font-medium text-zinc-300 group-hover:text-white transition-colors text-center whitespace-nowrap">
             Buy crypto
@@ -224,7 +224,7 @@ export const AssetsPage: React.FC<AssetsPageProps> = ({
             <span className="text-base font-bold text-white">
               Account
             </span>
-            <div className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full" />
+            <div className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-amber-400 to-yellow-500 rounded-full shadow-sm shadow-amber-400/50" />
           </div>
         </div>
 

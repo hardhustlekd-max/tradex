@@ -148,6 +148,36 @@ export function calculateMACD(
   return { macdLine, signalLine, histogram };
 }
 
+// Calculate Bollinger Bands (20, 2)
+export function calculateBollingerBands(
+  candles: Candle[],
+  period: number = 20,
+  multiplier: number = 2
+) {
+  const sma = calculateSMA(candles, period);
+  const upper: (number | null)[] = [];
+  const middle: (number | null)[] = sma;
+  const lower: (number | null)[] = [];
+
+  for (let i = 0; i < candles.length; i++) {
+    if (i < period - 1 || sma[i] === null) {
+      upper.push(null);
+      lower.push(null);
+    } else {
+      let sumSqDiff = 0;
+      for (let j = i - period + 1; j <= i; j++) {
+        const diff = candles[j].close - sma[i]!;
+        sumSqDiff += diff * diff;
+      }
+      const stdDev = Math.sqrt(sumSqDiff / period);
+      upper.push(sma[i]! + multiplier * stdDev);
+      lower.push(sma[i]! - multiplier * stdDev);
+    }
+  }
+
+  return { upper, middle, lower };
+}
+
 // Calculate Futures Liquidation Price
 export function calculateLiquidationPrice(
   entryPrice: number,

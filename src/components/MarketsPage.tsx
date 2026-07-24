@@ -77,13 +77,13 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({
   };
 
   return (
-    <div className="flex-1 bg-[#050508] text-white flex flex-col overflow-y-auto select-none pb-36 font-sans relative">
+    <div className="flex-1 bg-[#0b0e11] text-[#f0f3f8] flex flex-col overflow-y-auto select-none pb-36 font-sans relative">
       {/* Background Ambient Liquid Glow */}
-      <div className="absolute top-0 right-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/3 left-0 w-80 h-80 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 right-1/4 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-1/3 left-0 w-80 h-80 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
 
       {/* 1. Top Search Bar */}
-      <div className="px-3 pt-3 pb-1 sticky top-0 z-20 backdrop-blur-md bg-zinc-950/40">
+      <div className="px-3 pt-3 pb-1 sticky top-0 z-20 backdrop-blur-xl bg-[#0b0e11]/80">
         <div className="bg-zinc-900/80 border border-white/10 rounded-full px-4 py-2 flex items-center gap-2 text-sm text-zinc-300 shadow-inner">
           <Search className="w-4 h-4 text-zinc-400 shrink-0" />
           <input
@@ -106,7 +106,7 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({
         >
           Markets
           {topTab === 'markets' && (
-            <div className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full shadow-sm shadow-blue-500/50" />
+            <div className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-amber-400 to-yellow-500 rounded-full shadow-sm shadow-amber-400/50" />
           )}
         </button>
 
@@ -183,7 +183,7 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({
             onClick={() => setFilterPill('futures')}
             className={`px-3.5 py-1 rounded-full text-xs font-semibold cursor-pointer transition-all duration-200 ${
               filterPill === 'futures'
-                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white border border-white/20 shadow-md shadow-blue-500/20'
+                ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-black font-bold shadow-md shadow-amber-500/20 border border-yellow-300/40'
                 : 'bg-zinc-900/60 text-zinc-400 hover:text-zinc-200 border border-white/5'
             }`}
           >
@@ -194,7 +194,7 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({
             onClick={() => setFilterPill('tradfi')}
             className={`px-3.5 py-1 rounded-full text-xs font-semibold cursor-pointer transition-all duration-200 ${
               filterPill === 'tradfi'
-                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white border border-white/20 shadow-md shadow-blue-500/20'
+                ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-black font-bold shadow-md shadow-amber-500/20 border border-yellow-300/40'
                 : 'bg-zinc-900/60 text-zinc-400 hover:text-zinc-200 border border-white/5'
             }`}
           >
@@ -205,7 +205,7 @@ export const MarketsPage: React.FC<MarketsPageProps> = ({
             onClick={() => setFilterPill('spot')}
             className={`px-3.5 py-1 rounded-full text-xs font-semibold cursor-pointer transition-all duration-200 ${
               filterPill === 'spot'
-                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white border border-white/20 shadow-md shadow-blue-500/20'
+                ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-black font-bold shadow-md shadow-amber-500/20 border border-yellow-300/40'
                 : 'bg-zinc-900/60 text-zinc-400 hover:text-zinc-200 border border-white/5'
             }`}
           >

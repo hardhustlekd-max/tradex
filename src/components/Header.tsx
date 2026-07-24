@@ -53,7 +53,7 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <div className="bg-[#050508]/90 backdrop-blur-xl border-b border-white/10 select-none text-zinc-100 shrink-0 z-40">
+    <div className="bg-[#0b0e11]/90 backdrop-blur-xl border-b border-white/10 select-none text-zinc-100 shrink-0 z-40">
       {/* 1. Top Bar */}
       <header className="h-12 px-3 flex items-center justify-between border-b border-white/5">
         {/* Left: Back Arrow + Pair Selector Dropdown */}
@@ -78,10 +78,10 @@ export const Header: React.FC<HeaderProps> = ({
             }}
             className="flex items-center gap-1.5 cursor-pointer group"
           >
-            <span className="font-extrabold text-base sm:text-lg tracking-tight text-white group-hover:text-blue-400 transition-colors font-sans">
+            <span className="font-extrabold text-base sm:text-lg tracking-tight text-white group-hover:text-amber-400 transition-colors font-sans">
               {activePair.symbol}
             </span>
-            <ChevronDown className="w-4 h-4 text-zinc-300 fill-zinc-300 group-hover:text-blue-400" />
+            <ChevronDown className="w-4 h-4 text-zinc-300 fill-zinc-300 group-hover:text-amber-400" />
           </button>
         </div>
 
@@ -173,7 +173,7 @@ export const Header: React.FC<HeaderProps> = ({
             >
               <span>{tab}</span>
               {isActive && (
-                <span className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full shadow-sm shadow-blue-500/50" />
+                <span className="absolute bottom-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-amber-400 to-yellow-500 rounded-full shadow-sm shadow-amber-400/50" />
               )}
             </button>
           );
@@ -198,7 +198,7 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Equivalent Price & Percentage Change */}
           <div className="flex items-center gap-2 text-xs font-mono font-medium">
             <span className="text-zinc-300 font-sans">≈ ${formatNumber(activePair.price, 2)}</span>
-            <span className={`font-semibold px-2 py-0.5 rounded-full ${isPositive ? 'text-emerald-400 bg-emerald-500/10 border border-emerald-500/20' : 'text-rose-400 bg-rose-500/10 border border-rose-500/20'}`}>
+            <span className={`font-semibold ${isPositive ? 'text-emerald-400' : 'text-rose-400'}`}>
               {isPositive ? '+' : ''}{activePair.change24h.toFixed(2)}%
             </span>
           </div>

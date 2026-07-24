@@ -317,7 +317,7 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
 
       {/* 4. Bottom Floating Navigation Dock Bar - Apple Liquid Glass Style */}
       <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-[400px] pointer-events-auto select-none">
-        <div className="bg-zinc-900/70 backdrop-blur-2xl border border-white/15 rounded-full p-1.5 flex items-center justify-between text-zinc-400 text-[10px] font-sans shadow-[0_20px_50px_rgba(0,0,0,0.85),inset_0_1px_1px_rgba(255,255,255,0.25)]">
+        <div className="liquid-dock rounded-full p-1.5 flex items-center justify-between text-zinc-400 text-[10px] font-sans">
           {/* 1. Home */}
           <button
             onClick={() => {
@@ -326,7 +326,7 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
             }}
             className={`flex flex-col items-center justify-center gap-0.5 cursor-pointer transition-all duration-200 active:scale-95 ${
               activeNavDock === 'home'
-                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full px-3.5 py-1.5 font-bold shadow-lg shadow-blue-500/30 border border-white/20'
+                ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-black rounded-full px-3.5 py-1.5 font-extrabold shadow-md shadow-amber-500/25 border border-yellow-300/40'
                 : 'text-zinc-400 hover:text-zinc-100 px-3 py-1.5'
             }`}
           >
@@ -342,7 +342,7 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
             }}
             className={`flex flex-col items-center justify-center gap-0.5 cursor-pointer transition-all duration-200 active:scale-95 ${
               activeNavDock === 'markets'
-                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full px-3.5 py-1.5 font-bold shadow-lg shadow-blue-500/30 border border-white/20'
+                ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-black rounded-full px-3.5 py-1.5 font-extrabold shadow-md shadow-amber-500/25 border border-yellow-300/40'
                 : 'text-zinc-400 hover:text-zinc-100 px-3 py-1.5'
             }`}
           >
@@ -358,7 +358,7 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
             }}
             className={`flex flex-col items-center justify-center gap-0.5 cursor-pointer transition-all duration-200 active:scale-95 ${
               activeNavDock === 'futures'
-                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full px-3.5 py-1.5 font-bold shadow-lg shadow-blue-500/30 border border-white/20'
+                ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-black rounded-full px-3.5 py-1.5 font-extrabold shadow-md shadow-amber-500/25 border border-yellow-300/40'
                 : 'text-zinc-400 hover:text-zinc-100 px-3 py-1.5'
             }`}
           >
@@ -376,7 +376,7 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
             }}
             className={`flex flex-col items-center justify-center gap-0.5 cursor-pointer transition-all duration-200 active:scale-95 ${
               activeNavDock === 'trade'
-                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full px-3.5 py-1.5 font-bold shadow-lg shadow-blue-500/30 border border-white/20'
+                ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-black rounded-full px-3.5 py-1.5 font-extrabold shadow-md shadow-amber-500/25 border border-yellow-300/40'
                 : 'text-zinc-400 hover:text-zinc-100 px-3 py-1.5'
             }`}
           >
@@ -392,7 +392,7 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
             }}
             className={`flex flex-col items-center justify-center gap-0.5 cursor-pointer transition-all duration-200 active:scale-95 ${
               activeNavDock === 'assets'
-                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full px-3.5 py-1.5 font-bold shadow-lg shadow-blue-500/30 border border-white/20'
+                ? 'bg-gradient-to-r from-amber-400 to-yellow-500 text-black rounded-full px-3.5 py-1.5 font-extrabold shadow-md shadow-amber-500/25 border border-yellow-300/40'
                 : 'text-zinc-400 hover:text-zinc-100 px-3 py-1.5'
             }`}
           >

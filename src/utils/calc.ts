@@ -1,0 +1,218 @@
+import { Candle } from '../types';
+
+export function formatCurrency(value: number, precision: number = 2): string {
+  if (value === undefined || value === null || isNaN(value)) return '0.00';
+  return new Intl.NumberFormat('en-US', {
+    minimumFractionDigits: precision,
+    maximumFractionDigits: precision,
+  }).format(value);
+}
+
+export function formatNumber(value: number, precision: number = 2): string {
+  if (value === undefined || value === null || isNaN(value)) return '0';
+  return new Intl.NumberFormat('en-US', {
+    minimumFractionDigits: precision,
+    maximumFractionDigits: precision,
+  }).format(value);
+}
+
+export function formatCompactNumber(value: number): string {
+  if (value >= 1e9) return (value / 1e9).toFixed(2) + 'B';
+  if (value >= 1e6) return (value / 1e6).toFixed(2) + 'M';
+  if (value >= 1e3) return (value / 1e3).toFixed(2) + 'K';
+  return value.toFixed(2);
+}
+
+// Calculate Simple Moving Average (SMA)
+export function calculateSMA(candles: Candle[], period: number): (number | null)[] {
+  const result: (number | null)[] = [];
+  for (let i = 0; i < candles.length; i++) {
+    if (i < period - 1) {
+      result.push(null);
+    } else {
+      let sum = 0;
+      for (let j = i - period + 1; j <= i; j++) {
+        sum += candles[j].close;
+      }
+      result.push(sum / period);
+    }
+  }
+  return result;
+}
+
+// Calculate Relative Strength Index (RSI)
+export function calculateRSI(candles: Candle[], period: number = 14): (number | null)[] {
+  const rsiValues: (number | null)[] = [null];
+  if (candles.length <= period) return candles.map(() => null);
+
+  let gains = 0;
+  let losses = 0;
+
+  for (let i = 1; i <= period; i++) {
+    const change = candles[i].close - candles[i - 1].close;
+    if (change >= 0) gains += change;
+    else losses += Math.abs(change);
+  }
+
+  let avgGain = gains / period;
+  let avgLoss = losses / period;
+
+  let rs = avgLoss === 0 ? 100 : avgGain / avgLoss;
+  rsiValues.push(...Array(period - 1).fill(null));
+  rsiValues.push(100 - 100 / (1 + rs));
+
+  for (let i = period + 1; i < candles.length; i++) {
+    const change = candles[i].close - candles[i - 1].close;
+    const gain = change >= 0 ? change : 0;
+    const loss = change < 0 ? Math.abs(change) : 0;
+
+    avgGain = (avgGain * (period - 1) + gain) / period;
+    avgLoss = (avgLoss * (period - 1) + loss) / period;
+
+    if (avgLoss === 0) {
+      rsiValues.push(100);
+    } else {
+      rs = avgGain / avgLoss;
+      rsiValues.push(100 - 100 / (1 + rs));
+    }
+  }
+
+  return rsiValues;
+}
+
+// Calculate Exponential Moving Average (EMA)
+export function calculateEMA(candles: Candle[], period: number): (number | null)[] {
+  const result: (number | null)[] = [];
+  if (candles.length === 0) return result;
+
+  const k = 2 / (period + 1);
+  let ema = candles[0].close;
+  result.push(ema);
+
+  for (let i = 1; i < candles.length; i++) {
+    ema = candles[i].close * k + ema * (1 - k);
+    result.push(ema);
+  }
+  return result;
+}
+
+// Calculate MACD (12, 26, 9)
+export function calculateMACD(
+  candles: Candle[],
+  fastPeriod: number = 12,
+  slowPeriod: number = 26,
+  signalPeriod: number = 9
+) {
+  const emaFast = calculateEMA(candles, fastPeriod);
+  const emaSlow = calculateEMA(candles, slowPeriod);
+
+  const macdLine: (number | null)[] = [];
+  for (let i = 0; i < candles.length; i++) {
+    if (emaFast[i] !== null && emaSlow[i] !== null) {
+      macdLine.push(emaFast[i]! - emaSlow[i]!);
+    } else {
+      macdLine.push(null);
+    }
+  }
+
+  const signalLine: (number | null)[] = [];
+  let signalEma = 0;
+  const k = 2 / (signalPeriod + 1);
+  let initialized = false;
+
+  for (let i = 0; i < macdLine.length; i++) {
+    const macdVal = macdLine[i];
+    if (macdVal === null) {
+      signalLine.push(null);
+    } else if (!initialized) {
+      signalEma = macdVal;
+      initialized = true;
+      signalLine.push(signalEma);
+    } else {
+      signalEma = macdVal * k + signalEma * (1 - k);
+      signalLine.push(signalEma);
+    }
+  }
+
+  const histogram: (number | null)[] = [];
+  for (let i = 0; i < macdLine.length; i++) {
+    if (macdLine[i] !== null && signalLine[i] !== null) {
+      histogram.push(macdLine[i]! - signalLine[i]!);
+    } else {
+      histogram.push(null);
+    }
+  }
+
+  return { macdLine, signalLine, histogram };
+}
+
+// Calculate Bollinger Bands (20, 2)
+export function calculateBollingerBands(
+  candles: Candle[],
+  period: number = 20,
+  multiplier: number = 2
+) {
+  const sma = calculateSMA(candles, period);
+  const upper: (number | null)[] = [];
+  const middle: (number | null)[] = sma;
+  const lower: (number | null)[] = [];
+
+  for (let i = 0; i < candles.length; i++) {
+    if (i < period - 1 || sma[i] === null) {
+      upper.push(null);
+      lower.push(null);
+    } else {
+      let sumSqDiff = 0;
+      for (let j = i - period + 1; j <= i; j++) {
+        const diff = candles[j].close - sma[i]!;
+        sumSqDiff += diff * diff;
+      }
+      const stdDev = Math.sqrt(sumSqDiff / period);
+      upper.push(sma[i]! + multiplier * stdDev);
+      lower.push(sma[i]! - multiplier * stdDev);
+    }
+  }
+
+  return { upper, middle, lower };
+}
+
+// Calculate Futures Liquidation Price
+export function calculateLiquidationPrice(
+  entryPrice: number,
+  side: 'long' | 'short',
+  leverage: number,
+  maintenanceMargin: number = 0.005 // 0.5%
+): number {
+  if (side === 'long') {
+    // Long Liq Price = Entry * (1 - 1/leverage + maintenanceMargin)
+    return Math.max(0, entryPrice * (1 - (1 / leverage) + maintenanceMargin));
+  } else {
+    // Short Liq Price = Entry * (1 + 1/leverage - maintenanceMargin)
+    return entryPrice * (1 + (1 / leverage) - maintenanceMargin);
+  }
+}
+
+// Calculate Total Portfolio Equity
+export function calculateTotalEquity(
+  portfolio: { usdtBalance: number; spotBalances: Record<string, number> },
+  positions: Array<{ margin: number; pnl: number }>,
+  pairs: Array<{ baseAsset: string; quoteAsset: string; price: number }>
+): number {
+  const usdtCash = portfolio.usdtBalance || 0;
+  const lockedMargin = positions.reduce((acc, pos) => acc + (pos.margin || 0), 0);
+  const unrealizedPnl = positions.reduce((acc, pos) => acc + (pos.pnl || 0), 0);
+
+  let spotValue = 0;
+  if (portfolio.spotBalances) {
+    Object.entries(portfolio.spotBalances).forEach(([asset, val]) => {
+      const amount = Number(val) || 0;
+      if (amount > 0) {
+        const pair = pairs.find((p) => p.baseAsset === asset && p.quoteAsset === 'USDT');
+        const price = pair ? pair.price : 0;
+        spotValue += amount * price;
+      }
+    });
+  }
+
+  return usdtCash + lockedMargin + unrealizedPnl + spotValue;
+}

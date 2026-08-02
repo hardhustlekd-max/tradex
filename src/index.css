@@ -1,0 +1,567 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Inter Tight", "Inter", -apple-system, sans-serif;
+  --font-sans: "Inter", "Inter Tight", -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+  --font-mono: "Roboto Mono", "JetBrains Mono", "SF Mono", Consolas, monospace;
+}
+
+@layer base {
+  html, body, #root {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  :root, body, *, *::before, *::after {
+    font-family: "Inter", "Inter Tight", -apple-system, BlinkMacSystemFont, "SF Pro Text", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    box-sizing: border-box;
+  }
+
+  h1, h2, h3, h4, h5, h6, .font-display, .brand-heading {
+    font-family: "Inter Tight", "Inter", -apple-system, sans-serif;
+  }
+
+  body {
+    background-color: #0b0e11;
+    color: #eaecef;
+    font-size: 12px;
+    line-height: 1.3;
+  }
+
+  button, [role="button"], input, select, textarea {
+    font-family: inherit;
+    border-radius: 0.5rem;
+  }
+}
+
+/* Glass & Card Utilities - Binance Dark & Mint Theme */
+.liquid-glass {
+  background: #181a20;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.liquid-card {
+  background: #181a20;
+  border: none;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+}
+
+.liquid-dock {
+  background: #0d1117;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 -8px 28px rgba(0, 0, 0, 0.5);
+}
+
+/* Ambient Brand Glow Helpers */
+.ambient-glow-gold {
+  background: transparent;
+}
+
+.liquid-btn-primary {
+  background: #00c076;
+  color: #000000;
+  font-weight: 700;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 14px rgba(0, 192, 118, 0.25);
+}
+
+.liquid-btn-primary:hover {
+  background: #00d684;
+}
+
+.liquid-btn-green {
+  background: #00c076;
+  color: #ffffff;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 14px rgba(0, 192, 118, 0.25);
+}
+
+.liquid-btn-red {
+  background: #f6465d;
+  color: #ffffff;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 14px rgba(246, 70, 93, 0.25);
+}
+
+/* Clean font numeric reset */
+.tabular-nums {
+  font-variant-numeric: normal;
+  font-feature-settings: normal;
+}
+
+/* Custom minimal sleek scrollbar */
+/* Custom minimal sleek scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 0px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Custom App Tab Styles - Modern Minimalist Underline Tab Design (as per image design system) */
+
+.app-tab-active {
+  position: relative;
+  background-color: transparent !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  border: none !important;
+  box-shadow: none !important;
+  flex-shrink: 0;
+  white-space: nowrap;
+  padding-bottom: 6px;
+  transition: color 0.15s ease-in-out;
+}
+
+.app-tab-active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #00c076;
+  border-radius: 9999px;
+  box-shadow: 0 1px 6px rgba(0, 192, 118, 0.4);
+}
+
+.app-tab-inactive {
+  position: relative;
+  background-color: transparent !important;
+  color: #848e9c !important;
+  font-weight: 500 !important;
+  border: none !important;
+  box-shadow: none !important;
+  flex-shrink: 0;
+  white-space: nowrap;
+  padding-bottom: 6px;
+  transition: color 0.15s ease-in-out;
+}
+
+.app-tab-inactive:hover {
+  color: #ffffff !important;
+  background-color: transparent !important;
+}
+
+/* Secondary / Sub-Tab Active (Clean Mint Underline) */
+.app-subtab-active {
+  position: relative;
+  background-color: transparent !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  border: none !important;
+  box-shadow: none !important;
+  flex-shrink: 0;
+  white-space: nowrap;
+  padding-bottom: 4px;
+  transition: color 0.15s ease-in-out;
+}
+
+.app-subtab-active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2.5px;
+  background: #00c076;
+  border-radius: 9999px;
+}
+
+.app-subtab-inactive {
+  position: relative;
+  background-color: transparent !important;
+  color: #848e9c !important;
+  font-weight: 500 !important;
+  border: none !important;
+  box-shadow: none !important;
+  flex-shrink: 0;
+  white-space: nowrap;
+  padding-bottom: 4px;
+  transition: color 0.15s ease-in-out;
+}
+
+.app-subtab-inactive:hover {
+  color: #ffffff !important;
+  background-color: transparent !important;
+}
+
+/* Light Theme Comprehensive Global Overrides */
+html.light,
+body.light-theme,
+.light-theme {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+html.light body {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+
+/* Modal, Card, Popover, & Dock Base Elements - Elevated Card Shadows */
+.light-theme .liquid-card,
+.light-theme .liquid-glass,
+.light-theme .liquid-dock {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.08), 0 4px 6px -2px rgba(15, 23, 42, 0.03) !important;
+  color: #0f172a !important;
+}
+
+/* Light Mode Card Shadows for All Shadow Utility Classes */
+.light-theme [class*="shadow"] {
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.03) !important;
+}
+
+.light-theme [class*="shadow-md"],
+.light-theme [class*="shadow-lg"],
+.light-theme [class*="shadow-xl"],
+.light-theme [class*="shadow-2xl"],
+.light-theme [class*="shadow-3xl"],
+.light-theme [class*="shadow-[0_4px_20px"] {
+  box-shadow: 0 12px 32px -4px rgba(15, 23, 42, 0.09), 0 4px 12px -2px rgba(15, 23, 42, 0.04) !important;
+}
+
+/* All Hardcoded Dark Containers, Panels & Modals */
+.light-theme [class*="bg-[#0a0805]"],
+.light-theme [class*="bg-[#0b0e11]"],
+.light-theme [class*="bg-[#0c0a06]"],
+.light-theme [class*="bg-[#141008]"],
+.light-theme [class*="bg-[#181a20]"],
+.light-theme [class*="bg-[#120e08]"],
+.light-theme [class*="bg-[#1e1b12]"],
+.light-theme [class*="bg-[#100d07]"],
+.light-theme [class*="bg-[#0e0b06]"],
+.light-theme [class*="bg-[#0f0c07]"],
+.light-theme [class*="bg-[#131722]"],
+.light-theme [class*="bg-[#120f0a]"],
+.light-theme [class*="bg-[#1c1810]"],
+.light-theme [class*="bg-[#241e14]"],
+.light-theme [class*="bg-[#1e1c18]"],
+.light-theme [class*="bg-[#1a1814]"],
+.light-theme [class*="bg-[#0d0f12]"],
+.light-theme [class*="bg-[#0f1217]"],
+.light-theme [class*="bg-[#0e1117]"],
+.light-theme [class*="bg-[#0d1117]"],
+.light-theme [class*="bg-[#161b22]"],
+.light-theme [class*="bg-[#12161f]"],
+.light-theme [class*="bg-[#202630]"],
+.light-theme [class*="bg-[#2b313a]"],
+.light-theme [class*="bg-[#363d4a]"],
+.light-theme [class*="bg-[#1e2329]"],
+.light-theme [class*="bg-[#1a1e24]"],
+.light-theme [class*="bg-zinc-900"],
+.light-theme [class*="bg-zinc-950"],
+.light-theme [class*="bg-zinc-850"],
+.light-theme [class*="bg-zinc-800"] {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+}
+
+/* Semi-transparent Dark Fills & Inner Containers */
+.light-theme [class*="bg-white/3"],
+.light-theme [class*="bg-white/5"],
+.light-theme [class*="bg-white/10"],
+.light-theme [class*="bg-white/15"],
+.light-theme [class*="bg-white/20"],
+.light-theme [class*="bg-black/20"],
+.light-theme [class*="bg-black/30"],
+.light-theme [class*="bg-black/40"],
+.light-theme [class*="bg-[#1c2230]"],
+.light-theme [class*="bg-[#252d3d]"],
+.light-theme [class*="bg-zinc-800/80"],
+.light-theme [class*="bg-zinc-800/50"],
+.light-theme [class*="bg-zinc-700/60"] {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+/* Modal and Drawer Backdrop Overlays (Keep Dark Translucent) */
+.light-theme [class*="fixed"][class*="bg-black/70"],
+.light-theme [class*="fixed"][class*="bg-black/60"],
+.light-theme [class*="fixed"][class*="bg-black/50"],
+.light-theme [class*="fixed"][class*="bg-black/40"],
+.light-theme .fixed.inset-0.bg-black\/70,
+.light-theme .fixed.inset-0.bg-black\/60,
+.light-theme .fixed.inset-0.bg-black\/50,
+.light-theme .fixed.inset-0.bg-black\/40 {
+  background-color: rgba(15, 23, 42, 0.45) !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+/* Interactive Hover States in Light Mode */
+.light-theme [class*="hover:bg-white/5"]:hover,
+.light-theme [class*="hover:bg-white/10"]:hover,
+.light-theme [class*="hover:bg-amber-500/5"]:hover,
+.light-theme [class*="hover:bg-[#141008]"]:hover,
+.light-theme [class*="hover:bg-[#161b22]"]:hover,
+.light-theme [class*="hover:bg-zinc-800"]:hover,
+.light-theme [class*="hover:bg-[#181a20]"]:hover {
+  background-color: #f1f5f9 !important;
+}
+
+/* Borders in Light Mode */
+.light-theme [class*="border-amber-500/"],
+.light-theme [class*="border-amber-400/"],
+.light-theme [class*="border-white/"],
+.light-theme [class*="border-zinc-800"],
+.light-theme [class*="border-zinc-700"] {
+  border-color: #e2e8f0 !important;
+}
+
+/* Text Colors in Light Mode - Generic Overrides Excluding Green/Red Buttons & Badges */
+.light-theme [class*="text-zinc-100"]:not([class*="bg-[#00c076]"]):not([class*="bg-[#f6465d]"]):not([class*="bg-[#00d080]"]):not([class*="bg-[#f8556c]"]):not(.liquid-btn-green):not(.liquid-btn-red):not(.liquid-btn-primary),
+.light-theme [class*="text-zinc-200"]:not([class*="bg-[#00c076]"]):not([class*="bg-[#f6465d]"]):not([class*="bg-[#00d080]"]):not([class*="bg-[#f8556c]"]):not(.liquid-btn-green):not(.liquid-btn-red):not(.liquid-btn-primary),
+.light-theme [class*="text-zinc-300"]:not([class*="bg-[#00c076]"]):not([class*="bg-[#f6465d]"]):not([class*="bg-[#00d080]"]):not([class*="bg-[#f8556c]"]):not(.liquid-btn-green):not(.liquid-btn-red):not(.liquid-btn-primary),
+.light-theme [class*="text-[#f0f3f8]"],
+.light-theme [class*="text-white"]:not([class*="bg-[#00c076]"]):not([class*="bg-[#f6465d]"]):not([class*="bg-[#00d080]"]):not([class*="bg-[#f8556c]"]):not(.liquid-btn-green):not(.liquid-btn-red):not(.liquid-btn-primary) {
+  color: #0f172a !important;
+}
+
+.light-theme [class*="text-zinc-400"],
+.light-theme [class*="text-zinc-500"] {
+  color: #64748b !important;
+}
+
+/* --- REFINED GREEN & RED BRAND COLORS FOR LIGHT MODE --- */
+
+/* Standalone Green & Red Text Colors (High Contrast on White) */
+.light-theme [class*="text-[#00c076]"],
+.light-theme [class*="text-[#00d080]"],
+.light-theme [class*="text-emerald-500"],
+.light-theme [class*="text-emerald-400"] {
+  color: #008f52 !important;
+}
+
+.light-theme [class*="text-[#f6465d]"],
+.light-theme [class*="text-[#f8556c]"],
+.light-theme [class*="text-rose-500"],
+.light-theme [class*="text-red-500"] {
+  color: #d92138 !important;
+}
+
+/* Solid Green Buttons, Badges, and Containers in Light Mode */
+.light-theme [class*="bg-[#00c076]"]:not([class*="/"]),
+.light-theme [class*="bg-[#00d080]"]:not([class*="/"]),
+.light-theme .liquid-btn-green,
+.light-theme .liquid-btn-primary {
+  background-color: #00a863 !important;
+  border-color: #009657 !important;
+}
+
+.light-theme [class*="bg-[#00c076]"]:not([class*="/"]):hover,
+.light-theme [class*="bg-[#00d080]"]:not([class*="/"]):hover,
+.light-theme .liquid-btn-green:hover,
+.light-theme .liquid-btn-primary:hover {
+  background-color: #009657 !important;
+}
+
+/* Text and Icons Inside Solid Green Containers (Ensure High Contrast White or Black) */
+.light-theme [class*="bg-[#00c076]"]:not([class*="/"]):not(.text-black),
+.light-theme [class*="bg-[#00c076]"]:not([class*="/"]):not(.text-black) *,
+.light-theme [class*="bg-[#00d080]"]:not([class*="/"]):not(.text-black),
+.light-theme [class*="bg-[#00d080]"]:not([class*="/"]):not(.text-black) *,
+.light-theme .liquid-btn-green,
+.light-theme .liquid-btn-green * {
+  color: #ffffff !important;
+  fill: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+.light-theme [class*="bg-[#00c076]"].text-black,
+.light-theme [class*="bg-[#00c076]"].text-black *,
+.light-theme [class*="bg-[#00d080]"].text-black,
+.light-theme [class*="bg-[#00d080]"].text-black *,
+.light-theme .liquid-btn-primary,
+.light-theme .liquid-btn-primary * {
+  color: #000000 !important;
+  fill: #000000 !important;
+  stroke: #000000 !important;
+}
+
+/* Translucent Green Tints & Badges in Light Mode */
+.light-theme [class*="bg-[#00c076]/"],
+.light-theme [class*="bg-[#00d080]/"],
+.light-theme [class*="bg-emerald-500/"] {
+  background-color: #e6f7f0 !important;
+  border-color: rgba(0, 143, 82, 0.25) !important;
+}
+
+.light-theme [class*="bg-[#00c076]/"] *,
+.light-theme [class*="bg-[#00d080]/"] *,
+.light-theme [class*="bg-emerald-500/"] * {
+  color: #008f52 !important;
+}
+
+/* Solid Red Buttons in Light Mode */
+.light-theme [class*="bg-[#f6465d]"]:not([class*="/"]),
+.light-theme [class*="bg-[#f8556c]"]:not([class*="/"]),
+.light-theme .liquid-btn-red {
+  background-color: #e12d46 !important;
+  border-color: #d02038 !important;
+}
+
+.light-theme [class*="bg-[#f6465d]"]:not([class*="/"]):hover,
+.light-theme [class*="bg-[#f8556c]"]:not([class*="/"]):hover,
+.light-theme .liquid-btn-red:hover {
+  background-color: #d02038 !important;
+}
+
+.light-theme [class*="bg-[#f6465d]"]:not([class*="/"]) *,
+.light-theme [class*="bg-[#f8556c]"]:not([class*="/"]) *,
+.light-theme .liquid-btn-red,
+.light-theme .liquid-btn-red * {
+  color: #ffffff !important;
+  fill: #ffffff !important;
+  stroke: #ffffff !important;
+}
+
+/* Translucent Red Tints & Badges in Light Mode */
+.light-theme [class*="bg-[#f6465d]/"],
+.light-theme [class*="bg-[#f8556c]/"],
+.light-theme [class*="bg-red-500/"],
+.light-theme [class*="bg-rose-500/"] {
+  background-color: #fde8ea !important;
+  border-color: rgba(225, 45, 70, 0.25) !important;
+}
+
+.light-theme [class*="bg-[#f6465d]/"] *,
+.light-theme [class*="bg-[#f8556c]/"] * {
+  color: #d92138 !important;
+}
+
+/* Active Underline Tabs in Light Mode */
+.light-theme .app-tab-active::after,
+.light-theme .app-subtab-active::after {
+  background: #008f52 !important;
+  box-shadow: 0 1px 6px rgba(0, 143, 82, 0.3) !important;
+}
+
+/* Preserve exact dark theme appearance for OrderForm Buy & Sell buttons in all themes */
+.order-btn-buy,
+.light-theme .order-btn-buy {
+  background-color: #00c076 !important;
+  color: #000000 !important;
+  border-color: rgba(0, 192, 118, 0.4) !important;
+  box-shadow: 0 0 15px rgba(0, 192, 118, 0.25) !important;
+}
+
+.order-btn-buy:hover,
+.light-theme .order-btn-buy:hover {
+  background-color: #00d080 !important;
+  color: #000000 !important;
+}
+
+.order-btn-sell,
+.light-theme .order-btn-sell {
+  background-color: #f6465d !important;
+  color: #ffffff !important;
+  border-color: rgba(246, 70, 93, 0.4) !important;
+  box-shadow: 0 0 15px rgba(246, 70, 93, 0.25) !important;
+}
+
+.order-btn-sell:hover,
+.light-theme .order-btn-sell:hover {
+  background-color: #ff526a !important;
+  color: #ffffff !important;
+}
+
+/* Bottom Navigation Bar & Fixed Panels */
+.light-theme #positions-section,
+.light-theme .fixed.bottom-0 {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 -4px 12px rgba(15, 23, 42, 0.05) !important;
+}
+
+/* Header & Nav Specific Adjustments */
+.light-theme header,
+.light-theme nav {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* Toast Notifications in Light Mode */
+.light-theme [class*="bg-[#0a120c]"] {
+  background-color: #f0fdf4 !important;
+  color: #166534 !important;
+  border-color: #bbf7d0 !important;
+}
+.light-theme [class*="bg-[#140e06]"] {
+  background-color: #fffbeb !important;
+  color: #92400e !important;
+  border-color: #fde68a !important;
+}
+.light-theme [class*="bg-[#140708]"] {
+  background-color: #fef2f2 !important;
+  color: #991b1b !important;
+  border-color: #fecaca !important;
+}
+.light-theme [class*="bg-[#120e08]"] {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* Inputs & Form Controls */
+.light-theme input,
+.light-theme select,
+.light-theme textarea {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border-color: #cbd5e1 !important;
+}
+
+.light-theme input::placeholder,
+.light-theme textarea::placeholder {
+  color: #94a3b8 !important;
+}
+
+/* Tab active / inactive */
+.light-theme .app-tab-active,
+.light-theme .app-subtab-active {
+  background-color: transparent !important;
+  color: #0f172a !important;
+  font-weight: 700 !important;
+}
+
+.light-theme .app-tab-inactive,
+.light-theme .app-subtab-inactive {
+  background-color: transparent !important;
+  color: #64748b !important;
+  font-weight: 500 !important;
+}
+
+.light-theme .app-tab-inactive:hover,
+.light-theme .app-subtab-inactive:hover {
+  color: #0f172a !important;
+}
+
+/* Shadows for Dropdowns & Popovers */
+.light-theme [class*="shadow-2xl"] {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.04) !important;
+}
+
+
+
+
+

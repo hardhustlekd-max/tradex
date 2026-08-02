@@ -66,7 +66,7 @@ export const AssetsPage: React.FC<AssetsPageProps> = ({
               }}
               className={`py-1 px-3 rounded-full transition-all capitalize whitespace-nowrap cursor-pointer text-xs ${
                 activeTab === tab
-                  ? 'bg-[#00c076] text-black font-extrabold shadow-xs'
+                  ? 'bg-[#00c076] text-white font-extrabold shadow-xs'
                   : 'bg-[#181a20] text-zinc-400 hover:text-white hover:bg-zinc-800'
               }`}
             >
@@ -214,7 +214,7 @@ export const AssetsPage: React.FC<AssetsPageProps> = ({
               soundFx.playClick();
               onOpenDeposit();
             }}
-            className="px-3 py-1 rounded-full bg-[#00c076] hover:bg-[#00d080] text-black font-extrabold text-[11px] transition-colors cursor-pointer shrink-0"
+            className="px-3 py-1 rounded-full bg-[#00c076] hover:bg-[#00d080] text-white font-extrabold text-[11px] transition-colors cursor-pointer shrink-0"
           >
             Earn Now
           </button>

@@ -307,7 +307,7 @@ export const BottomPanels: React.FC<BottomPanelsProps> = ({
           )}
           <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
             activeNavDock === 'trade'
-              ? 'bg-[#00c076] text-black shadow-md shadow-[#00c076]/40 scale-105'
+              ? 'bg-[#00c076] text-white shadow-md shadow-[#00c076]/40 scale-105'
               : 'bg-[#2b313a]/80 text-[#848e9c] hover:bg-[#363d4a] hover:text-white'
           }`}>
             <ArrowLeftRight className="w-4 h-4 font-bold stroke-[2.2]" />

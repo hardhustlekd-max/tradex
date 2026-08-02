@@ -85,7 +85,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
       <header className="w-full h-14 border-b border-white/10 bg-[#0d1117]/90 px-4 sm:px-8 flex items-center justify-between shrink-0 relative z-20">
         {/* Brand Logo - pure white NEXUS text */}
         <div className="flex items-center gap-2.5 cursor-pointer" onClick={handleQuickDemoLogin}>
-          <div className="w-8 h-8 rounded-xl bg-[#00c076] text-black font-black text-base flex items-center justify-center shadow-md shadow-[#00c076]/20">
+          <div className="w-8 h-8 rounded-xl bg-[#00c076] text-white font-black text-base flex items-center justify-center shadow-md shadow-[#00c076]/20">
             N
           </div>
           <span className="text-base font-black tracking-widest text-white uppercase leading-none">

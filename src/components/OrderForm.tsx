@@ -130,7 +130,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
             onClick={() => { soundFx.playClick(); setTradingMode('futures'); }}
             className={`flex-1 py-1 rounded-md text-[11px] font-extrabold cursor-pointer transition-all ${
               tradingMode === 'futures'
-                ? 'bg-[#00c076] text-black shadow-xs'
+                ? 'bg-[#00c076] text-white shadow-xs'
                 : 'text-zinc-400 hover:text-white'
             }`}
           >
@@ -141,7 +141,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
             onClick={() => { soundFx.playClick(); setTradingMode('spot'); }}
             className={`flex-1 py-1 rounded-md text-[11px] font-extrabold cursor-pointer transition-all ${
               tradingMode === 'spot'
-                ? 'bg-[#00c076] text-black shadow-xs'
+                ? 'bg-[#00c076] text-white shadow-xs'
                 : 'text-zinc-400 hover:text-white'
             }`}
           >
@@ -382,7 +382,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
               type="button"
               disabled={amountNum <= 0}
               onClick={() => handleOrderSubmit('buy')}
-              className="order-btn-buy py-2.5 rounded-lg font-extrabold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-md active:scale-95 bg-[#00c076] hover:bg-[#00d080] text-black border border-[#00c076]/40 shadow-[0_0_15px_rgba(0,192,118,0.25)] disabled:bg-zinc-800 disabled:text-zinc-500 disabled:border-transparent disabled:shadow-none"
+              className="order-btn-buy py-2.5 rounded-lg font-extrabold text-xs uppercase tracking-wider transition-all cursor-pointer shadow-md active:scale-95 bg-[#00c076] hover:bg-[#00d080] text-white border border-[#00c076]/40 shadow-[0_0_15px_rgba(0,192,118,0.25)] disabled:bg-zinc-800 disabled:text-zinc-500 disabled:border-transparent disabled:shadow-none"
             >
               Buy {activePair.baseAsset}
             </button>

@@ -375,27 +375,26 @@ html.light body {
   background-color: #009657 !important;
 }
 
-/* Text and Icons Inside Solid Green Containers (Ensure High Contrast White or Black) */
-.light-theme [class*="bg-[#00c076]"]:not([class*="/"]):not(.text-black),
-.light-theme [class*="bg-[#00c076]"]:not([class*="/"]):not(.text-black) *,
-.light-theme [class*="bg-[#00d080]"]:not([class*="/"]):not(.text-black),
-.light-theme [class*="bg-[#00d080]"]:not([class*="/"]):not(.text-black) *,
+/* Text and Icons Inside Solid Green Containers (Ensure High Contrast White) */
+[class*="bg-[#00c076]"]:not([class*="/"]),
+[class*="bg-[#00c076]"]:not([class*="/"]) *,
+[class*="bg-[#00d080]"]:not([class*="/"]),
+[class*="bg-[#00d080]"]:not([class*="/"]) *,
+.liquid-btn-green,
+.liquid-btn-green *,
+.liquid-btn-primary,
+.liquid-btn-primary *,
+.light-theme [class*="bg-[#00c076]"]:not([class*="/"]),
+.light-theme [class*="bg-[#00c076]"]:not([class*="/"]) *,
+.light-theme [class*="bg-[#00d080]"]:not([class*="/"]),
+.light-theme [class*="bg-[#00d080]"]:not([class*="/"]) *,
 .light-theme .liquid-btn-green,
-.light-theme .liquid-btn-green * {
+.light-theme .liquid-btn-green *,
+.light-theme .liquid-btn-primary,
+.light-theme .liquid-btn-primary * {
   color: #ffffff !important;
   fill: #ffffff !important;
   stroke: #ffffff !important;
-}
-
-.light-theme [class*="bg-[#00c076]"].text-black,
-.light-theme [class*="bg-[#00c076]"].text-black *,
-.light-theme [class*="bg-[#00d080]"].text-black,
-.light-theme [class*="bg-[#00d080]"].text-black *,
-.light-theme .liquid-btn-primary,
-.light-theme .liquid-btn-primary * {
-  color: #000000 !important;
-  fill: #000000 !important;
-  stroke: #000000 !important;
 }
 
 /* Translucent Green Tints & Badges in Light Mode */
@@ -460,7 +459,7 @@ html.light body {
 .order-btn-buy,
 .light-theme .order-btn-buy {
   background-color: #00c076 !important;
-  color: #000000 !important;
+  color: #ffffff !important;
   border-color: rgba(0, 192, 118, 0.4) !important;
   box-shadow: 0 0 15px rgba(0, 192, 118, 0.25) !important;
 }
@@ -468,7 +467,7 @@ html.light body {
 .order-btn-buy:hover,
 .light-theme .order-btn-buy:hover {
   background-color: #00d080 !important;
-  color: #000000 !important;
+  color: #ffffff !important;
 }
 
 .order-btn-sell,

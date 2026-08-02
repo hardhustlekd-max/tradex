@@ -392,7 +392,7 @@ export const Header: React.FC<HeaderProps> = ({
                           }}
                           className={`px-2.5 py-1 rounded-md text-[10px] font-bold cursor-pointer transition-all whitespace-nowrap ${
                             coinCategory === cat
-                              ? 'bg-[#00c076] text-black font-extrabold'
+                              ? 'bg-[#00c076] text-white font-extrabold'
                               : 'bg-[#161b22] text-zinc-400 border border-white/5 hover:text-zinc-200'
                           }`}
                         >

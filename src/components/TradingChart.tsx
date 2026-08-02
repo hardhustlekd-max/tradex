@@ -2224,7 +2224,7 @@ export const TradingChart: React.FC<TradingChartProps> = ({
                   setPriceScaleRatio(1.0);
                   setVisibleCount(75);
                 }}
-                className="px-2 py-1 bg-[#00c076] text-black font-extrabold text-[10px] rounded hover:bg-[#00d080] transition-colors cursor-pointer flex items-center gap-1 shadow-sm ml-0.5"
+                className="px-2 py-1 bg-[#00c076] text-white font-extrabold text-[10px] rounded hover:bg-[#00d080] transition-colors cursor-pointer flex items-center gap-1 shadow-sm ml-0.5"
                 title="Reset Chart Scale & Recenter (Double Click Canvas)"
               >
                 <span>Reset</span>

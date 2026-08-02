@@ -12,6 +12,7 @@ import {
 import { TradingPair, Portfolio, Position } from '../types';
 import { soundFx } from '../utils/audio';
 import { calculateTotalEquity } from '../utils/calc';
+import { CoinIcon } from './CoinIcon';
 
 interface HomePageProps {
   pairs: TradingPair[];
@@ -322,6 +323,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                   >
                     <Star className={`w-3.5 h-3.5 ${isFav ? 'text-[#00c076] fill-[#00c076]' : ''}`} />
                   </button>
+                  <CoinIcon symbol={pair.baseAsset} size={28} />
                   <div>
                     <div className="flex items-baseline gap-1">
                       <span className="font-bold text-sm text-white group-hover:text-[#00c076] transition-colors">{pair.baseAsset}</span>

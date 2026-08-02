@@ -80,8 +80,11 @@ export interface Position {
 }
 
 export interface Portfolio {
-  usdtBalance: number;
-  spotBalances: Record<string, number>; // e.g. { BTC: 0.25, ETH: 2.1 }
+  usdtBalance: number;                   // Futures USDT
+  fundingUsdt?: number;                  // Funding USDT balance
+  copyUsdt?: number;                     // Copy Trading USDT balance
+  earnUsdt?: number;                     // Auto Earn USDT balance
+  spotBalances: Record<string, number>;  // e.g. { USDT: 5000, BTC: 0.25, ETH: 2.5, SOL: 15.0 }
 }
 
 export type UserPortfolio = Portfolio;

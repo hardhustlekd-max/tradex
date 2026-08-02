@@ -344,6 +344,26 @@ html.light body {
 
 /* --- REFINED GREEN & RED BRAND COLORS FOR LIGHT MODE --- */
 
+/* Light Mode Logo Text & Dropdown Blur Adjustments */
+.light-theme .nexus-logo-text {
+  color: #00c076 !important;
+}
+
+.light-theme [class*="bg-[#181a20]"],
+.light-theme [class*="bg-[#141822]"],
+.light-theme [class*="bg-[#161b22]"],
+.light-theme [class*="bg-[#0a0805]"],
+.light-theme [class*="bg-[#0d1117]"] {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+}
+
+.light-theme [class*="backdrop-blur"] {
+  background-color: rgba(255, 255, 255, 0.92) !important;
+  backdrop-filter: blur(8px) !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1) !important;
+}
+
 /* Standalone Green & Red Text Colors (High Contrast on White) */
 .light-theme [class*="text-[#00c076]"],
 .light-theme [class*="text-[#00d080]"],

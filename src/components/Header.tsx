@@ -258,7 +258,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <path d="M12 2L2 12l10 10 10-10L12 2zm0 4.5l5.5 5.5L12 17.5 6.5 12 12 6.5z"/>
               </svg>
             </div>
-            <span className="font-black text-white text-base tracking-wider font-sans">NEXUS</span>
+            <span className="font-black text-white nexus-logo-text text-base tracking-wider font-sans">NEXUS</span>
           </div>
         </div>
 

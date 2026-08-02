@@ -15,6 +15,7 @@ interface OrderFormProps {
   activePair: TradingPair;
   portfolio: Portfolio;
   selectedPrice: number | null;
+  hideHeader?: boolean;
   onSubmitOrder: (order: {
     mode: TradingMode;
     side: OrderSide;
@@ -32,6 +33,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
   activePair,
   portfolio,
   selectedPrice,
+  hideHeader = false,
   onSubmitOrder,
 }) => {
   const [tradingMode, setTradingMode] = useState<TradingMode>('futures');
@@ -56,8 +58,10 @@ export const OrderForm: React.FC<OrderFormProps> = ({
   const amountNum = parseFloat(amountInput) || 0;
   const totalValue = priceNum * amountNum;
 
-  const availableUSDT = portfolio.usdtBalance;
-  const availableAsset = portfolio.spotBalances[activePair.baseAsset] || 0;
+  const availableUSDT = tradingMode === 'futures' 
+    ? (portfolio.usdtBalance || 0) 
+    : (portfolio.spotBalances?.USDT || 0);
+  const availableAsset = portfolio.spotBalances?.[activePair.baseAsset] || 0;
 
   const maxAffordableAmount = tradingMode === 'futures' 
     ? (availableUSDT * leverage) / priceNum 
@@ -110,17 +114,19 @@ export const OrderForm: React.FC<OrderFormProps> = ({
   };
 
   return (
-    <div className="w-full lg:w-72 xl:w-80 bg-[#0d1117] border-t lg:border-t-0 lg:border-l border-white/10 flex flex-col shrink-0 text-xs font-sans select-none overflow-y-auto h-full min-h-0">
+    <div className={`w-full ${hideHeader ? 'bg-transparent border-0' : 'lg:w-72 xl:w-80 bg-[#0d1117] border-t lg:border-t-0 lg:border-l border-white/10'} flex flex-col shrink-0 text-xs font-sans select-none overflow-y-auto h-full min-h-0`}>
       {/* Header Bar matching PositionHistory */}
-      <div className="h-9 px-3 bg-[#181a20] border-b border-white/10 flex items-center justify-between text-zinc-100 font-bold shrink-0 text-[11px]">
-        <div className="flex items-center gap-1.5">
-          <Zap className="w-3.5 h-3.5 text-[#00c076]" />
-          <span>Place Order</span>
+      {!hideHeader && (
+        <div className="h-9 px-3 bg-[#181a20] border-b border-white/10 flex items-center justify-between text-zinc-100 font-bold shrink-0 text-[11px]">
+          <div className="flex items-center gap-1.5">
+            <Zap className="w-3.5 h-3.5 text-[#00c076]" />
+            <span>Place Order</span>
+          </div>
+          <span className="text-[10px] text-zinc-400 font-sans font-medium">
+            {activePair.symbol}
+          </span>
         </div>
-        <span className="text-[10px] text-zinc-400 font-sans font-medium">
-          {activePair.symbol}
-        </span>
-      </div>
+      )}
 
       {/* Mode Switcher: Futures vs Spot */}
       <div className="p-2 border-b border-white/10 bg-[#0d1117] flex items-center justify-between gap-1">

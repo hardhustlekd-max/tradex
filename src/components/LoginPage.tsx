@@ -198,10 +198,10 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
             {/* QR Code Tab View */}
             {inputMethod === 'qr' ? (
               <div className="text-center py-4 space-y-4">
-                <div className="relative w-36 h-36 mx-auto bg-white p-3 rounded-2xl shadow-xl flex items-center justify-center border-2 border-amber-400">
+                <div className="relative w-36 h-36 mx-auto bg-white p-3 rounded-2xl shadow-xl flex items-center justify-center border-2 border-[#00c076]">
                   <QrCode className="w-28 h-28 text-black" />
                   {qrScanned && (
-                    <div className="absolute inset-0 bg-black/85 rounded-2xl flex items-center justify-center text-emerald-400 font-bold text-xs">
+                    <div className="absolute inset-0 bg-black/85 rounded-2xl flex items-center justify-center text-[#00c076] font-bold text-xs">
                       Confirmed!
                     </div>
                   )}
@@ -233,7 +233,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="Email address"
                         required
-                        className="w-full h-10 px-3.5 bg-[#0e0b06] border border-amber-500/20 focus:border-amber-400 rounded-xl text-xs font-medium font-sans text-white placeholder:font-sans placeholder:text-zinc-500 focus:outline-none transition-colors"
+                        className="w-full h-10 px-3.5 bg-[#161b22] border border-white/10 focus:border-[#00c076] rounded-xl text-xs font-medium font-sans text-white placeholder:font-sans placeholder:text-zinc-500 focus:outline-none transition-colors"
                       />
                     </div>
                   </div>
@@ -250,7 +250,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
                         <select
                           value={phoneCountry}
                           onChange={(e) => setPhoneCountry(e.target.value)}
-                          className="w-full h-10 pl-2.5 pr-6 bg-[#0e0b06] border border-amber-500/20 focus:border-amber-400 rounded-xl text-xs font-medium font-sans text-amber-300 appearance-none focus:outline-none cursor-pointer"
+                          className="w-full h-10 pl-2.5 pr-6 bg-[#161b22] border border-white/10 focus:border-[#00c076] rounded-xl text-xs font-medium font-sans text-[#00c076] appearance-none focus:outline-none cursor-pointer"
                         >
                           <option value="+1">+1</option>
                           <option value="+44">+44</option>
@@ -269,7 +269,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
                           onChange={(e) => setPhone(e.target.value)}
                           placeholder="Phone number"
                           required
-                          className="w-full h-10 px-3.5 bg-[#0e0b06] border border-amber-500/20 focus:border-amber-400 rounded-xl text-xs font-medium font-sans text-white placeholder:font-sans placeholder:text-zinc-500 focus:outline-none transition-colors"
+                          className="w-full h-10 px-3.5 bg-[#161b22] border border-white/10 focus:border-[#00c076] rounded-xl text-xs font-medium font-sans text-white placeholder:font-sans placeholder:text-zinc-500 focus:outline-none transition-colors"
                         />
                       </div>
                     </div>
@@ -288,12 +288,12 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="Password"
                       required
-                      className="w-full h-10 pl-3.5 pr-9 bg-[#0e0b06] border border-amber-500/20 focus:border-amber-400 rounded-xl text-xs font-medium font-sans text-white placeholder:font-sans placeholder:text-zinc-500 focus:outline-none transition-colors"
+                      className="w-full h-10 pl-3.5 pr-9 bg-[#161b22] border border-white/10 focus:border-[#00c076] rounded-xl text-xs font-medium font-sans text-white placeholder:font-sans placeholder:text-zinc-500 focus:outline-none transition-colors"
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-amber-300 p-1 cursor-pointer"
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-[#00c076] p-1 cursor-pointer"
                     >
                       {showPassword ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                     </button>
@@ -311,7 +311,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
                       value={referralCode}
                       onChange={(e) => setReferralCode(e.target.value)}
                       placeholder="Referral Code"
-                      className="w-full h-10 px-3.5 bg-[#0e0b06] border border-amber-500/20 focus:border-amber-400 rounded-xl text-xs font-medium font-sans text-amber-300 placeholder:font-sans placeholder:text-zinc-500 uppercase tracking-wider focus:outline-none"
+                      className="w-full h-10 px-3.5 bg-[#161b22] border border-white/10 focus:border-[#00c076] rounded-xl text-xs font-medium font-sans text-[#00c076] placeholder:font-sans placeholder:text-zinc-500 uppercase tracking-wider focus:outline-none"
                     />
                   </div>
                 )}
@@ -324,11 +324,11 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
                         type="checkbox"
                         checked={rememberMe}
                         onChange={(e) => setRememberMe(e.target.checked)}
-                        className="rounded border-amber-500/30 bg-[#0e0b06] text-amber-500 focus:ring-0 w-3.5 h-3.5 accent-amber-500"
+                        className="rounded border-white/10 bg-[#161b22] text-[#00c076] focus:ring-0 w-3.5 h-3.5 accent-[#00c076]"
                       />
                       <span className="font-medium">Remember me</span>
                     </label>
-                    <span className="text-amber-400 font-medium hover:underline cursor-pointer">
+                    <span className="text-[#00c076] font-medium hover:underline cursor-pointer">
                       Forgot Password?
                     </span>
                   </div>
@@ -340,10 +340,10 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
                         checked={agreeTerms}
                         onChange={(e) => setAgreeTerms(e.target.checked)}
                         required
-                        className="rounded border-amber-500/30 bg-[#0e0b06] text-amber-500 focus:ring-0 w-3.5 h-3.5 accent-amber-500 mt-0.5"
+                        className="rounded border-white/10 bg-[#161b22] text-[#00c076] focus:ring-0 w-3.5 h-3.5 accent-[#00c076] mt-0.5"
                       />
                       <span className="text-zinc-400 font-medium leading-snug">
-                        I agree to <span className="text-amber-400 underline">Terms</span> and <span className="text-amber-400 underline">Privacy</span>.
+                        I agree to <span className="text-[#00c076] underline">Terms</span> and <span className="text-[#00c076] underline">Privacy</span>.
                       </span>
                     </label>
                   </div>
@@ -353,7 +353,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full h-10 rounded-xl liquid-btn-primary font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-lg shadow-amber-500/20 cursor-pointer active:scale-95 transition-all disabled:opacity-50 mt-1"
+                  className="w-full h-10 rounded-xl liquid-btn-primary font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-lg shadow-[#00c076]/20 cursor-pointer active:scale-95 transition-all disabled:opacity-50 mt-1"
                 >
                   {isLoading ? (
                     <span>Authenticating...</span>
@@ -368,22 +368,22 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
             )}
 
             {/* Quick Web3 & One-Click Login Options */}
-            <div className="mt-5 pt-4 border-t border-amber-500/15 space-y-2">
+            <div className="mt-5 pt-4 border-t border-white/10 space-y-2">
               <button
                 type="button"
                 onClick={handleQuickDemoLogin}
                 className="w-full h-9.5 px-3 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-semibold text-zinc-200 flex items-center justify-center gap-2 cursor-pointer transition-colors active:scale-95"
               >
-                <Zap className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                <Zap className="w-3.5 h-3.5 text-[#00c076] shrink-0" />
                 <span>Demo Account Log In</span>
               </button>
 
               <button
                 type="button"
                 onClick={handleQuickDemoLogin}
-                className="w-full h-9.5 px-3 rounded-xl bg-[#0e0b06] hover:bg-amber-500/10 border border-amber-500/20 text-xs font-semibold text-zinc-300 flex items-center justify-center gap-2 cursor-pointer transition-colors active:scale-95"
+                className="w-full h-9.5 px-3 rounded-xl bg-[#161b22] hover:bg-[#00c076]/10 border border-white/10 hover:border-[#00c076]/40 text-xs font-semibold text-zinc-300 flex items-center justify-center gap-2 cursor-pointer transition-colors active:scale-95"
               >
-                <Wallet className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                <Wallet className="w-3.5 h-3.5 text-[#00c076] shrink-0" />
                 <span>Connect Web3 Wallet</span>
               </button>
             </div>
@@ -393,14 +393,14 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
       </main>
 
       {/* Minimal Footer */}
-      <footer className="w-full border-t border-amber-500/15 py-3 px-4 sm:px-6 text-center text-xs font-medium text-zinc-500 flex flex-col sm:flex-row items-center justify-between gap-2 shrink-0 bg-[#0a0805]">
+      <footer className="w-full border-t border-white/10 py-3 px-4 sm:px-6 text-center text-xs font-medium text-zinc-500 flex flex-col sm:flex-row items-center justify-between gap-2 shrink-0 bg-[#0d1117]">
         <div>
           © 2026 NEXUS. All rights reserved.
         </div>
         <div className="flex items-center gap-4">
-          <span className="hover:text-amber-400 cursor-pointer">Privacy</span>
-          <span className="hover:text-amber-400 cursor-pointer">Terms</span>
-          <span className="hover:text-amber-400 cursor-pointer">Support</span>
+          <span className="hover:text-[#00c076] cursor-pointer">Privacy</span>
+          <span className="hover:text-[#00c076] cursor-pointer">Terms</span>
+          <span className="hover:text-[#00c076] cursor-pointer">Support</span>
         </div>
       </footer>
 

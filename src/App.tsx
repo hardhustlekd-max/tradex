@@ -39,6 +39,8 @@ import { MarketsPage } from './components/MarketsPage';
 import { AssetsPage } from './components/AssetsPage';
 import { PairSelectorModal } from './components/PairSelectorModal';
 import { FaucetModal } from './components/FaucetModal';
+import { TransferModal } from './components/TransferModal';
+import { TradeModal } from './components/TradeModal';
 import { AiAnalystDrawer } from './components/AiAnalystDrawer';
 import { NotificationToast } from './components/NotificationToast';
 import { LoginPage } from './components/LoginPage';
@@ -203,10 +205,31 @@ export default function App() {
     localStorage.setItem('tradex_mobile_tab', mobileTab);
   }, [mobileTab]);
 
+  // Redirect legacy saved tab
+  useEffect(() => {
+    if (mobileTab === 'order') {
+      setMobileTab('chart');
+    }
+  }, [mobileTab]);
+
   // Modals & Drawers
   const [isPairModalOpen, setIsPairModalOpen] = useState(false);
+  const [isTradeModalOpen, setIsTradeModalOpen] = useState(false);
   const [isFaucetModalOpen, setIsFaucetModalOpen] = useState(false);
   const [isAiAnalystOpen, setIsAiAnalystOpen] = useState(false);
+  const [transferModal, setTransferModal] = useState<{
+    isOpen: boolean;
+    initialFrom?: 'spot' | 'futures' | 'funding' | 'copy' | 'earn';
+    initialTo?: 'spot' | 'futures' | 'funding' | 'copy' | 'earn';
+    initialAsset?: string;
+    initialAmount?: string;
+  }>({
+    isOpen: false,
+    initialFrom: 'funding',
+    initialTo: 'futures',
+    initialAsset: 'USDT',
+    initialAmount: '',
+  });
   const [soundEnabled, setSoundEnabled] = useState(true);
 
   // Floating Notifications
@@ -562,6 +585,99 @@ export default function App() {
     const notional = orderData.price * orderData.amount;
     const requiredMargin = orderData.mode === 'spot' ? notional : notional / orderData.leverage;
 
+    // Specific Account Balance Checking
+    if (orderData.mode === 'spot') {
+      if (orderData.side === 'buy') {
+        const availableSpotUSDT = portfolio.spotBalances?.USDT || 0;
+        if (availableSpotUSDT < notional) {
+          const deficit = notional - availableSpotUSDT;
+          const otherAccounts = [
+            { name: 'futures' as const, bal: portfolio.usdtBalance || 0 },
+            { name: 'funding' as const, bal: portfolio.fundingUsdt || 0 },
+            { name: 'copy' as const, bal: portfolio.copyUsdt || 0 },
+            { name: 'earn' as const, bal: portfolio.earnUsdt || 0 },
+          ];
+          const totalOtherUSDT = otherAccounts.reduce((sum, item) => sum + item.bal, 0);
+
+          if (totalOtherUSDT >= deficit) {
+            // Find account with highest USDT balance
+            const sortedOther = [...otherAccounts].sort((a, b) => b.bal - a.bal);
+            const bestFromAccount = sortedOther[0].name;
+
+            addNotification(
+              'warning',
+              'Low Spot Wallet Balance',
+              `Required: $${notional.toFixed(2)} USDT. You only have $${availableSpotUSDT.toFixed(2)} USDT in Spot. Pre-filling transfer of $${deficit.toFixed(2)} USDT to Spot Wallet.`
+            );
+
+            setTransferModal({
+              isOpen: true,
+              initialFrom: bestFromAccount,
+              initialTo: 'spot',
+              initialAsset: 'USDT',
+              initialAmount: deficit.toFixed(2),
+            });
+          } else {
+            addNotification(
+              'error',
+              'Insufficient Total Balance',
+              `Required: $${notional.toFixed(2)} USDT. Total USDT across all wallets is $${(availableSpotUSDT + totalOtherUSDT).toFixed(2)}. Please claim via Faucet.`
+            );
+          }
+          return;
+        }
+      } else {
+        // Spot Sell: Check base asset
+        const availableBaseAsset = portfolio.spotBalances?.[activePair.baseAsset] || 0;
+        if (availableBaseAsset < orderData.amount) {
+          addNotification(
+            'error',
+            'Insufficient Base Asset',
+            `You do not have enough ${activePair.baseAsset} to sell. Available: ${availableBaseAsset.toFixed(4)}, Required: ${orderData.amount.toFixed(4)}.`
+          );
+          return;
+        }
+      }
+    } else if (orderData.mode === 'futures') {
+      const availableFuturesUSDT = portfolio.usdtBalance || 0;
+      if (availableFuturesUSDT < requiredMargin) {
+        const deficit = requiredMargin - availableFuturesUSDT;
+        const otherAccounts = [
+          { name: 'spot' as const, bal: portfolio.spotBalances?.USDT || 0 },
+          { name: 'funding' as const, bal: portfolio.fundingUsdt || 0 },
+          { name: 'copy' as const, bal: portfolio.copyUsdt || 0 },
+          { name: 'earn' as const, bal: portfolio.earnUsdt || 0 },
+        ];
+        const totalOtherUSDT = otherAccounts.reduce((sum, item) => sum + item.bal, 0);
+
+        if (totalOtherUSDT >= deficit) {
+          const sortedOther = [...otherAccounts].sort((a, b) => b.bal - a.bal);
+          const bestFromAccount = sortedOther[0].name;
+
+          addNotification(
+            'warning',
+            'Low Futures Margin Balance',
+            `Required: $${requiredMargin.toFixed(2)} USDT. You only have $${availableFuturesUSDT.toFixed(2)} USDT in Futures. Pre-filling transfer of $${deficit.toFixed(2)} USDT to Futures Account.`
+          );
+
+          setTransferModal({
+            isOpen: true,
+            initialFrom: bestFromAccount,
+            initialTo: 'futures',
+            initialAsset: 'USDT',
+            initialAmount: deficit.toFixed(2),
+          });
+        } else {
+          addNotification(
+            'error',
+            'Insufficient Total Balance',
+            `Required Margin: $${requiredMargin.toFixed(2)} USDT. Total USDT across all wallets is $${(availableFuturesUSDT + totalOtherUSDT).toFixed(2)}. Please claim via Faucet.`
+          );
+        }
+        return;
+      }
+    }
+
     // Immediate execution for Market Orders
     if (orderData.type === 'market') {
       if (orderData.mode === 'spot') {
@@ -569,10 +685,10 @@ export default function App() {
           // Spot Buy
           setPortfolio((p) => ({
             ...p,
-            usdtBalance: p.usdtBalance - notional,
             spotBalances: {
               ...p.spotBalances,
-              [activePair.baseAsset]: (p.spotBalances[activePair.baseAsset] || 0) + orderData.amount,
+              USDT: Math.max(0, (p.spotBalances?.USDT || 0) - notional),
+              [activePair.baseAsset]: (p.spotBalances?.[activePair.baseAsset] || 0) + orderData.amount,
             },
           }));
           addNotification('success', 'Spot Bought', `Bought ${orderData.amount} ${activePair.baseAsset} for ${notional.toFixed(2)} USDT`);
@@ -580,10 +696,10 @@ export default function App() {
           // Spot Sell
           setPortfolio((p) => ({
             ...p,
-            usdtBalance: p.usdtBalance + notional,
             spotBalances: {
               ...p.spotBalances,
-              [activePair.baseAsset]: Math.max(0, (p.spotBalances[activePair.baseAsset] || 0) - orderData.amount),
+              USDT: (p.spotBalances?.USDT || 0) + notional,
+              [activePair.baseAsset]: Math.max(0, (p.spotBalances?.[activePair.baseAsset] || 0) - orderData.amount),
             },
           }));
           addNotification('success', 'Spot Sold', `Sold ${orderData.amount} ${activePair.baseAsset} for ${notional.toFixed(2)} USDT`);
@@ -633,7 +749,7 @@ export default function App() {
           createdAt: new Date().toLocaleTimeString(),
         };
 
-        // Lock margin
+        // Lock margin in Futures
         setPortfolio((p) => ({ ...p, usdtBalance: p.usdtBalance - requiredMargin }));
         setPositions((prev) => [newPos, ...prev]);
 
@@ -704,15 +820,18 @@ export default function App() {
   const handleResetBalance = (amount: number = 100000) => {
     setPositions([]);
     setOrders([]);
-    setPortfolio({
+    const updatedPortfolio = {
       usdtBalance: amount,
+      fundingUsdt: amount,
+      copyUsdt: amount,
+      earnUsdt: amount,
       spotBalances: { USDT: amount },
-      futuresBalance: amount,
-      totalEquity: amount,
-    });
+    };
+    setPortfolio(updatedPortfolio);
+    localStorage.setItem('tradex_portfolio', JSON.stringify(updatedPortfolio));
     localStorage.removeItem('tradex_positions');
     localStorage.removeItem('tradex_orders');
-    addNotification('success', 'Faucet Reset', `Positions closed & total assets reset to $${amount.toLocaleString()} USDT`);
+    addNotification('success', 'Faucet Reset', `Positions closed & $${amount.toLocaleString()} USDT deposited to Futures, Spot, and Funding Accounts! All other balances reset.`);
   };
 
   // Claim Testnet Crypto
@@ -725,6 +844,54 @@ export default function App() {
       },
     }));
     addNotification('success', 'Testnet Coin Claimed', `Claimed +${amount} ${asset} to demo wallet`);
+  };
+
+  // Internal Asset Transfer Between Accounts
+  const handleTransferAsset = (
+    fromAcc: string,
+    toAcc: string,
+    asset: string,
+    amount: number
+  ) => {
+    if (fromAcc === toAcc || amount <= 0) return;
+
+    setPortfolio((prev) => {
+      const next = { ...prev };
+      if (!next.spotBalances) next.spotBalances = {};
+      if (next.fundingUsdt === undefined) next.fundingUsdt = 0;
+      if (next.copyUsdt === undefined) next.copyUsdt = 0;
+      if (next.earnUsdt === undefined) next.earnUsdt = 0;
+
+      // Deduct from Source Account
+      if (asset === 'USDT') {
+        if (fromAcc === 'futures') next.usdtBalance = Math.max(0, next.usdtBalance - amount);
+        else if (fromAcc === 'spot') next.spotBalances.USDT = Math.max(0, (next.spotBalances.USDT || 0) - amount);
+        else if (fromAcc === 'funding') next.fundingUsdt = Math.max(0, (next.fundingUsdt || 0) - amount);
+        else if (fromAcc === 'copy') next.copyUsdt = Math.max(0, (next.copyUsdt || 0) - amount);
+        else if (fromAcc === 'earn') next.earnUsdt = Math.max(0, (next.earnUsdt || 0) - amount);
+
+        // Add to Destination Account
+        if (toAcc === 'futures') next.usdtBalance += amount;
+        else if (toAcc === 'spot') next.spotBalances.USDT = (next.spotBalances.USDT || 0) + amount;
+        else if (toAcc === 'funding') next.fundingUsdt = (next.fundingUsdt || 0) + amount;
+        else if (toAcc === 'copy') next.copyUsdt = (next.copyUsdt || 0) + amount;
+        else if (toAcc === 'earn') next.earnUsdt = (next.earnUsdt || 0) + amount;
+      } else {
+        // Non-USDT Asset (e.g. BTC, ETH, SOL)
+        if (fromAcc === 'spot') {
+          next.spotBalances[asset] = Math.max(0, (next.spotBalances[asset] || 0) - amount);
+        }
+        if (toAcc === 'spot') {
+          next.spotBalances[asset] = (next.spotBalances[asset] || 0) + amount;
+        }
+      }
+
+      localStorage.setItem('tradex_portfolio', JSON.stringify(next));
+      return next;
+    });
+
+    soundFx.playOrderFilled();
+    addNotification('success', 'Transfer Completed', `Transferred ${amount} ${asset} from ${fromAcc.toUpperCase()} to ${toAcc.toUpperCase()}`);
   };
 
   if (!user) {
@@ -816,6 +983,7 @@ export default function App() {
                 onOpenDeposit={() => setIsFaucetModalOpen(true)}
                 onResetBalance={handleResetBalance}
                 onOpenFaucet={() => setIsFaucetModalOpen(true)}
+                onTransferAsset={handleTransferAsset}
               />
             </motion.div>
           )}
@@ -844,8 +1012,8 @@ export default function App() {
                       currentPrice={activePair.price}
                       positions={positions}
                       isLoading={isChartLoading}
-                      onOpenLong={() => setMobileTab('order')}
-                      onOpenShort={() => setMobileTab('order')}
+                      onOpenLong={() => setIsTradeModalOpen(true)}
+                      onOpenShort={() => setIsTradeModalOpen(true)}
                       onOpenPairModal={() => setIsPairModalOpen(true)}
                     />
                   </div>
@@ -885,7 +1053,7 @@ export default function App() {
               {/* Mobile Layout (< lg) */}
               <div className="flex lg:hidden flex-col bg-[#0a0805] w-full relative">
                 {/* 1. Mobile Navigation Tab Bar - Placed DIRECTLY under topman bar */}
-                <div className="flex bg-[#0c0a06] border-b border-amber-500/10 text-[11px] font-bold shrink-0 sticky top-0 z-20 px-3 py-1.5 gap-2 overflow-x-auto no-scrollbar justify-between">
+                <div className="flex bg-[#0c0a06] border-b border-amber-500/10 text-[11px] font-bold shrink-0 sticky top-0 z-20 px-3 py-1.5 gap-2 overflow-x-auto no-scrollbar justify-between items-center w-full">
                   <button
                     onClick={() => setMobileTab('chart')}
                     className={`flex-1 py-1.5 text-center transition-all cursor-pointer whitespace-nowrap ${
@@ -911,12 +1079,13 @@ export default function App() {
                     Positions
                   </button>
                   <button
-                    onClick={() => setMobileTab('order')}
-                    className={`flex-1 py-1.5 text-center transition-all cursor-pointer whitespace-nowrap ${
-                      mobileTab === 'order' ? 'app-tab-active' : 'app-tab-inactive'
-                    }`}
+                    onClick={() => {
+                      soundFx.playClick();
+                      setIsTradeModalOpen(true);
+                    }}
+                    className="flex-1 py-1 px-3 text-center bg-[#00c076]/10 hover:bg-[#00c076]/20 text-[#00c076] transition-all font-extrabold rounded-lg cursor-pointer whitespace-nowrap shadow-xs shadow-[#00c076]/10 h-7 text-xs"
                   >
-                    Trade Panel
+                    Trade
                   </button>
                 </div>
 
@@ -940,8 +1109,8 @@ export default function App() {
                           onChangeTimeframe={handleChangeTimeframe}
                           currentPrice={activePair.price}
                           isLoading={isChartLoading}
-                          onOpenLong={() => setMobileTab('order')}
-                          onOpenShort={() => setMobileTab('order')}
+                          onOpenLong={() => setIsTradeModalOpen(true)}
+                          onOpenShort={() => setIsTradeModalOpen(true)}
                           onOpenPairModal={() => setIsPairModalOpen(true)}
                         />
                       </motion.div>
@@ -963,7 +1132,7 @@ export default function App() {
                           precision={activePair.precision}
                           onSelectPrice={(price) => {
                             setSelectedBookPrice(price);
-                            setMobileTab('order');
+                            setIsTradeModalOpen(true);
                           }}
                         />
                       </motion.div>
@@ -984,26 +1153,6 @@ export default function App() {
                           orderHistory={orderHistory}
                           onClosePosition={handleClosePosition}
                           onCancelOrder={handleCancelOrder}
-                        />
-                      </motion.div>
-                    )}
-
-                    {mobileTab === 'order' && (
-                      <motion.div
-                        key="mobile-order"
-                        initial={{ opacity: 0, y: 5 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -5 }}
-                        transition={{ duration: 0.12 }}
-                        className="p-1"
-                      >
-                        <OrderForm
-                          activePair={activePair}
-                          portfolio={portfolio}
-                          selectedPrice={selectedBookPrice}
-                          onSubmitOrder={(ord) => {
-                            handleSubmitOrder(ord);
-                          }}
                         />
                       </motion.div>
                     )}
@@ -1045,6 +1194,26 @@ export default function App() {
         portfolio={portfolio}
         onResetBalance={handleResetBalance}
         onClaimCrypto={handleClaimCrypto}
+      />
+
+      <TransferModal
+        isOpen={transferModal.isOpen}
+        onClose={() => setTransferModal((prev) => ({ ...prev, isOpen: false }))}
+        portfolio={portfolio}
+        initialFrom={transferModal.initialFrom}
+        initialTo={transferModal.initialTo}
+        initialAsset={transferModal.initialAsset}
+        initialAmount={transferModal.initialAmount}
+        onTransferAsset={handleTransferAsset}
+      />
+
+      <TradeModal
+        isOpen={isTradeModalOpen}
+        onClose={() => setIsTradeModalOpen(false)}
+        activePair={activePair}
+        portfolio={portfolio}
+        selectedPrice={selectedBookPrice}
+        onSubmitOrder={handleSubmitOrder}
       />
 
       <AiAnalystDrawer

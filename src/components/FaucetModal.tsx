@@ -39,7 +39,7 @@ export const FaucetModal: React.FC<FaucetModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4" onClick={onClose}>
+    <div className="fixed inset-0 z-[100000] bg-black/70 flex items-center justify-center p-4" onClick={onClose}>
       <div className="w-full max-w-md liquid-card rounded-2xl shadow-2xl overflow-hidden font-mono text-zinc-100 animate-in fade-in zoom-in-95 duration-100" onClick={(e) => e.stopPropagation()}>
         {/* Modal Header */}
         <div className="p-4 border-b border-white/10 flex items-center justify-between bg-[#181a20]">
@@ -72,8 +72,8 @@ export const FaucetModal: React.FC<FaucetModalProps> = ({
           {/* Current Equity Card */}
           <div className="p-3.5 rounded-xl bg-[#181a20] border border-white/10 shadow-[0_4px_20px_rgba(0,0,0,0.3)] flex items-center justify-between">
             <div>
-              <span className="text-[10px] text-zinc-400 block">Available Demo Cash</span>
-              <span className="text-lg font-bold text-[#00c076] tabular-nums">{formatCurrency(portfolio.usdtBalance)}</span>
+              <span className="text-[10px] text-zinc-400 block font-medium">Funding Account Cash</span>
+              <span className="text-lg font-extrabold text-[#00c076] tabular-nums">{formatCurrency(portfolio.fundingUsdt || 0)}</span>
             </div>
             <button
               onClick={() => handleReset(100000)}

@@ -79,7 +79,7 @@ export const TradingChart: React.FC<TradingChartProps> = ({
   const [priceScaleRatio, setPriceScaleRatio] = useState<number>(1.0);
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
-  const [showEMA, setShowEMA] = useState<boolean>(true);
+  const [showEMA, setShowEMA] = useState<boolean>(false);
   const [showBoll, setShowBoll] = useState<boolean>(false);
   const [chartType, setChartType] = useState<'candle' | 'line'>('candle');
   const [activeSubchart, setActiveSubchart] = useState<'MACD' | 'RSI' | 'VOL'>('MACD');
@@ -101,25 +101,39 @@ export const TradingChart: React.FC<TradingChartProps> = ({
     soundFx.playClick();
     if (!containerRef.current) return;
 
+    const orientation = window.screen && window.screen.orientation ? (window.screen.orientation as any) : null;
+
     if (!document.fullscreenElement) {
       if (containerRef.current.requestFullscreen) {
         containerRef.current.requestFullscreen().then(() => {
           setIsFullScreen(true);
+          if (orientation && orientation.lock) {
+            orientation.lock('landscape').catch(() => {});
+          }
         }).catch(() => {
           setIsFullScreen(!isFullScreen);
         });
       } else {
         setIsFullScreen(!isFullScreen);
+        if (orientation && orientation.lock) {
+          orientation.lock('landscape').catch(() => {});
+        }
       }
     } else {
       if (document.exitFullscreen) {
         document.exitFullscreen().then(() => {
           setIsFullScreen(false);
+          if (orientation && orientation.unlock) {
+            orientation.unlock();
+          }
         }).catch(() => {
           setIsFullScreen(false);
         });
       } else {
         setIsFullScreen(false);
+        if (orientation && orientation.unlock) {
+          orientation.unlock();
+        }
       }
     }
   };
@@ -762,7 +776,7 @@ export const TradingChart: React.FC<TradingChartProps> = ({
         const y = getY(highCandle.high);
 
         ctx.fillStyle = isLight ? '#1e293b' : '#f3f4f6';
-        ctx.font = 'bold 10px monospace';
+        ctx.font = 'bold 11px monospace';
         ctx.textAlign = x > chartWidth / 2 ? 'right' : 'left';
         const textX = x > chartWidth / 2 ? x - 8 : x + 8;
         ctx.fillText(`▲ H: ${highCandle.high.toFixed(precision)}`, textX, y - 2);
@@ -774,7 +788,7 @@ export const TradingChart: React.FC<TradingChartProps> = ({
         const y = getY(lowCandle.low);
 
         ctx.fillStyle = isLight ? '#1e293b' : '#f3f4f6';
-        ctx.font = 'bold 10px monospace';
+        ctx.font = 'bold 11px monospace';
         ctx.textAlign = x > chartWidth / 2 ? 'right' : 'left';
         const textX = x > chartWidth / 2 ? x - 8 : x + 8;
         ctx.fillText(`▼ L: ${lowCandle.low.toFixed(precision)}`, textX, y + 10);
@@ -1115,8 +1129,8 @@ export const TradingChart: React.FC<TradingChartProps> = ({
       const y = 10 + ((mainChartHeight - 20) * i) / gridSteps;
       const priceVal = minPrice + (maxPrice - minPrice) * (mainChartHeight - 10 - y + verticalPanOffset) / (mainChartHeight - 20);
 
-      ctx.fillStyle = isLight ? '#475569' : '#9ca3af';
-      ctx.font = '10px -apple-system, BlinkMacSystemFont, monospace';
+      ctx.fillStyle = isLight ? '#334155' : '#cbd5e1';
+      ctx.font = 'bold 11px -apple-system, BlinkMacSystemFont, monospace';
       ctx.textAlign = 'left';
       ctx.fillText(priceVal.toFixed(precision), chartWidth + 8, y + 3);
     }
@@ -1126,7 +1140,7 @@ export const TradingChart: React.FC<TradingChartProps> = ({
     ctx.fillStyle = isCustomScaled ? '#fcd535' : (isLight ? '#e2e8f0' : '#1e293b');
     ctx.fillRect(chartWidth + 6, 6, 18, 14);
     ctx.fillStyle = isCustomScaled ? '#000000' : (isLight ? '#475569' : '#94a3b8');
-    ctx.font = 'bold 9px monospace';
+    ctx.font = 'bold 10px monospace';
     ctx.textAlign = 'center';
     ctx.fillText('A', chartWidth + 15, 16);
 
@@ -1139,8 +1153,8 @@ export const TradingChart: React.FC<TradingChartProps> = ({
         const dateObj = new Date(visibleCandles[index].time);
         const dateStr = `${(dateObj.getMonth() + 1).toString().padStart(2, '0')}/${dateObj.getDate().toString().padStart(2, '0')} ${dateObj.getHours().toString().padStart(2, '0')}:00`;
         
-        ctx.fillStyle = isLight ? '#475569' : '#9ca3af';
-        ctx.font = '10px -apple-system, BlinkMacSystemFont, monospace';
+        ctx.fillStyle = isLight ? '#334155' : '#cbd5e1';
+        ctx.font = 'bold 11px -apple-system, BlinkMacSystemFont, monospace';
         ctx.textAlign = 'center';
         ctx.fillText(dateStr, x, availableHeight + 14);
       }
@@ -1149,14 +1163,14 @@ export const TradingChart: React.FC<TradingChartProps> = ({
     // Live Price Pill Tag drawn on top of the right axis mask
     if (currentY >= 0 && currentY <= mainChartHeight) {
       ctx.fillStyle = '#00c076';
-      const pillHeight = 18;
+      const pillHeight = 20;
       const pillWidth = paddingRight - 4;
       ctx.fillRect(chartWidth + 2, currentY - pillHeight / 2, pillWidth, pillHeight);
 
-      ctx.fillStyle = '#000000';
-      ctx.font = 'bold 9px monospace';
+      ctx.fillStyle = '#ffffff';
+      ctx.font = 'bold 11px monospace';
       ctx.textAlign = 'center';
-      ctx.fillText(`${currentPrice.toFixed(precision)}`, chartWidth + 2 + pillWidth / 2, currentY + 3);
+      ctx.fillText(`${currentPrice.toFixed(precision)}`, chartWidth + 2 + pillWidth / 2, currentY + 4);
     }
 
     // Hover Coordinate Pill Tags
@@ -1165,15 +1179,15 @@ export const TradingChart: React.FC<TradingChartProps> = ({
       if (hoverY <= mainChartHeight) {
         const hoverPrice = minPrice + (maxPrice - minPrice) * (mainChartHeight - 10 - hoverY + verticalPanOffset) / (mainChartHeight - 20);
 
-        ctx.fillStyle = isLight ? '#1e293b' : '#374151';
-        const hPillHeight = 18;
+        ctx.fillStyle = isLight ? '#0f172a' : '#1f2937';
+        const hPillHeight = 20;
         const hPillWidth = paddingRight - 4;
         ctx.fillRect(chartWidth + 2, hoverY - hPillHeight / 2, hPillWidth, hPillHeight);
 
         ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 9px monospace';
+        ctx.font = 'bold 11px monospace';
         ctx.textAlign = 'center';
-        ctx.fillText(`${hoverPrice.toFixed(precision)}`, chartWidth + 2 + hPillWidth / 2, hoverY + 3);
+        ctx.fillText(`${hoverPrice.toFixed(precision)}`, chartWidth + 2 + hPillWidth / 2, hoverY + 4);
       }
 
       const hoverIndex = Math.floor((hoverData.x / chartWidth) * visibleCandles.length);
@@ -1556,12 +1570,12 @@ export const TradingChart: React.FC<TradingChartProps> = ({
       ref={containerRef}
       className={`flex-1 flex flex-col bg-[#0a0805] min-w-0 select-none relative w-full border-r border-amber-500/10 ${
         isFullScreen
-          ? 'fixed inset-0 z-50 w-screen h-screen bg-[#0a0805]'
+          ? 'fixed inset-0 z-[90000] w-screen h-screen bg-[#0a0805] p-1.5'
           : 'h-full min-h-0 lg:min-h-[580px] xl:min-h-[640px]'
       }`}
     >
       {/* 1. Timeframe & Analysis Toolbar */}
-      <div className="h-10 px-2.5 bg-[#0a0805] border-b border-amber-500/10 flex items-center justify-between gap-1.5 text-xs font-sans text-zinc-300 shrink-0 relative z-30 w-full overflow-hidden">
+      <div className="h-10 px-2.5 bg-[#0a0805] border-b border-amber-500/10 flex items-center gap-1.5 text-xs font-sans text-zinc-300 shrink-0 relative z-30 w-full overflow-visible">
         {/* Left Section: Horizontally scrollable timeframe bar */}
         <div className="flex items-center gap-1.5 sm:gap-2.5 overflow-x-auto no-scrollbar scrollbar-none min-w-0 pr-1 py-1">
           {/* Favorite Timeframe Presets */}
@@ -1582,296 +1596,30 @@ export const TradingChart: React.FC<TradingChartProps> = ({
               </button>
             );
           })}
+        </div>
 
-          {/* Timeframes Dropdown & Favorite Marking Selector */}
-          <div className="relative shrink-0" ref={tfDropdownRef}>
-            <button
-              onClick={() => {
-                soundFx.playClick();
-                setIsTfDropdownOpen(!isTfDropdownOpen);
-              }}
-              className={`px-2 py-1 text-xs cursor-pointer transition-all rounded-lg flex items-center gap-1 border font-sans ${
-                isTfDropdownOpen
-                  ? 'bg-zinc-800 text-zinc-100 border-zinc-600'
-                  : 'bg-white/5 hover:bg-white/10 text-zinc-300 border-white/10 hover:border-zinc-700'
-              }`}
-              title="Timeframe Selector"
-            >
-              <Clock className="w-3.5 h-3.5 text-zinc-300 shrink-0" />
-              <ChevronDown className={`w-3 h-3 text-zinc-400 transition-transform duration-150 ${isTfDropdownOpen ? 'rotate-180 text-zinc-200' : ''}`} />
-            </button>
+        {/* Timeframes Dropdown Selector - Placed outside scrollable to prevent clipping */}
+        <div className="relative shrink-0" ref={tfDropdownRef}>
+          <button
+            onClick={() => {
+              soundFx.playClick();
+              setIsTfDropdownOpen(!isTfDropdownOpen);
+            }}
+            className={`px-2 py-1 text-xs cursor-pointer transition-all rounded-lg flex items-center gap-1 border font-sans ${
+              isTfDropdownOpen
+                ? 'bg-zinc-800 text-zinc-100 border-zinc-600'
+                : 'bg-white/5 hover:bg-white/10 text-zinc-300 border-white/10 hover:border-zinc-700'
+            }`}
+            title="Timeframe Selector"
+          >
+            <Clock className="w-3.5 h-3.5 text-zinc-300 shrink-0" />
+            <ChevronDown className={`w-3 h-3 text-zinc-400 transition-transform duration-150 ${isTfDropdownOpen ? 'rotate-180 text-zinc-200' : ''}`} />
+          </button>
+        </div>
 
-            {isTfDropdownOpen && (
-              <>
-                {/* Backdrop Overlay to catch clicks anywhere */}
-                <div 
-                  className="fixed inset-0 z-40 bg-black/40 transition-opacity duration-100" 
-                  onClick={() => setIsTfDropdownOpen(false)}
-                />
-
-                {/* Popover Menu: Absolute compact dropdown below button */}
-                <div className="absolute top-full left-0 mt-1 z-50 w-72 bg-[#181a20] border border-white/10 rounded-xl shadow-2xl p-2.5 overflow-hidden font-sans text-zinc-100 max-h-80 flex flex-col animate-in fade-in duration-100">
-                  {/* Modal Header */}
-                  <div className="flex items-center justify-between pb-2 border-b border-white/10 shrink-0">
-                    <div>
-                      <h3 className="text-xs font-bold text-white flex items-center gap-1.5">
-                        <Clock className="w-3.5 h-3.5 text-[#00c076]" />
-                        <span>Select Timeframe</span>
-                      </h3>
-                    </div>
-                    <button
-                      onClick={() => setIsTfDropdownOpen(false)}
-                      className="p-1 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white cursor-pointer"
-                    >
-                      <X className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-
-                  {/* Timeframe Categories Grid */}
-                  <div className="overflow-y-auto py-2 space-y-2.5 text-xs max-h-64 no-scrollbar">
-                    {/* Minutes */}
-                    <div>
-                      <div className="text-[9px] uppercase font-bold text-zinc-400 tracking-wider mb-1">Minutes</div>
-                      <div className="grid grid-cols-4 gap-1">
-                        {(['1m', '3m', '5m', '15m'] as ChartTimeframe[]).map((tf) => {
-                          const isFav = favTimeframes.includes(tf);
-                          const isActive = timeframe === tf;
-                          return (
-                            <div 
-                              key={tf}
-                              className={`flex items-center justify-between px-2 py-1 rounded-lg border transition-all ${
-                                isActive 
-                                  ? 'bg-[#00c076]/20 border-[#00c076] text-[#00c076] font-bold' 
-                                  : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-zinc-700 text-zinc-300'
-                              }`}
-                            >
-                              <button
-                                onClick={() => {
-                                  soundFx.playClick();
-                                  onChangeTimeframe(tf);
-                                  setIsTfDropdownOpen(false);
-                                }}
-                                className="flex-1 text-left text-xs font-semibold cursor-pointer py-0.5"
-                              >
-                                {tf}
-                              </button>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  soundFx.playClick();
-                                  setFavTimeframes((prev) => {
-                                    if (prev.includes(tf)) {
-                                      if (prev.length <= 1) return prev;
-                                      return prev.filter((item) => item !== tf);
-                                    } else {
-                                      return [...prev, tf];
-                                    }
-                                  });
-                                }}
-                                className="p-0.5 cursor-pointer hover:scale-110 transition-transform text-zinc-500 hover:text-amber-400"
-                              >
-                                <Star 
-                                  className={`w-3 h-3 ${
-                                    isFav ? 'text-amber-400 fill-amber-400' : 'text-zinc-600'
-                                  }`} 
-                                />
-                              </button>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    {/* Hours */}
-                    <div>
-                      <div className="text-[9px] uppercase font-bold text-zinc-400 tracking-wider mb-1">Hours</div>
-                      <div className="grid grid-cols-4 gap-1">
-                        {(['1h', '4h'] as ChartTimeframe[]).map((tf) => {
-                          const isFav = favTimeframes.includes(tf);
-                          const isActive = timeframe === tf;
-                          return (
-                            <div 
-                              key={tf}
-                              className={`flex items-center justify-between px-2 py-1 rounded-lg border transition-all ${
-                                isActive 
-                                  ? 'bg-[#00c076]/20 border-[#00c076] text-[#00c076] font-bold' 
-                                  : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-zinc-700 text-zinc-300'
-                              }`}
-                            >
-                              <button
-                                onClick={() => {
-                                  soundFx.playClick();
-                                  onChangeTimeframe(tf);
-                                  setIsTfDropdownOpen(false);
-                                }}
-                                className="flex-1 text-left text-xs font-semibold cursor-pointer py-0.5"
-                              >
-                                {tf}
-                              </button>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  soundFx.playClick();
-                                  setFavTimeframes((prev) => {
-                                    if (prev.includes(tf)) {
-                                      if (prev.length <= 1) return prev;
-                                      return prev.filter((item) => item !== tf);
-                                    } else {
-                                      return [...prev, tf];
-                                    }
-                                  });
-                                }}
-                                className="p-0.5 cursor-pointer hover:scale-110 transition-transform text-zinc-500 hover:text-amber-400"
-                              >
-                                <Star 
-                                  className={`w-3 h-3 ${
-                                    isFav ? 'text-amber-400 fill-amber-400' : 'text-zinc-600'
-                                  }`} 
-                                />
-                              </button>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    {/* Days */}
-                    <div>
-                      <div className="text-[9px] uppercase font-bold text-zinc-400 tracking-wider mb-1">Days</div>
-                      <div className="grid grid-cols-3 gap-1">
-                        {(['1d', '2d', '3d'] as ChartTimeframe[]).map((tf) => {
-                          const isFav = favTimeframes.includes(tf);
-                          const isActive = timeframe === tf;
-                          return (
-                            <div 
-                              key={tf}
-                              className={`flex items-center justify-between px-2 py-1 rounded-lg border transition-all ${
-                                isActive 
-                                  ? 'bg-[#00c076]/20 border-[#00c076] text-[#00c076] font-bold' 
-                                  : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-zinc-700 text-zinc-300'
-                              }`}
-                            >
-                              <button
-                                onClick={() => {
-                                  soundFx.playClick();
-                                  onChangeTimeframe(tf);
-                                  setIsTfDropdownOpen(false);
-                                }}
-                                className="flex-1 text-left text-xs font-semibold cursor-pointer py-0.5"
-                              >
-                                {tf}
-                              </button>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  soundFx.playClick();
-                                  setFavTimeframes((prev) => {
-                                    if (prev.includes(tf)) {
-                                      if (prev.length <= 1) return prev;
-                                      return prev.filter((item) => item !== tf);
-                                    } else {
-                                      return [...prev, tf];
-                                    }
-                                  });
-                                }}
-                                className="p-0.5 cursor-pointer hover:scale-110 transition-transform text-zinc-500 hover:text-amber-400"
-                              >
-                                <Star 
-                                  className={`w-3 h-3 ${
-                                    isFav ? 'text-amber-400 fill-amber-400' : 'text-zinc-600'
-                                  }`} 
-                                />
-                              </button>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-
-                    {/* Weeks & Months */}
-                    <div>
-                      <div className="text-[9px] uppercase font-bold text-zinc-400 tracking-wider mb-1">Weeks & Months</div>
-                      <div className="grid grid-cols-3 gap-1">
-                        {(['1w', '2w', '1Month', '2Month', '3Month', '1y'] as ChartTimeframe[]).map((tf) => {
-                          const isFav = favTimeframes.includes(tf);
-                          const isActive = timeframe === tf;
-                          return (
-                            <div 
-                              key={tf}
-                              className={`flex items-center justify-between px-2 py-1 rounded-lg border transition-all ${
-                                isActive 
-                                  ? 'bg-[#00c076]/20 border-[#00c076] text-[#00c076] font-bold' 
-                                  : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-zinc-700 text-zinc-300'
-                              }`}
-                            >
-                              <button
-                                onClick={() => {
-                                  soundFx.playClick();
-                                  onChangeTimeframe(tf);
-                                  setIsTfDropdownOpen(false);
-                                }}
-                                className="flex-1 text-left text-xs font-semibold cursor-pointer py-0.5"
-                              >
-                                {tf}
-                              </button>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  soundFx.playClick();
-                                  setFavTimeframes((prev) => {
-                                    if (prev.includes(tf)) {
-                                      if (prev.length <= 1) return prev;
-                                      return prev.filter((item) => item !== tf);
-                                    } else {
-                                      return [...prev, tf];
-                                    }
-                                  });
-                                }}
-                                className="p-0.5 cursor-pointer hover:scale-110 transition-transform text-zinc-500 hover:text-amber-400"
-                              >
-                                <Star 
-                                  className={`w-3 h-3 ${
-                                    isFav ? 'text-amber-400 fill-amber-400' : 'text-zinc-600'
-                                  }`} 
-                                />
-                              </button>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </>
-            )}
-          </div>
-
+        {/* Separator and type toggles */}
+        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
           <div className="h-4 w-[1px] bg-white/10 mx-0.5 shrink-0" />
-
-          {/* Indicator Toggles */}
-          <button
-            onClick={() => {
-              soundFx.playClick();
-              setShowEMA(!showEMA);
-            }}
-            className={`shrink-0 px-2 py-0.5 text-[11px] font-bold cursor-pointer transition-all ${
-              showEMA ? 'app-subtab-active' : 'app-subtab-inactive'
-            }`}
-          >
-            EMA
-          </button>
-
-          <button
-            onClick={() => {
-              soundFx.playClick();
-              setShowBoll(!showBoll);
-            }}
-            className={`shrink-0 px-2 py-0.5 text-[11px] font-bold cursor-pointer transition-all ${
-              showBoll ? 'app-subtab-active' : 'app-subtab-inactive'
-            }`}
-          >
-            BOLL
-          </button>
 
           {/* Chart Type Toggle */}
           <button
@@ -1887,7 +1635,7 @@ export const TradingChart: React.FC<TradingChartProps> = ({
         </div>
 
         {/* Right Tools: Zoom Controls + Settings Gear + Fullscreen Mode */}
-        <div className="flex items-center gap-1.5 text-zinc-400 shrink-0 ml-auto bg-[#0a0805] pl-1 z-10">
+        <div className="flex items-center gap-1.5 text-zinc-400 shrink-0 ml-auto bg-[#0a0805] pl-1 relative z-40 overflow-visible">
           <div className="hidden sm:flex items-center bg-[#181a20] rounded border border-white/10 p-0.5 shrink-0">
             <button
               onClick={() => {
@@ -1930,19 +1678,19 @@ export const TradingChart: React.FC<TradingChartProps> = ({
               }}
               className={`p-1.5 rounded-lg transition-colors cursor-pointer border ${
                 isSettingsOpen
-                  ? 'bg-amber-500/20 text-amber-400 border-amber-500/40'
-                  : 'bg-white/5 hover:bg-white/10 text-zinc-300 border-white/10 hover:text-white'
+                  ? 'bg-[#00c076]/20 text-[#00c076] border-[#00c076]/40 shadow-xs'
+                  : 'bg-white/5 hover:bg-white/10 text-zinc-300 border-white/10 hover:text-[#00c076]'
               }`}
               title="Chart Settings & Display Options"
             >
-              <Settings className={`w-4 h-4 ${isSettingsOpen ? 'rotate-45 text-amber-400' : ''} transition-transform duration-200`} />
+              <Settings className={`w-4 h-4 text-[#00c076] ${isSettingsOpen ? 'rotate-45' : ''} transition-transform duration-200`} />
             </button>
 
             {isSettingsOpen && (
-              <div className="absolute right-0 top-full mt-1.5 w-64 bg-[#141822] border border-amber-500/20 rounded-xl shadow-2xl p-3 z-50 text-xs font-sans text-zinc-200 backdrop-blur-md animate-in fade-in duration-100">
+              <div className="absolute right-0 top-full mt-1.5 w-64 bg-[#141822] border border-white/5 rounded-2xl shadow-2xl p-3 z-50 text-xs font-sans text-zinc-200 backdrop-blur-md animate-in fade-in duration-100">
                 <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/10">
                   <span className="font-bold text-white flex items-center gap-1.5 text-xs">
-                    <Settings className="w-3.5 h-3.5 text-amber-400" />
+                    <Settings className="w-3.5 h-3.5 text-[#00c076]" />
                     Chart Display Options
                   </span>
                   <button
@@ -1967,7 +1715,7 @@ export const TradingChart: React.FC<TradingChartProps> = ({
                         soundFx.playClick();
                         setShowPositions(e.target.checked);
                       }}
-                      className="w-3.5 h-3.5 accent-amber-500 rounded cursor-pointer"
+                      className="w-3.5 h-3.5 accent-[#00c076] rounded cursor-pointer"
                     />
                   </label>
 
@@ -1984,7 +1732,7 @@ export const TradingChart: React.FC<TradingChartProps> = ({
                         soundFx.playClick();
                         setShowLiquidation(e.target.checked);
                       }}
-                      className="w-3.5 h-3.5 accent-amber-500 rounded cursor-pointer"
+                      className="w-3.5 h-3.5 accent-[#00c076] rounded cursor-pointer"
                     />
                   </label>
 
@@ -2000,7 +1748,7 @@ export const TradingChart: React.FC<TradingChartProps> = ({
                         soundFx.playClick();
                         setShowLivePrice(e.target.checked);
                       }}
-                      className="w-3.5 h-3.5 accent-amber-500 rounded cursor-pointer"
+                      className="w-3.5 h-3.5 accent-[#00c076] rounded cursor-pointer"
                     />
                   </label>
 
@@ -2016,7 +1764,7 @@ export const TradingChart: React.FC<TradingChartProps> = ({
                         soundFx.playClick();
                         setShowHighLow(e.target.checked);
                       }}
-                      className="w-3.5 h-3.5 accent-amber-500 rounded cursor-pointer"
+                      className="w-3.5 h-3.5 accent-[#00c076] rounded cursor-pointer"
                     />
                   </label>
 
@@ -2032,7 +1780,7 @@ export const TradingChart: React.FC<TradingChartProps> = ({
                         soundFx.playClick();
                         setShowGrid(e.target.checked);
                       }}
-                      className="w-3.5 h-3.5 accent-amber-500 rounded cursor-pointer"
+                      className="w-3.5 h-3.5 accent-[#00c076] rounded cursor-pointer"
                     />
                   </label>
 
@@ -2044,7 +1792,7 @@ export const TradingChart: React.FC<TradingChartProps> = ({
                         setShowEMA(!showEMA);
                       }}
                       className={`flex-1 py-1 rounded text-[11px] font-bold border transition-colors cursor-pointer ${
-                        showEMA ? 'bg-amber-500/20 text-amber-400 border-amber-500/40' : 'bg-white/5 text-zinc-400 border-white/10'
+                        showEMA ? 'bg-[#00c076]/20 text-[#00c076] border-[#00c076]/40' : 'bg-white/5 text-zinc-400 border-white/10'
                       }`}
                     >
                       EMA Indicator
@@ -2055,7 +1803,7 @@ export const TradingChart: React.FC<TradingChartProps> = ({
                         setShowBoll(!showBoll);
                       }}
                       className={`flex-1 py-1 rounded text-[11px] font-bold border transition-colors cursor-pointer ${
-                        showBoll ? 'bg-amber-500/20 text-amber-400 border-amber-500/40' : 'bg-white/5 text-zinc-400 border-white/10'
+                        showBoll ? 'bg-[#00c076]/20 text-[#00c076] border-[#00c076]/40' : 'bg-white/5 text-zinc-400 border-white/10'
                       }`}
                     >
                       Bollinger Bands
@@ -2071,15 +1819,15 @@ export const TradingChart: React.FC<TradingChartProps> = ({
             onClick={toggleFullScreen}
             className={`p-1.5 rounded-lg transition-all cursor-pointer border shrink-0 ${
               isFullScreen
-                ? 'bg-amber-500 text-black border-amber-400 font-bold shadow-lg shadow-amber-500/30'
-                : 'bg-white/5 hover:bg-white/10 text-zinc-300 border-white/10 hover:text-white'
+                ? 'bg-[#00c076] text-white border-[#00c076] font-bold shadow-md shadow-[#00c076]/30'
+                : 'bg-white/5 hover:bg-white/10 text-zinc-300 border-white/10 hover:text-[#00c076]'
             }`}
             title={isFullScreen ? 'Exit Full Screen' : 'Full Screen Horizontal Mode'}
           >
             {isFullScreen ? (
-              <Minimize2 className="w-4 h-4 text-black shrink-0" />
+              <Minimize2 className="w-4 h-4 text-white shrink-0" />
             ) : (
-              <Maximize2 className="w-4 h-4 text-amber-400 shrink-0" />
+              <Maximize2 className="w-4 h-4 text-[#00c076] shrink-0" />
             )}
           </button>
         </div>
@@ -2137,6 +1885,35 @@ export const TradingChart: React.FC<TradingChartProps> = ({
             title="Measure Ruler"
           >
             <Ruler className="w-4 h-4" />
+          </button>
+
+          <div className="h-[1px] w-5 bg-white/10 my-1 shrink-0" />
+
+          {/* Indicators in Trading Tools */}
+          <button
+            onClick={() => {
+              soundFx.playClick();
+              setShowEMA(!showEMA);
+            }}
+            className={`w-7 h-7 flex items-center justify-center rounded text-[10px] font-black cursor-pointer transition-all shrink-0 ${
+              showEMA ? 'bg-[#00c076]/25 text-[#00c076] border border-[#00c076]/40 shadow-xs' : 'hover:text-white hover:bg-white/5 text-zinc-400 border border-transparent'
+            }`}
+            title="Toggle EMA Indicator"
+          >
+            EMA
+          </button>
+
+          <button
+            onClick={() => {
+              soundFx.playClick();
+              setShowBoll(!showBoll);
+            }}
+            className={`w-7 h-7 flex items-center justify-center rounded text-[10px] font-black cursor-pointer transition-all shrink-0 ${
+              showBoll ? 'bg-[#00c076]/25 text-[#00c076] border border-[#00c076]/40 shadow-xs' : 'hover:text-white hover:bg-white/5 text-zinc-400 border border-transparent'
+            }`}
+            title="Toggle Bollinger Bands"
+          >
+            BOLL
           </button>
 
           <div className="mt-auto flex flex-col gap-2">
@@ -2258,6 +2035,248 @@ export const TradingChart: React.FC<TradingChartProps> = ({
           <span className="text-[10px] opacity-90 font-sans">Sell</span>
         </button>
       </div>
+
+      {isTfDropdownOpen && (
+        <>
+          {/* Backdrop Overlay to catch clicks anywhere inside the chart */}
+          <div 
+            className="absolute inset-0 z-40 bg-black/60 backdrop-blur-[2px] transition-opacity duration-100" 
+            onClick={() => setIsTfDropdownOpen(false)}
+          />
+
+          {/* Centered Modal: Styled exactly like the chart settings/display options modal */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-72 bg-[#141822] border border-white/5 rounded-2xl shadow-2xl p-4 text-xs font-sans text-zinc-200 backdrop-blur-md animate-in fade-in duration-100 max-h-[85%] flex flex-col">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/10 shrink-0">
+              <span className="font-bold text-white flex items-center gap-1.5 text-xs">
+                <Clock className="w-3.5 h-3.5 text-[#00c076]" />
+                Select Timeframe
+              </span>
+              <button
+                onClick={() => setIsTfDropdownOpen(false)}
+                className="text-zinc-400 hover:text-white transition-colors cursor-pointer"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            {/* Timeframe Categories Grid */}
+            <div className="overflow-y-auto py-1 space-y-2.5 text-xs no-scrollbar flex-1">
+              {/* Minutes */}
+              <div>
+                <div className="text-[9px] uppercase font-bold text-zinc-400 tracking-wider mb-1">Minutes</div>
+                <div className="grid grid-cols-4 gap-1">
+                  {(['1m', '3m', '5m', '15m'] as ChartTimeframe[]).map((tf) => {
+                    const isFav = favTimeframes.includes(tf);
+                    const isActive = timeframe === tf;
+                    return (
+                      <div 
+                        key={tf}
+                        className={`flex items-center justify-between px-2 py-1 rounded-lg border transition-all ${
+                          isActive 
+                            ? 'bg-[#00c076]/20 border-[#00c076] text-[#00c076] font-bold' 
+                            : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-zinc-700 text-zinc-300'
+                        }`}
+                      >
+                        <button
+                          onClick={() => {
+                            soundFx.playClick();
+                            onChangeTimeframe(tf);
+                            setIsTfDropdownOpen(false);
+                          }}
+                          className="flex-1 text-left text-[11px] font-semibold cursor-pointer py-0.5"
+                        >
+                          {tf}
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            soundFx.playClick();
+                            setFavTimeframes((prev) => {
+                              if (prev.includes(tf)) {
+                                if (prev.length <= 1) return prev;
+                                return prev.filter((item) => item !== tf);
+                              } else {
+                                return [...prev, tf];
+                              }
+                            });
+                          }}
+                          className="p-0.5 cursor-pointer hover:scale-110 transition-transform text-zinc-500 hover:text-amber-400"
+                        >
+                          <Star 
+                            className={`w-3 h-3 ${
+                              isFav ? 'text-amber-400 fill-amber-400' : 'text-zinc-600'
+                            }`} 
+                          />
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Hours */}
+              <div>
+                <div className="text-[9px] uppercase font-bold text-zinc-400 tracking-wider mb-1">Hours</div>
+                <div className="grid grid-cols-4 gap-1">
+                  {(['1h', '4h'] as ChartTimeframe[]).map((tf) => {
+                    const isFav = favTimeframes.includes(tf);
+                    const isActive = timeframe === tf;
+                    return (
+                      <div 
+                        key={tf}
+                        className={`flex items-center justify-between px-2 py-1 rounded-lg border transition-all ${
+                          isActive 
+                            ? 'bg-[#00c076]/20 border-[#00c076] text-[#00c076] font-bold' 
+                            : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-zinc-700 text-zinc-300'
+                        }`}
+                      >
+                        <button
+                          onClick={() => {
+                            soundFx.playClick();
+                            onChangeTimeframe(tf);
+                            setIsTfDropdownOpen(false);
+                          }}
+                          className="flex-1 text-left text-[11px] font-semibold cursor-pointer py-0.5"
+                        >
+                          {tf}
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            soundFx.playClick();
+                            setFavTimeframes((prev) => {
+                              if (prev.includes(tf)) {
+                                if (prev.length <= 1) return prev;
+                                return prev.filter((item) => item !== tf);
+                              } else {
+                                return [...prev, tf];
+                              }
+                            });
+                          }}
+                          className="p-0.5 cursor-pointer hover:scale-110 transition-transform text-zinc-500 hover:text-amber-400"
+                        >
+                          <Star 
+                            className={`w-3 h-3 ${
+                              isFav ? 'text-amber-400 fill-amber-400' : 'text-zinc-600'
+                            }`} 
+                          />
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Days */}
+              <div>
+                <div className="text-[9px] uppercase font-bold text-zinc-400 tracking-wider mb-1">Days</div>
+                <div className="grid grid-cols-3 gap-1">
+                  {(['1d', '2d', '3d'] as ChartTimeframe[]).map((tf) => {
+                    const isFav = favTimeframes.includes(tf);
+                    const isActive = timeframe === tf;
+                    return (
+                      <div 
+                        key={tf}
+                        className={`flex items-center justify-between px-2 py-1 rounded-lg border transition-all ${
+                          isActive 
+                            ? 'bg-[#00c076]/20 border-[#00c076] text-[#00c076] font-bold' 
+                            : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-zinc-700 text-zinc-300'
+                        }`}
+                      >
+                        <button
+                          onClick={() => {
+                            soundFx.playClick();
+                            onChangeTimeframe(tf);
+                            setIsTfDropdownOpen(false);
+                          }}
+                          className="flex-1 text-left text-[11px] font-semibold cursor-pointer py-0.5"
+                        >
+                          {tf}
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            soundFx.playClick();
+                            setFavTimeframes((prev) => {
+                              if (prev.includes(tf)) {
+                                if (prev.length <= 1) return prev;
+                                return prev.filter((item) => item !== tf);
+                              } else {
+                                return [...prev, tf];
+                              }
+                            });
+                          }}
+                          className="p-0.5 cursor-pointer hover:scale-110 transition-transform text-zinc-500 hover:text-amber-400"
+                        >
+                          <Star 
+                            className={`w-3 h-3 ${
+                              isFav ? 'text-amber-400 fill-amber-400' : 'text-zinc-600'
+                            }`} 
+                          />
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Weeks & Months */}
+              <div>
+                <div className="text-[9px] uppercase font-bold text-zinc-400 tracking-wider mb-1">Weeks & Months</div>
+                <div className="grid grid-cols-3 gap-1">
+                  {(['1w', '2w', '1Month', '2Month', '3Month', '1y'] as ChartTimeframe[]).map((tf) => {
+                    const isFav = favTimeframes.includes(tf);
+                    const isActive = timeframe === tf;
+                    return (
+                      <div 
+                        key={tf}
+                        className={`flex items-center justify-between px-2 py-1 rounded-lg border transition-all ${
+                          isActive 
+                            ? 'bg-[#00c076]/20 border-[#00c076] text-[#00c076] font-bold' 
+                            : 'bg-white/5 border-white/5 hover:bg-white/10 hover:border-zinc-700 text-zinc-300'
+                        }`}
+                      >
+                        <button
+                          onClick={() => {
+                            soundFx.playClick();
+                            onChangeTimeframe(tf);
+                            setIsTfDropdownOpen(false);
+                          }}
+                          className="flex-1 text-left text-[11px] font-semibold cursor-pointer py-0.5"
+                        >
+                          {tf}
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            soundFx.playClick();
+                            setFavTimeframes((prev) => {
+                              if (prev.includes(tf)) {
+                                if (prev.length <= 1) return prev;
+                                return prev.filter((item) => item !== tf);
+                              } else {
+                                return [...prev, tf];
+                              }
+                            });
+                          }}
+                          className="p-0.5 cursor-pointer hover:scale-110 transition-transform text-zinc-500 hover:text-amber-400"
+                        >
+                          <Star 
+                            className={`w-3 h-3 ${
+                              isFav ? 'text-amber-400 fill-amber-400' : 'text-zinc-600'
+                            }`} 
+                          />
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

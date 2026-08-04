@@ -3,6 +3,7 @@ import { motion } from 'motion/react';
 import { Position, Order, Portfolio, TradingPair } from '../types';
 import { formatCurrency, formatNumber } from '../utils/calc';
 import { soundFx } from '../utils/audio';
+import { PositionCard } from './PositionCard';
 import { 
   ChevronRight, 
   Pencil, 
@@ -134,73 +135,13 @@ export const PositionsPanel: React.FC<PositionsPanelProps> = ({
                 <p className="text-[10px] text-zinc-600">Open a Long or Short trade to see real-time positions here</p>
               </div>
             ) : (
-              displayPositions.map((pos) => {
-                const isLong = pos.side === 'long';
-                const isPnlPositive = pos.pnl >= 0;
-                const baseAsset = pos.symbol.replace('USDT', '');
-
-                return (
-                  <div key={pos.id} className="p-3.5 bg-[#131722]/60 rounded-xl border border-white/5 space-y-3.5 transition-all">
-                    {/* Header: Name, Side, Leverage and PnL */}
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="font-extrabold text-sm text-white tracking-tight">{pos.symbol}</span>
-                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wide ${
-                          isLong
-                            ? 'bg-[#00c076]/10 text-[#00c076] border border-[#00c076]/20'
-                            : 'bg-[#f6465d]/10 text-[#f6465d] border border-[#f6465d]/20'
-                        }`}>
-                          {isLong ? 'Long' : 'Short'} {pos.leverage}x
-                        </span>
-                      </div>
-                      <div className="text-right">
-                        <div className={`font-extrabold text-xs font-mono tabular-nums ${
-                          isPnlPositive ? 'text-[#00c076]' : 'text-[#f6465d]'
-                        }`}>
-                          {pos.pnl >= 0 ? '+' : ''}{pos.pnl.toFixed(2)} USDT ({pos.pnlPercentage >= 0 ? '+' : ''}{pos.pnlPercentage.toFixed(1)}%)
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Simple Column Metrics Grid */}
-                    <div className="grid grid-cols-3 gap-2.5 py-1.5 border-t border-b border-white/5 text-[11px]">
-                      <div>
-                        <div className="text-zinc-500 font-medium">Size ({baseAsset})</div>
-                        <div className="font-bold text-zinc-200 mt-0.5 font-mono">{pos.size}</div>
-                      </div>
-                      <div>
-                        <div className="text-zinc-500 font-medium">Entry / Mark</div>
-                        <div className="font-bold text-zinc-200 mt-0.5 font-mono text-zinc-300">
-                          {pos.entryPrice.toFixed(2)} / {pos.markPrice.toFixed(2)}
-                        </div>
-                      </div>
-                      <div className="text-right">
-                        <div className="text-zinc-500 font-medium">Est. Liq Price</div>
-                        <div className="font-bold text-rose-400 mt-0.5 font-mono">{pos.liquidationPrice.toFixed(2)}</div>
-                      </div>
-                    </div>
-
-                    {/* Streamlined Action Buttons */}
-                    <div className="flex items-center justify-end gap-2 pt-0.5">
-                      <button
-                        onClick={() => soundFx.playClick()}
-                        className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-zinc-300 font-bold text-[11px] transition-colors cursor-pointer border border-white/5"
-                      >
-                        TP/SL
-                      </button>
-                      <button
-                        onClick={() => {
-                          soundFx.playOrderFilled();
-                          onClosePosition(pos.id);
-                        }}
-                        className="px-3 py-1.5 rounded-lg bg-[#f6465d]/15 hover:bg-[#f6465d]/25 text-[#f6465d] font-bold text-[11px] transition-colors cursor-pointer border border-[#f6465d]/20"
-                      >
-                        Close Position
-                      </button>
-                    </div>
-                  </div>
-                );
-              })
+              displayPositions.map((pos) => (
+                <PositionCard
+                  key={pos.id}
+                  pos={pos}
+                  onClosePosition={onClosePosition}
+                />
+              ))
             )}
         </>
       )}

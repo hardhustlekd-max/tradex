@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Position, Order } from '../types';
 import { soundFx } from '../utils/audio';
+import { PositionCard } from './PositionCard';
 import { Layers, History, ShieldAlert, ArrowUpDown, CheckCircle2, Clock, X } from 'lucide-react';
 
 interface PositionHistoryProps {
@@ -83,79 +84,13 @@ export const PositionHistory: React.FC<PositionHistoryProps> = ({
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
-              {positions.map((pos) => {
-                const isLong = pos.side === 'long';
-                const isPnlPos = pos.pnl >= 0;
-
-                return (
-                  <div
-                    key={pos.id}
-                    className="p-3.5 rounded-xl bg-[#181a20] border border-white/10 hover:border-white/20 transition-all flex flex-col justify-between gap-2.5 shadow-sm"
-                  >
-                    {/* Symbol + Long/Short Badge + Leverage */}
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-1.5 font-bold text-white text-xs">
-                        <span>{pos.symbol}</span>
-                        <span
-                          className={`px-1.5 py-0.5 rounded text-[9px] font-extrabold uppercase tracking-wide ${
-                            isLong
-                              ? 'bg-[#00c076]/10 text-[#00c076] border border-[#00c076]/20'
-                              : 'bg-[#f6465d]/10 text-[#f6465d] border border-[#f6465d]/20'
-                          }`}
-                        >
-                          {isLong ? 'Long' : 'Short'}
-                        </span>
-                        <span className="px-1.5 py-0.5 rounded bg-[#0d1117] text-zinc-300 text-[9px] border border-white/10 font-mono">
-                          {pos.leverage}x
-                        </span>
-                      </div>
-
-                      <button
-                        onClick={() => {
-                          soundFx.playOrderFilled();
-                          onClosePosition(pos.id);
-                        }}
-                        className="px-2 py-0.5 rounded-md bg-[#f6465d]/15 hover:bg-[#f6465d]/25 text-[#f6465d] text-[10px] font-bold transition-all cursor-pointer border border-[#f6465d]/20"
-                      >
-                        Close
-                      </button>
-                    </div>
-
-                    {/* Unrealized PnL & ROI */}
-                    <div className="grid grid-cols-2 gap-2 bg-[#0d1117] p-2 rounded-lg border border-white/5 font-mono">
-                      <div>
-                        <div className="text-[9px] text-zinc-500 font-sans font-medium">Unrealized PnL</div>
-                        <div className={`text-xs font-extrabold ${isPnlPos ? 'text-[#00c076]' : 'text-[#f6465d]'}`}>
-                          {pos.pnl >= 0 ? '+' : ''}{pos.pnl.toFixed(2)} USDT
-                        </div>
-                      </div>
-
-                      <div className="text-right">
-                        <div className="text-[9px] text-zinc-500 font-sans font-medium font-mono">ROI</div>
-                        <div className={`text-xs font-extrabold ${isPnlPos ? 'text-[#00c076]' : 'text-[#f6465d]'}`}>
-                          {pos.pnlPercentage >= 0 ? '+' : ''}{pos.pnlPercentage.toFixed(2)}%
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Details: Size, Entry, Mark */}
-                    <div className="grid grid-cols-3 gap-1 text-[10px] font-mono text-zinc-300">
-                      <div>
-                        <div className="text-zinc-500 text-[9px] font-sans">Size</div>
-                        <div className="font-semibold text-zinc-300">{pos.size}</div>
-                      </div>
-                      <div>
-                        <div className="text-zinc-500 text-[9px] font-sans">Entry</div>
-                        <div className="font-semibold text-zinc-300">${pos.entryPrice.toFixed(2)}</div>
-                      </div>
-                      <div>
-                        <div className="text-zinc-500 text-[9px] font-sans">Mark</div>
-                        <div className="font-semibold text-zinc-300">${pos.markPrice.toFixed(2)}</div>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
+              {positions.map((pos) => (
+                <PositionCard
+                  key={pos.id}
+                  pos={pos}
+                  onClosePosition={onClosePosition}
+                />
+              ))}
             </div>
           )
         )}

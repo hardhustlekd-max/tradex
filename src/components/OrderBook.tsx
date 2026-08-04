@@ -136,8 +136,8 @@ export const OrderBook: React.FC<OrderBookProps> = ({
                   className={`absolute right-0 top-0 bottom-0 transition-all duration-300 pointer-events-none ${
                     showHeatMap
                       ? isLiquidityWall
-                        ? 'bg-gradient-to-l from-rose-600/40 via-amber-500/25 to-rose-500/15 border-l-2 border-amber-400 shadow-[inset_0_0_12px_rgba(251,191,36,0.2)]'
-                        : 'bg-gradient-to-l from-[#f6465d]/25 to-[#f6465d]/10 border-l border-[#f6465d]/40'
+                        ? 'bg-gradient-to-l from-rose-600/70 via-amber-500/50 to-rose-500/30 border-l-2 border-amber-400 shadow-[0_0_15px_rgba(251,191,36,0.35)]'
+                        : 'bg-gradient-to-l from-rose-500/35 via-rose-500/20 to-rose-500/5 border-l border-rose-400/50'
                       : 'bg-[#f6465d]/15 border-l border-[#f6465d]/30'
                   }`}
                   style={{ width: `${depthPercent}%` }}
@@ -190,8 +190,8 @@ export const OrderBook: React.FC<OrderBookProps> = ({
                   className={`absolute right-0 top-0 bottom-0 transition-all duration-300 pointer-events-none ${
                     showHeatMap
                       ? isLiquidityWall
-                        ? 'bg-gradient-to-l from-emerald-600/40 via-amber-400/25 to-emerald-500/15 border-l-2 border-amber-400 shadow-[inset_0_0_12px_rgba(251,191,36,0.2)]'
-                        : 'bg-gradient-to-l from-[#00c076]/25 to-[#00c076]/10 border-l border-[#00c076]/40'
+                        ? 'bg-gradient-to-l from-emerald-600/70 via-amber-400/50 to-emerald-500/30 border-l-2 border-amber-400 shadow-[0_0_15px_rgba(251,191,36,0.35)]'
+                        : 'bg-gradient-to-l from-emerald-500/35 via-emerald-500/20 to-emerald-500/5 border-l border-emerald-400/50'
                       : 'bg-[#00c076]/15 border-l border-[#00c076]/30'
                   }`}
                   style={{ width: `${depthPercent}%` }}

@@ -660,6 +660,7 @@ export default function App() {
     takeProfit?: number;
     stopLoss?: number;
   }) => {
+    if (transferModal.isOpen) return; // Prevent duplicate transfer modal calls
     const notional = orderData.price * orderData.amount;
     const requiredMargin = orderData.mode === 'spot' ? notional : notional / orderData.leverage;
 
@@ -1063,13 +1064,13 @@ export default function App() {
       fundingUsdt: amount,
       copyUsdt: 0,
       earnUsdt: 0,
-      spotBalances: { USDT: 0 },
+      spotBalances: { USDT: 0, BTC: 0, ETH: 0, SOL: 0 },
     };
     setPortfolio(updatedPortfolio);
     localStorage.setItem('tradex_portfolio', JSON.stringify(updatedPortfolio));
     localStorage.removeItem('tradex_positions');
     localStorage.removeItem('tradex_orders');
-    addNotification('success', 'Faucet Reset', `Opened positions closed. All account balances reset to 0, and Funding Account refilled to $${amount.toLocaleString()} USDT!`);
+    addNotification('success', 'Faucet Reset', `All opened positions closed. All accounts and spot crypto reset to 0, and Funding Account refilled to $${amount.toLocaleString()} USDT.`);
   };
 
   // Claim Testnet Crypto

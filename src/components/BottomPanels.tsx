@@ -14,7 +14,9 @@ import {
   ArrowLeftRight, 
   Wallet,
   Layers,
-  LayoutGrid
+  LayoutGrid,
+  X,
+  Clock
 } from 'lucide-react';
 
 export interface PositionsPanelProps {
@@ -135,9 +137,9 @@ export const PositionsPanel: React.FC<PositionsPanelProps> = ({
                 <p className="text-[10px] text-zinc-600">Open a Long or Short trade to see real-time positions here</p>
               </div>
             ) : (
-              displayPositions.map((pos) => (
+              displayPositions.map((pos, idx) => (
                 <PositionCard
-                  key={pos.id}
+                  key={`${pos.id}-${idx}`}
                   pos={pos}
                   onClosePosition={onClosePosition}
                 />
@@ -147,9 +149,75 @@ export const PositionsPanel: React.FC<PositionsPanelProps> = ({
       )}
 
         {activeTab === 'orders' && (
-          <div className="py-8 text-center text-zinc-400 text-xs">
-            {orders.length === 0 ? 'No active open orders' : `${orders.length} open orders available`}
-          </div>
+          orders.length === 0 ? (
+            <div className="py-8 text-center text-zinc-500 font-sans space-y-1">
+              <Clock className="w-7 h-7 mx-auto text-zinc-600 stroke-[1.5]" />
+              <p className="text-xs font-semibold text-zinc-400">No active limit orders</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              {orders.map((ord, idx) => {
+                const isBuy = ord.side === 'buy';
+                const baseAsset = ord.symbol.replace('USDT', '');
+                return (
+                  <div
+                    key={`${ord.id}-${idx}`}
+                    className="p-2.5 rounded-lg bg-[#181a20] border border-white/5 space-y-2 text-sans select-none shadow-xs hover:border-white/10 flex flex-col justify-between"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1 flex-wrap">
+                        <div className={`w-3.5 h-3.5 rounded flex items-center justify-center font-extrabold text-[9px] shrink-0 ${
+                          isBuy ? 'bg-[#00c076] text-black' : 'bg-[#f6465d] text-white'
+                        }`}>
+                          {isBuy ? 'B' : 'S'}
+                        </div>
+                        <span className="font-bold text-white text-xs tracking-tight leading-none">{ord.symbol}</span>
+                        <span className="px-1 py-0.5 rounded bg-[#2b313a] text-zinc-400 text-[9px] font-medium leading-none capitalize">
+                          {ord.type.replace('_', ' ')}
+                        </span>
+                        {ord.leverage && (
+                          <span className="px-1 py-0.5 rounded bg-[#2b313a] text-zinc-400 text-[9px] font-medium leading-none">
+                            {ord.leverage}X
+                          </span>
+                        )}
+                      </div>
+
+                      <button
+                        onClick={() => {
+                          soundFx.playClick();
+                          onCancelOrder(ord.id);
+                        }}
+                        className="text-zinc-400 hover:text-rose-400 cursor-pointer p-1 rounded-md hover:bg-white/5 transition-all text-[10px] font-bold flex items-center gap-0.5"
+                        title="Cancel Order"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2 pt-0.5">
+                      <div>
+                        <span className="text-[10px] text-zinc-400 font-normal border-b border-dashed border-zinc-600/70 inline-block pb-0.5 self-start">
+                          Order Price
+                        </span>
+                        <div className="text-xs font-bold text-white font-sans mt-0.5 leading-tight">
+                          ${ord.price.toFixed(2)}
+                        </div>
+                      </div>
+
+                      <div className="text-right">
+                        <span className="text-[10px] text-zinc-400 font-normal border-b border-dashed border-zinc-600/70 inline-block pb-0.5 text-right">
+                          Amount ({baseAsset})
+                        </span>
+                        <div className="text-xs font-bold text-zinc-200 font-sans mt-0.5 leading-tight">
+                          {ord.amount}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )
         )}
 
         {activeTab === 'copy' && (

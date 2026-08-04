@@ -84,9 +84,9 @@ export const PositionHistory: React.FC<PositionHistoryProps> = ({
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
-              {positions.map((pos) => (
+              {positions.map((pos, idx) => (
                 <PositionCard
-                  key={pos.id}
+                  key={`${pos.id}-${idx}`}
                   pos={pos}
                   onClosePosition={onClosePosition}
                 />
@@ -103,43 +103,75 @@ export const PositionHistory: React.FC<PositionHistoryProps> = ({
               <span className="text-xs font-semibold text-zinc-400">No active limit orders</span>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
-              {orders.map((ord) => (
-                <div
-                  key={ord.id}
-                  className="p-3.5 rounded-xl bg-[#181a20] border border-white/10 space-y-2 hover:border-white/20 transition-all flex flex-col justify-between"
-                >
-                  <div className="flex items-center justify-between text-xs font-bold text-white">
-                    <div className="flex items-center gap-1.5">
-                      <span>{ord.symbol}</span>
-                      <span className={`text-[9px] uppercase font-extrabold px-1.5 py-0.5 rounded ${ord.side === 'buy' ? 'bg-[#00c076]/10 text-[#00c076] border border-[#00c076]/20' : 'bg-[#f6465d]/10 text-[#f6465d] border border-[#f6465d]/20'}`}>
-                        {ord.side}
-                      </span>
-                    </div>
-                    <button
-                      onClick={() => {
-                        soundFx.playClick();
-                        onCancelOrder(ord.id);
-                      }}
-                      className="text-zinc-400 hover:text-rose-400 cursor-pointer p-1 rounded-md hover:bg-white/5 transition-all"
-                      title="Cancel Order"
-                    >
-                      <X className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2.5">
+              {orders.map((ord, idx) => {
+                const isBuy = ord.side === 'buy';
+                const baseAsset = ord.symbol.replace('USDT', '');
+                return (
+                  <div
+                    key={`${ord.id}-${idx}`}
+                    className="p-2.5 sm:p-3 rounded-lg bg-[#181a20] border border-white/5 space-y-2 transition-all text-sans select-none shadow-xs hover:border-white/10 flex flex-col justify-between"
+                  >
+                    {/* Header Row */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1 flex-wrap">
+                        <div className={`w-3.5 h-3.5 rounded flex items-center justify-center font-extrabold text-[9px] shrink-0 ${
+                          isBuy ? 'bg-[#00c076] text-black' : 'bg-[#f6465d] text-white'
+                        }`}>
+                          {isBuy ? 'B' : 'S'}
+                        </div>
+                        <span className="font-bold text-white text-xs tracking-tight leading-none">{ord.symbol}</span>
+                        <span className="px-1 py-0.5 rounded bg-[#2b313a] text-zinc-400 text-[9px] font-medium leading-none capitalize">
+                          {ord.type.replace('_', ' ')}
+                        </span>
+                        {ord.leverage && (
+                          <span className="px-1 py-0.5 rounded bg-[#2b313a] text-zinc-400 text-[9px] font-medium leading-none">
+                            {ord.leverage}X
+                          </span>
+                        )}
+                      </div>
 
-                  <div className="grid grid-cols-2 gap-2 text-[10px] font-mono text-zinc-300 bg-[#0d1117] p-2 rounded-lg border border-white/5">
-                    <div>
-                      <div className="text-[9px] text-zinc-500 font-sans">Price</div>
-                      <div className="font-semibold text-zinc-300">${ord.price.toFixed(2)}</div>
+                      <button
+                        onClick={() => {
+                          soundFx.playClick();
+                          onCancelOrder(ord.id);
+                        }}
+                        className="text-zinc-400 hover:text-rose-400 cursor-pointer p-1 rounded-md hover:bg-white/5 transition-all text-[10px] font-bold flex items-center gap-0.5"
+                        title="Cancel Order"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
                     </div>
-                    <div className="text-right">
-                      <div className="text-[9px] text-zinc-500 font-sans">Amount</div>
-                      <div className="font-semibold text-zinc-300">{ord.amount}</div>
+
+                    {/* Metric Row */}
+                    <div className="grid grid-cols-2 gap-2 pt-0.5">
+                      <div>
+                        <span className="text-[10px] text-zinc-400 font-normal border-b border-dashed border-zinc-600/70 inline-block pb-0.5 self-start">
+                          Order Price
+                        </span>
+                        <div className="text-xs font-bold text-white font-sans mt-0.5 leading-tight">
+                          ${ord.price.toFixed(2)}
+                        </div>
+                      </div>
+
+                      <div className="text-right">
+                        <span className="text-[10px] text-zinc-400 font-normal border-b border-dashed border-zinc-600/70 inline-block pb-0.5 text-right">
+                          Amount ({baseAsset})
+                        </span>
+                        <div className="text-xs font-bold text-zinc-200 font-sans mt-0.5 leading-tight">
+                          {ord.amount}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Bottom Date / Status */}
+                    <div className="flex items-center justify-between text-[10px] text-zinc-400 pt-0.5 border-t border-white/5">
+                      <span>Created: {ord.createdAt || 'Just now'}</span>
+                      <span className="text-[#00c076] font-semibold uppercase">{ord.status}</span>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )
         )}
@@ -152,58 +184,76 @@ export const PositionHistory: React.FC<PositionHistoryProps> = ({
               <span className="text-xs font-semibold text-zinc-400">No order or position history</span>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3">
-              {orderHistory.map((item: any) => {
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2.5">
+              {orderHistory.map((item: any, idx: number) => {
+                const isLong = item.positionSide === 'long' || item.side === 'buy';
                 const hasPnl = typeof item.pnl === 'number';
                 const isPnlPos = (item.pnl || 0) >= 0;
+                const baseAsset = item.symbol ? item.symbol.replace('USDT', '') : '';
+
                 return (
                   <div
-                    key={item.id}
-                    className="p-3.5 rounded-xl bg-[#181a20] border border-white/10 space-y-2 hover:border-white/20 transition-all"
+                    key={`${item.id}-${idx}`}
+                    className="p-2.5 sm:p-3 rounded-lg bg-[#181a20] border border-white/5 space-y-2 transition-all text-sans select-none shadow-xs hover:border-white/10"
                   >
-                    <div className="flex items-center justify-between text-xs font-bold text-white">
-                      <div className="flex items-center gap-1.5">
-                        <span>{item.symbol}</span>
-                        <span className={`text-[9px] uppercase font-extrabold px-1.5 py-0.5 rounded ${
-                          item.positionSide === 'long' || item.side === 'buy'
-                            ? 'bg-[#00c076]/10 text-[#00c076] border border-[#00c076]/20'
-                            : 'bg-[#f6465d]/10 text-[#f6465d] border border-[#f6465d]/20'
+                    {/* Header Row */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1 flex-wrap">
+                        <div className={`w-3.5 h-3.5 rounded flex items-center justify-center font-extrabold text-[9px] shrink-0 ${
+                          isLong ? 'bg-[#00c076] text-black' : 'bg-[#f6465d] text-white'
                         }`}>
-                          {item.positionSide ? (item.positionSide === 'long' ? 'Long' : 'Short') : item.side}
+                          {isLong ? 'B' : 'S'}
+                        </div>
+                        <span className="font-bold text-white text-xs tracking-tight leading-none">{item.symbol}</span>
+                        <span className="px-1 py-0.5 rounded bg-[#2b313a] text-zinc-400 text-[9px] font-medium leading-none">
+                          {isLong ? 'Long' : 'Short'}
                         </span>
                         {item.leverage && (
-                          <span className="px-1.5 py-0.5 rounded bg-[#0d1117] text-zinc-400 text-[9px] border border-white/10 font-mono">
-                            {item.leverage}x
+                          <span className="px-1 py-0.5 rounded bg-[#2b313a] text-zinc-400 text-[9px] font-medium leading-none">
+                            {item.leverage}X
                           </span>
                         )}
                       </div>
 
                       <div className="flex items-center gap-1 text-[9px] text-[#00c076] font-bold bg-[#00c076]/10 px-1.5 py-0.5 rounded border border-[#00c076]/20">
-                        <CheckCircle2 className="w-3 h-3" />
-                        <span className="uppercase">{item.status}</span>
+                        <CheckCircle2 className="w-3 h-3 text-[#00c076]" />
+                        <span className="uppercase">{item.status || 'closed'}</span>
                       </div>
                     </div>
 
-                    {hasPnl && (
-                      <div className="grid grid-cols-2 gap-2 bg-[#0d1117] p-2 rounded-lg border border-white/5 font-mono">
-                        <div>
-                          <div className="text-[9px] text-zinc-500 font-sans">Realized PnL</div>
-                          <div className={`text-xs font-bold ${isPnlPos ? 'text-[#00c076]' : 'text-[#f6465d]'}`}>
+                    {/* Metric Row: Size vs Realized PNL / ROI% */}
+                    <div className="flex items-start justify-between gap-2 pt-0.5">
+                      <div className="flex flex-col">
+                        <span className="text-[10px] text-zinc-400 font-normal border-b border-dashed border-zinc-600/70 inline-block pb-0.5 self-start">
+                          Filled Size
+                        </span>
+                        <div className="text-xs font-bold text-white font-sans mt-0.5 leading-tight">
+                          {item.amount} {baseAsset}
+                        </div>
+                        <div className="text-[10px] text-zinc-400 font-sans mt-0.5">
+                          @ ${item.price ? item.price.toFixed(2) : '0.00'}
+                        </div>
+                      </div>
+
+                      {hasPnl && (
+                        <div className="flex flex-col items-end text-right">
+                          <span className="text-[10px] text-zinc-400 font-normal border-b border-dashed border-zinc-600/70 inline-block pb-0.5 text-right">
+                            Realized PNL
+                          </span>
+                          <div className={`text-xs font-bold font-sans mt-0.5 leading-tight ${isPnlPos ? 'text-[#00c076]' : 'text-[#f6465d]'}`}>
                             {item.pnl >= 0 ? '+' : ''}${item.pnl.toFixed(2)}
                           </div>
-                        </div>
-                        <div className="text-right">
-                          <div className="text-[9px] text-zinc-500 font-sans">ROI</div>
-                          <div className={`text-xs font-bold ${isPnlPos ? 'text-[#00c076]' : 'text-[#f6465d]'}`}>
+                          <div className={`text-[10px] font-semibold font-sans mt-0.5 ${isPnlPos ? 'text-[#00c076]' : 'text-[#f6465d]'}`}>
                             {item.pnlPercentage >= 0 ? '+' : ''}{(item.pnlPercentage || 0).toFixed(2)}%
                           </div>
                         </div>
-                      </div>
-                    )}
+                      )}
+                    </div>
 
-                    <div className="flex items-center justify-between text-[10px] text-zinc-400 font-mono pt-0.5">
-                      <span>Price: <strong className="text-zinc-200">${item.price ? item.price.toFixed(2) : '0.00'}</strong></span>
-                      <span>Amount: <strong className="text-zinc-200">{item.amount}</strong></span>
+                    {/* Date / Time Footer */}
+                    <div className="flex items-center justify-between text-[10px] text-zinc-400 pt-0.5 border-t border-white/5">
+                      <span>Time: {item.createdAt || 'Recent'}</span>
+                      <span className="text-zinc-400">TradeX Futures</span>
                     </div>
                   </div>
                 );

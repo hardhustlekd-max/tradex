@@ -480,8 +480,8 @@ export const AssetsPage: React.FC<AssetsPageProps> = ({
                   </div>
                 ) : (
                   <div className="space-y-2 font-sans">
-                    {positions.map((pos) => (
-                      <div key={pos.id} className="bg-[#161b22] rounded-xl p-2.5 border border-white/5 flex items-center justify-between text-xs">
+                    {positions.map((pos, idx) => (
+                      <div key={`${pos.id}-${idx}`} className="bg-[#161b22] rounded-xl p-2.5 border border-white/5 flex items-center justify-between text-xs">
                         <div>
                           <div className="flex items-center gap-1.5">
                             <span className={`font-black uppercase ${pos.side === 'long' ? 'text-[#00c076]' : 'text-[#f6465d]'}`}>

@@ -128,3 +128,13 @@ export interface AiMarketAnalysis {
     riskRewardRatio: string;
   };
 }
+
+export interface PriceAlert {
+  id: string;
+  symbol: string;
+  targetPrice: number;
+  condition: 'above' | 'below';
+  active: boolean;
+  triggered?: boolean;
+  createdAt: string;
+}

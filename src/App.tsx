@@ -13,7 +13,8 @@ import {
   OrderSide, 
   OrderType, 
   MarginMode, 
-  NotificationItem 
+  NotificationItem,
+  PriceAlert
 } from './types';
 import { 
   INITIAL_PAIRS, 
@@ -42,6 +43,7 @@ import { FaucetModal } from './components/FaucetModal';
 import { TransferModal } from './components/TransferModal';
 import { TradeModal } from './components/TradeModal';
 import { AiAnalystDrawer } from './components/AiAnalystDrawer';
+import { PriceAlertsModal } from './components/PriceAlertsModal';
 import { NotificationToast } from './components/NotificationToast';
 import { LoginPage } from './components/LoginPage';
 
@@ -217,6 +219,42 @@ export default function App() {
   const [isTradeModalOpen, setIsTradeModalOpen] = useState(false);
   const [isFaucetModalOpen, setIsFaucetModalOpen] = useState(false);
   const [isAiAnalystOpen, setIsAiAnalystOpen] = useState(false);
+  const [isPriceAlertsModalOpen, setIsPriceAlertsModalOpen] = useState(false);
+
+  // Price Alerts State with LocalStorage persistence
+  const [priceAlerts, setPriceAlerts] = useState<PriceAlert[]>(() => {
+    const saved = localStorage.getItem('tradex_price_alerts');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('tradex_price_alerts', JSON.stringify(priceAlerts));
+  }, [priceAlerts]);
+
+  const handleAddPriceAlert = (symbol: string, targetPrice: number, condition: 'above' | 'below') => {
+    const newAlert: PriceAlert = {
+      id: `alert-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+      symbol,
+      targetPrice,
+      condition,
+      active: true,
+      triggered: false,
+      createdAt: new Date().toLocaleTimeString(),
+    };
+    setPriceAlerts((prev) => [newAlert, ...prev]);
+    addNotification('success', 'Price Alert Set', `Alert set for ${symbol} when price goes ${condition} $${targetPrice.toLocaleString()}`);
+  };
+
+  const handleTogglePriceAlert = (id: string) => {
+    setPriceAlerts((prev) =>
+      prev.map((a) => (a.id === id ? { ...a, active: !a.active } : a))
+    );
+  };
+
+  const handleDeletePriceAlert = (id: string) => {
+    setPriceAlerts((prev) => prev.filter((a) => a.id !== id));
+    addNotification('info', 'Alert Deleted', 'Price alert removed.');
+  };
   const [transferModal, setTransferModal] = useState<{
     isOpen: boolean;
     initialFrom?: 'spot' | 'futures' | 'funding' | 'copy' | 'earn';
@@ -230,6 +268,17 @@ export default function App() {
     initialAsset: 'USDT',
     initialAmount: '',
   });
+  const [pendingOrder, setPendingOrder] = useState<{
+    mode: TradingMode;
+    side: OrderSide;
+    type: OrderType;
+    price: number;
+    amount: number;
+    leverage: number;
+    marginMode: MarginMode;
+    takeProfit?: number;
+    stopLoss?: number;
+  } | null>(null);
   const [soundEnabled, setSoundEnabled] = useState(true);
 
   // Floating Notifications
@@ -413,7 +462,7 @@ export default function App() {
       // 5. Append recent trade
       if (Math.random() > 0.3) {
         const newTrade: Trade = {
-          id: `trd-${Date.now()}`,
+          id: `trd-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
           price: newPrice,
           amount: Number((Math.random() * 0.8 + 0.01).toFixed(3)),
           time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }),
@@ -443,6 +492,7 @@ export default function App() {
             // Handle Spot balance vs Futures position created
             if (ord.mode === 'spot') {
               if (ord.side === 'buy') {
+                // USDT was locked on placement; credit base asset
                 setPortfolio((p) => ({
                   ...p,
                   spotBalances: {
@@ -451,18 +501,22 @@ export default function App() {
                   },
                 }));
               } else {
+                // Base asset was locked on placement; credit USDT to Spot Wallet
                 setPortfolio((p) => ({
                   ...p,
-                  usdtBalance: p.usdtBalance + ord.amount * ord.price,
+                  spotBalances: {
+                    ...p.spotBalances,
+                    USDT: (p.spotBalances?.USDT || 0) + ord.amount * ord.price,
+                  },
                 }));
               }
             } else if (ord.mode === 'futures') {
-              // Create futures position
+              // Create futures position (margin was locked on placement)
               const margin = (ord.amount * ord.price) / (ord.leverage || 10);
               const liqPrice = calculateLiquidationPrice(ord.price, ord.side === 'buy' ? 'long' : 'short', ord.leverage || 10);
 
               const newPos: Position = {
-                id: `pos-${Date.now()}`,
+                id: `pos-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
                 symbol: ord.symbol,
                 side: ord.side === 'buy' ? 'long' : 'short',
                 leverage: ord.leverage || 10,
@@ -470,7 +524,7 @@ export default function App() {
                 markPrice: newPrice,
                 size: ord.amount,
                 margin,
-                marginMode: 'cross',
+                marginMode: ord.marginMode || 'cross',
                 pnl: 0,
                 pnlPercentage: 0,
                 liquidationPrice: liqPrice,
@@ -565,6 +619,30 @@ export default function App() {
 
         return remainingPositions;
       });
+
+      // 8. Evaluate active price alerts
+      setPriceAlerts((prevAlerts) => {
+        return prevAlerts.map((alert) => {
+          if (!alert.active || alert.triggered || alert.symbol !== activePair.symbol) {
+            return alert;
+          }
+
+          const isMet =
+            (alert.condition === 'above' && newPrice >= alert.targetPrice) ||
+            (alert.condition === 'below' && newPrice <= alert.targetPrice);
+
+          if (isMet) {
+            soundFx.playOrderFilled();
+            addNotification(
+              'success',
+              `Price Alert Triggered! (${alert.symbol})`,
+              `${alert.symbol} reached $${newPrice.toFixed(2)} (Target: ${alert.condition} $${alert.targetPrice.toFixed(2)})`
+            );
+            return { ...alert, triggered: true, active: false };
+          }
+          return alert;
+        });
+      });
     }, 800);
 
     return () => clearInterval(interval);
@@ -610,6 +688,7 @@ export default function App() {
               `Required: $${notional.toFixed(2)} USDT. You only have $${availableSpotUSDT.toFixed(2)} USDT in Spot. Pre-filling transfer of $${deficit.toFixed(2)} USDT to Spot Wallet.`
             );
 
+            setPendingOrder(orderData);
             setTransferModal({
               isOpen: true,
               initialFrom: bestFromAccount,
@@ -660,6 +739,7 @@ export default function App() {
             `Required: $${requiredMargin.toFixed(2)} USDT. You only have $${availableFuturesUSDT.toFixed(2)} USDT in Futures. Pre-filling transfer of $${deficit.toFixed(2)} USDT to Futures Account.`
           );
 
+          setPendingOrder(orderData);
           setTransferModal({
             isOpen: true,
             initialFrom: bestFromAccount,
@@ -708,7 +788,7 @@ export default function App() {
         // Record in Order History
         setOrderHistory((prev) => [
           {
-            id: `hist-spot-${Date.now()}`,
+            id: `hist-spot-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
             symbol: activePair.symbol,
             type: 'market',
             side: orderData.side,
@@ -732,7 +812,7 @@ export default function App() {
         );
 
         const newPos: Position = {
-          id: `pos-${Date.now()}`,
+          id: `pos-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
           symbol: activePair.symbol,
           side: orderData.side === 'buy' ? 'long' : 'short',
           leverage: orderData.leverage,
@@ -760,24 +840,153 @@ export default function App() {
         );
       }
     } else {
-      // Limit Order Placement
-      const newOrder: Order = {
-        id: `ord-${Date.now()}`,
-        symbol: activePair.symbol,
-        type: orderData.type,
-        side: orderData.side,
-        mode: orderData.mode,
-        price: orderData.price,
-        amount: orderData.amount,
-        filled: 0,
-        status: 'open',
-        createdAt: new Date().toLocaleTimeString(),
-        leverage: orderData.leverage,
-        marginMode: orderData.marginMode,
-      };
+      // Limit / Stop-Limit Order Placement
+      const triggersImmediately = 
+        (orderData.side === 'buy' && orderData.price >= activePair.price) ||
+        (orderData.side === 'sell' && orderData.price <= activePair.price);
 
-      setOrders((prev) => [newOrder, ...prev]);
-      addNotification('info', 'Limit Order Placed', `${orderData.side.toUpperCase()} ${orderData.amount} ${activePair.baseAsset} at $${orderData.price.toFixed(2)}`);
+      if (triggersImmediately) {
+        soundFx.playOrderFilled();
+        const execPrice = activePair.price;
+        const execNotional = execPrice * orderData.amount;
+
+        if (orderData.mode === 'spot') {
+          if (orderData.side === 'buy') {
+            setPortfolio((p) => ({
+              ...p,
+              spotBalances: {
+                ...p.spotBalances,
+                USDT: Math.max(0, (p.spotBalances?.USDT || 0) - execNotional),
+                [activePair.baseAsset]: (p.spotBalances?.[activePair.baseAsset] || 0) + orderData.amount,
+              },
+            }));
+            addNotification('success', 'Limit Order Executed', `Limit Buy ${orderData.amount} ${activePair.baseAsset} filled immediately @ $${execPrice.toFixed(2)}`);
+          } else {
+            setPortfolio((p) => ({
+              ...p,
+              spotBalances: {
+                ...p.spotBalances,
+                USDT: (p.spotBalances?.USDT || 0) + execNotional,
+                [activePair.baseAsset]: Math.max(0, (p.spotBalances?.[activePair.baseAsset] || 0) - orderData.amount),
+              },
+            }));
+            addNotification('success', 'Limit Order Executed', `Limit Sell ${orderData.amount} ${activePair.baseAsset} filled immediately @ $${execPrice.toFixed(2)}`);
+          }
+
+          setOrderHistory((prev) => [
+            {
+              id: `hist-limit-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+              symbol: activePair.symbol,
+              type: orderData.type,
+              side: orderData.side,
+              mode: 'spot',
+              price: execPrice,
+              amount: orderData.amount,
+              filled: orderData.amount,
+              status: 'filled',
+              createdAt: new Date().toLocaleTimeString(),
+              leverage: 1,
+              marginMode: 'cross',
+            },
+            ...prev,
+          ]);
+        } else if (orderData.mode === 'futures') {
+          const liqPrice = calculateLiquidationPrice(
+            execPrice,
+            orderData.side === 'buy' ? 'long' : 'short',
+            orderData.leverage
+          );
+
+          const newPos: Position = {
+            id: `pos-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+            symbol: activePair.symbol,
+            side: orderData.side === 'buy' ? 'long' : 'short',
+            leverage: orderData.leverage,
+            entryPrice: execPrice,
+            markPrice: execPrice,
+            size: orderData.amount,
+            margin: requiredMargin,
+            marginMode: orderData.marginMode,
+            pnl: 0,
+            pnlPercentage: 0,
+            liquidationPrice: liqPrice,
+            takeProfit: orderData.takeProfit,
+            stopLoss: orderData.stopLoss,
+            createdAt: new Date().toLocaleTimeString(),
+          };
+
+          setPortfolio((p) => ({ ...p, usdtBalance: Math.max(0, p.usdtBalance - requiredMargin) }));
+          setPositions((prev) => [newPos, ...prev]);
+
+          setOrderHistory((prev) => [
+            {
+              id: `hist-limit-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+              symbol: activePair.symbol,
+              type: orderData.type,
+              side: orderData.side,
+              mode: 'futures',
+              price: execPrice,
+              amount: orderData.amount,
+              filled: orderData.amount,
+              status: 'filled',
+              createdAt: new Date().toLocaleTimeString(),
+              leverage: orderData.leverage,
+              marginMode: orderData.marginMode,
+            },
+            ...prev,
+          ]);
+
+          addNotification(
+            'success',
+            `Futures Limit ${orderData.side === 'buy' ? 'LONG' : 'SHORT'} Filled`,
+            `${orderData.leverage}x ${activePair.symbol} position size ${orderData.amount} @ $${execPrice.toFixed(2)}`
+          );
+        }
+      } else {
+        // Lock funds/margin immediately for open limit order
+        if (orderData.mode === 'spot') {
+          if (orderData.side === 'buy') {
+            setPortfolio((p) => ({
+              ...p,
+              spotBalances: {
+                ...p.spotBalances,
+                USDT: Math.max(0, (p.spotBalances?.USDT || 0) - notional),
+              },
+            }));
+          } else {
+            setPortfolio((p) => ({
+              ...p,
+              spotBalances: {
+                ...p.spotBalances,
+                [activePair.baseAsset]: Math.max(0, (p.spotBalances?.[activePair.baseAsset] || 0) - orderData.amount),
+              },
+            }));
+          }
+        } else if (orderData.mode === 'futures') {
+          setPortfolio((p) => ({
+            ...p,
+            usdtBalance: Math.max(0, p.usdtBalance - requiredMargin),
+          }));
+        }
+
+        const newOrder: Order = {
+          id: `ord-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
+          symbol: activePair.symbol,
+          type: orderData.type,
+          side: orderData.side,
+          mode: orderData.mode,
+          price: orderData.price,
+          amount: orderData.amount,
+          filled: 0,
+          status: 'open',
+          createdAt: new Date().toLocaleTimeString(),
+          leverage: orderData.leverage,
+          marginMode: orderData.marginMode,
+        };
+
+        setOrders((prev) => [newOrder, ...prev]);
+        addNotification('info', 'Limit Order Placed', `${orderData.side.toUpperCase()} ${orderData.amount} ${activePair.baseAsset} at $${orderData.price.toFixed(2)} (Funds locked)`);
+      }
     }
 
     // Switch view to Positions tab
@@ -811,9 +1020,38 @@ export default function App() {
     const ord = orders.find((o) => o.id === orderId);
     if (!ord) return;
 
+    // Refund locked funds/margin
+    const notional = ord.price * ord.amount;
+    if (ord.mode === 'spot') {
+      if (ord.side === 'buy') {
+        setPortfolio((p) => ({
+          ...p,
+          spotBalances: {
+            ...p.spotBalances,
+            USDT: (p.spotBalances?.USDT || 0) + notional,
+          },
+        }));
+      } else {
+        const baseAsset = ord.symbol.replace('USDT', '');
+        setPortfolio((p) => ({
+          ...p,
+          spotBalances: {
+            ...p.spotBalances,
+            [baseAsset]: (p.spotBalances?.[baseAsset] || 0) + ord.amount,
+          },
+        }));
+      }
+    } else if (ord.mode === 'futures') {
+      const margin = notional / (ord.leverage || 10);
+      setPortfolio((p) => ({
+        ...p,
+        usdtBalance: p.usdtBalance + margin,
+      }));
+    }
+
     setOrders((prev) => prev.filter((o) => o.id !== orderId));
     setOrderHistory((prev) => [{ ...ord, id: `hist-cancel-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`, status: 'cancelled' }, ...prev]);
-    addNotification('info', 'Order Cancelled', `Cancelled ${ord.side.toUpperCase()} order for ${ord.symbol}`);
+    addNotification('info', 'Order Cancelled', `Cancelled ${ord.side.toUpperCase()} order for ${ord.symbol}. Funds unlocked.`);
   };
 
   // Reset Balance via Faucet
@@ -821,17 +1059,17 @@ export default function App() {
     setPositions([]);
     setOrders([]);
     const updatedPortfolio = {
-      usdtBalance: amount,
+      usdtBalance: 0,
       fundingUsdt: amount,
-      copyUsdt: amount,
-      earnUsdt: amount,
-      spotBalances: { USDT: amount },
+      copyUsdt: 0,
+      earnUsdt: 0,
+      spotBalances: { USDT: 0 },
     };
     setPortfolio(updatedPortfolio);
     localStorage.setItem('tradex_portfolio', JSON.stringify(updatedPortfolio));
     localStorage.removeItem('tradex_positions');
     localStorage.removeItem('tradex_orders');
-    addNotification('success', 'Faucet Reset', `Positions closed & $${amount.toLocaleString()} USDT deposited to Futures, Spot, and Funding Accounts! All other balances reset.`);
+    addNotification('success', 'Faucet Reset', `Opened positions closed. All account balances reset to 0, and Funding Account refilled to $${amount.toLocaleString()} USDT!`);
   };
 
   // Claim Testnet Crypto
@@ -892,6 +1130,15 @@ export default function App() {
 
     soundFx.playOrderFilled();
     addNotification('success', 'Transfer Completed', `Transferred ${amount} ${asset} from ${fromAcc.toUpperCase()} to ${toAcc.toUpperCase()}`);
+
+    // Auto-execute pending order if user was prompted to transfer margin for order placement
+    if (pendingOrder) {
+      const targetOrder = pendingOrder;
+      setPendingOrder(null);
+      setTimeout(() => {
+        handleSubmitOrder(targetOrder);
+      }, 150);
+    }
   };
 
   if (!user) {
@@ -925,6 +1172,8 @@ export default function App() {
         onGoHome={() => setActiveDockTab('home')}
         pairs={pairs}
         onSelectPair={handleSelectPair}
+        onOpenPriceAlerts={() => setIsPriceAlertsModalOpen(true)}
+        activeAlertsCount={priceAlerts.filter(a => a.active && !a.triggered).length}
       />
 
       {/* Main Workspace Body Layout */}
@@ -1221,6 +1470,16 @@ export default function App() {
         onClose={() => setIsAiAnalystOpen(false)}
         activePair={activePair}
         candles={candles}
+      />
+
+      <PriceAlertsModal
+        isOpen={isPriceAlertsModalOpen}
+        onClose={() => setIsPriceAlertsModalOpen(false)}
+        activePair={activePair}
+        priceAlerts={priceAlerts}
+        onAddAlert={handleAddPriceAlert}
+        onToggleAlert={handleTogglePriceAlert}
+        onDeleteAlert={handleDeletePriceAlert}
       />
 
       {/* Floating Notification Toasts */}

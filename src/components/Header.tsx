@@ -42,6 +42,8 @@ interface HeaderProps {
   onToggleTheme?: () => void;
   pairs?: TradingPair[];
   onSelectPair?: (pair: TradingPair) => void;
+  onOpenPriceAlerts?: () => void;
+  activeAlertsCount?: number;
 }
 
 const UserAvatarDropdown: React.FC<{
@@ -202,6 +204,8 @@ export const Header: React.FC<HeaderProps> = ({
   onToggleTheme,
   pairs = [],
   onSelectPair,
+  onOpenPriceAlerts,
+  activeAlertsCount = 0,
 }) => {
   const [isCoinSelectorOpen, setIsCoinSelectorOpen] = useState(false);
   const [coinSearch, setCoinSearch] = useState('');
@@ -297,12 +301,21 @@ export const Header: React.FC<HeaderProps> = ({
           </button>
 
           <button
-            onClick={() => soundFx.playClick()}
+            onClick={() => {
+              soundFx.playClick();
+              if (onOpenPriceAlerts) onOpenPriceAlerts();
+            }}
             className="p-1.5 rounded-lg hover:bg-white/5 text-zinc-300 hover:text-[#00c076] transition-colors relative active:scale-95"
-            title="Notifications"
+            title="Custom Price Alerts"
           >
             <Bell className="w-4 h-4" />
-            <span className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-[#00c076] shadow-sm shadow-[#00c076]" />
+            {activeAlertsCount > 0 ? (
+              <span className="absolute -top-1 -right-1 px-1.5 py-0.2 rounded-full bg-[#00c076] text-black font-extrabold text-[9px] shadow-sm">
+                {activeAlertsCount}
+              </span>
+            ) : (
+              <span className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-[#00c076]/60 shadow-sm" />
+            )}
           </button>
 
           {isTradingView && (

@@ -58,14 +58,23 @@ export const OrderForm: React.FC<OrderFormProps> = ({
   const amountNum = parseFloat(amountInput) || 0;
   const totalValue = priceNum * amountNum;
 
+  const totalUsdtAcrossAccounts = 
+    (portfolio.usdtBalance || 0) + 
+    (portfolio.fundingUsdt || 0) + 
+    (portfolio.spotBalances?.USDT || 0) + 
+    (portfolio.copyUsdt || 0) + 
+    (portfolio.earnUsdt || 0);
+
   const availableUSDT = tradingMode === 'futures' 
     ? (portfolio.usdtBalance || 0) 
     : (portfolio.spotBalances?.USDT || 0);
+  
+  const effectiveUsdtForMax = availableUSDT > 0 ? availableUSDT : (totalUsdtAcrossAccounts > 0 ? totalUsdtAcrossAccounts : 100);
   const availableAsset = portfolio.spotBalances?.[activePair.baseAsset] || 0;
 
   const maxAffordableAmount = tradingMode === 'futures' 
-    ? (availableUSDT * leverage) / priceNum 
-    : Math.max(availableUSDT / priceNum, availableAsset);
+    ? (effectiveUsdtForMax * leverage) / priceNum 
+    : Math.max(effectiveUsdtForMax / priceNum, availableAsset);
 
   const effectiveMax = maxAffordableAmount > 0 ? maxAffordableAmount : 1.0;
 
@@ -158,9 +167,9 @@ export const OrderForm: React.FC<OrderFormProps> = ({
 
       {/* Leverage & Margin Controls for Futures Mode */}
       {tradingMode === 'futures' && (
-        <div className="px-2.5 pt-2 pb-1 border-b border-white/5 bg-[#12161f]/50 flex flex-col gap-1.5">
+        <div className="px-2.5 pt-2 pb-1.5 border-b border-white/5 bg-[#12161f]/50 flex flex-col gap-1.5">
           <div className="flex items-center justify-between text-[11px]">
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1.5">
               <button
                 type="button"
                 onClick={() => { soundFx.playClick(); setMarginMode(marginMode === 'cross' ? 'isolated' : 'cross'); }}
@@ -168,26 +177,43 @@ export const OrderForm: React.FC<OrderFormProps> = ({
               >
                 {marginMode}
               </button>
-              <span className="text-zinc-400 font-bold text-[10px]">{leverage}x</span>
+              <span className="text-[#00c076] font-extrabold text-[11px] bg-[#00c076]/10 px-1.5 py-0.5 rounded border border-[#00c076]/20">
+                {leverage}x
+              </span>
             </div>
-            <span className="text-[10px] text-zinc-400 font-medium">Leverage</span>
+            <div className="flex items-center gap-1">
+              <span className="text-[10px] text-zinc-400 font-medium">Leverage (Max 200x)</span>
+            </div>
           </div>
 
+          {/* Quick Presets (up to 200x) */}
           <div className="grid grid-cols-5 gap-1">
-            {[2, 5, 10, 20, 50].map((lev) => (
+            {[10, 25, 50, 100, 200].map((lev) => (
               <button
                 key={lev}
                 type="button"
                 onClick={() => { soundFx.playClick(); setLeverage(lev); }}
                 className={`py-0.5 rounded text-[10px] font-extrabold cursor-pointer transition-colors border ${
                   leverage === lev
-                    ? 'bg-[#00c076]/20 text-[#00c076] border-[#00c076]/50'
+                    ? 'bg-[#00c076]/20 text-[#00c076] border-[#00c076]/50 shadow-xs'
                     : 'bg-[#181a20] text-zinc-400 hover:text-zinc-200 border-white/10'
                 }`}
               >
                 {lev}x
               </button>
             ))}
+          </div>
+
+          {/* Custom Leverage Range Slider */}
+          <div className="flex items-center gap-2 pt-0.5">
+            <input
+              type="range"
+              min="1"
+              max="200"
+              value={leverage}
+              onChange={(e) => setLeverage(Number(e.target.value))}
+              className="w-full accent-[#00c076] cursor-pointer h-1 bg-[#0d1117] rounded"
+            />
           </div>
         </div>
       )}

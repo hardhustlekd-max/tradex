@@ -46,13 +46,18 @@ export const OrderForm: React.FC<OrderFormProps> = ({
   const [amountInput, setAmountInput] = useState<string>('');
   const [sliderPct, setSliderPct] = useState<number>(0);
 
+  const [lastSymbol, setLastSymbol] = useState(activePair.symbol);
+
   useEffect(() => {
     if (selectedPrice !== null) {
       setPriceInput(selectedPrice.toFixed(activePair.precision));
-    } else {
+    } else if (activePair.symbol !== lastSymbol) {
+      setPriceInput(activePair.price.toFixed(activePair.precision));
+      setLastSymbol(activePair.symbol);
+    } else if (!priceInput) {
       setPriceInput(activePair.price.toFixed(activePair.precision));
     }
-  }, [selectedPrice, activePair]);
+  }, [selectedPrice, activePair.symbol, activePair.precision]);
 
   const priceNum = parseFloat(priceInput) || activePair.price;
   const amountNum = parseFloat(amountInput) || 0;
@@ -288,8 +293,10 @@ export const OrderForm: React.FC<OrderFormProps> = ({
               </div>
             ) : (
               <div className="bg-[#181a20] border border-white/10 rounded-lg px-2 flex flex-col justify-center text-center h-10">
-                <div className="text-[9px] text-zinc-400 font-sans">Price</div>
-                <div className="text-xs font-bold text-zinc-400 font-sans truncate">Market Best</div>
+                <div className="text-[9px] text-zinc-400 font-sans">Market Price</div>
+                <div className="text-xs font-bold text-[#00c076] font-sans truncate">
+                  ${activePair.price.toFixed(activePair.precision)}
+                </div>
               </div>
             )}
           </div>

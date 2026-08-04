@@ -194,11 +194,14 @@ export function calculateLiquidationPrice(
 
 // Calculate Total Portfolio Equity
 export function calculateTotalEquity(
-  portfolio: { usdtBalance: number; spotBalances: Record<string, number> },
+  portfolio: { usdtBalance: number; fundingUsdt?: number; copyUsdt?: number; earnUsdt?: number; spotBalances: Record<string, number> },
   positions: Array<{ margin: number; pnl: number }>,
   pairs: Array<{ baseAsset: string; quoteAsset: string; price: number }>
 ): number {
   const usdtCash = portfolio.usdtBalance || 0;
+  const fundingCash = portfolio.fundingUsdt || 0;
+  const copyCash = portfolio.copyUsdt || 0;
+  const earnCash = portfolio.earnUsdt || 0;
   const lockedMargin = positions.reduce((acc, pos) => acc + (pos.margin || 0), 0);
   const unrealizedPnl = positions.reduce((acc, pos) => acc + (pos.pnl || 0), 0);
 
@@ -207,12 +210,16 @@ export function calculateTotalEquity(
     Object.entries(portfolio.spotBalances).forEach(([asset, val]) => {
       const amount = Number(val) || 0;
       if (amount > 0) {
-        const pair = pairs.find((p) => p.baseAsset === asset && p.quoteAsset === 'USDT');
-        const price = pair ? pair.price : 0;
-        spotValue += amount * price;
+        if (asset === 'USDT') {
+          spotValue += amount;
+        } else {
+          const pair = pairs.find((p) => p.baseAsset === asset && p.quoteAsset === 'USDT');
+          const price = pair ? pair.price : (asset === 'BTC' ? 69870 : asset === 'ETH' ? 3500 : asset === 'SOL' ? 220 : 1.0);
+          spotValue += amount * price;
+        }
       }
     });
   }
 
-  return usdtCash + lockedMargin + unrealizedPnl + spotValue;
+  return usdtCash + fundingCash + copyCash + earnCash + lockedMargin + unrealizedPnl + spotValue;
 }

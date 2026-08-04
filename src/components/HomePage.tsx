@@ -46,10 +46,30 @@ export const HomePage: React.FC<HomePageProps> = ({
   };
 
   const totalEquity = calculateTotalEquity(portfolio, positions, pairs);
-  const spotBalance = portfolio.usdtBalance || 12456.89;
-  const futuresBalance = positions.reduce((acc, pos) => acc + pos.margin + pos.pnl, 0);
-  const earnBalance = 1250.00;
-  const btcEq = (totalEquity / 69870.50).toFixed(4);
+  const futuresUsdt = portfolio.usdtBalance || 0;
+  const fundingUsdt = portfolio.fundingUsdt || 0;
+  const copyUsdt = portfolio.copyUsdt || 0;
+  const earnUsdt = portfolio.earnUsdt || 0;
+  let spotUsdtVal = 0;
+  if (portfolio.spotBalances) {
+    Object.entries(portfolio.spotBalances).forEach(([asset, val]) => {
+      const amount = Number(val) || 0;
+      if (amount > 0) {
+        if (asset === 'USDT') spotUsdtVal += amount;
+        else {
+          const pair = pairs.find((p) => p.baseAsset === asset && p.quoteAsset === 'USDT');
+          const price = pair ? pair.price : (asset === 'BTC' ? 69870 : asset === 'ETH' ? 3500 : asset === 'SOL' ? 220 : 1.0);
+          spotUsdtVal += amount * price;
+        }
+      }
+    });
+  }
+  const lockedMargin = positions.reduce((acc, pos) => acc + (pos.margin || 0), 0);
+  const unrealizedPnl = positions.reduce((acc, pos) => acc + (pos.pnl || 0), 0);
+  const futuresTotal = futuresUsdt + lockedMargin + unrealizedPnl;
+
+  const btcPrice = pairs.find(p => p.baseAsset === 'BTC')?.price || 69870.50;
+  const btcEq = (totalEquity / btcPrice).toFixed(4);
 
   const assetItems = [
     { base: 'BTC', name: 'Bitcoin', amount: '0.1250 BTC', price: 69870.50, pnl: '+15.89 (1.03%)', iconBg: 'bg-amber-500 text-black' },
@@ -96,17 +116,25 @@ export const HomePage: React.FC<HomePageProps> = ({
           </div>
 
           <div className="text-right text-[11px] text-zinc-300 space-y-1 bg-black/40 px-3 py-2 rounded-xl">
-            <div className="flex justify-between gap-3">
+            <div className="flex justify-between gap-4">
               <span className="text-zinc-400">Spot</span>
-              <span className="font-bold text-white">{spotBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+              <span className="font-bold text-white">{spotUsdtVal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
             </div>
-            <div className="flex justify-between gap-3">
+            <div className="flex justify-between gap-4">
               <span className="text-zinc-400">Futures</span>
-              <span className="font-bold text-white">{futuresBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+              <span className="font-bold text-white">{futuresTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
             </div>
-            <div className="flex justify-between gap-3">
+            <div className="flex justify-between gap-4">
+              <span className="text-zinc-400">Funding</span>
+              <span className="font-bold text-white">{fundingUsdt.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+            </div>
+            <div className="flex justify-between gap-4">
+              <span className="text-zinc-400">Copy</span>
+              <span className="font-bold text-white">{copyUsdt.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+            </div>
+            <div className="flex justify-between gap-4">
               <span className="text-zinc-400">Earn</span>
-              <span className="font-bold text-[#00c076]">{earnBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+              <span className="font-bold text-[#00c076]">{earnUsdt.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
             </div>
           </div>
         </div>

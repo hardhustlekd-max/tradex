@@ -41,6 +41,7 @@ import { AssetsPage } from './components/AssetsPage';
 import { PairSelectorModal } from './components/PairSelectorModal';
 import { FaucetModal } from './components/FaucetModal';
 import { TransferModal } from './components/TransferModal';
+import { InsufficientFundsModal } from './components/InsufficientFundsModal';
 import { TradeModal } from './components/TradeModal';
 import { AiAnalystDrawer } from './components/AiAnalystDrawer';
 import { PriceAlertsModal } from './components/PriceAlertsModal';
@@ -268,6 +269,21 @@ export default function App() {
     initialAsset: 'USDT',
     initialAmount: '',
   });
+  const [insufficientFundsModal, setInsufficientFundsModal] = useState<{
+    isOpen: boolean;
+    requiredAmount: number;
+    currentBalance: number;
+    deficit: number;
+    targetAccount: 'spot' | 'futures' | 'funding' | 'copy' | 'earn';
+    symbol: string;
+  }>({
+    isOpen: false,
+    requiredAmount: 0,
+    currentBalance: 0,
+    deficit: 0,
+    targetAccount: 'futures',
+    symbol: activePair.symbol,
+  });
   const [pendingOrder, setPendingOrder] = useState<{
     mode: TradingMode;
     side: OrderSide;
@@ -278,6 +294,7 @@ export default function App() {
     marginMode: MarginMode;
     takeProfit?: number;
     stopLoss?: number;
+    symbol?: string;
   } | null>(null);
   const [soundEnabled, setSoundEnabled] = useState(true);
 
@@ -659,8 +676,10 @@ export default function App() {
     marginMode: MarginMode;
     takeProfit?: number;
     stopLoss?: number;
+    symbol?: string;
   }, skipBalanceCheck: boolean = false) => {
-    if (transferModal.isOpen) return; // Prevent duplicate transfer modal calls
+    if (!skipBalanceCheck && (transferModal.isOpen || insufficientFundsModal.isOpen)) return; // Prevent duplicate transfer modal calls
+    const orderSymbol = orderData.symbol || activePair.symbol;
     const notional = orderData.price * orderData.amount;
     const requiredMargin = orderData.mode === 'spot' ? notional : notional / orderData.leverage;
 
@@ -671,40 +690,22 @@ export default function App() {
           const availableSpotUSDT = portfolio.spotBalances?.USDT || 0;
           if (availableSpotUSDT < notional) {
             const deficit = notional - availableSpotUSDT;
-            const otherAccounts = [
-              { name: 'futures' as const, bal: portfolio.usdtBalance || 0 },
-              { name: 'funding' as const, bal: portfolio.fundingUsdt || 0 },
-              { name: 'copy' as const, bal: portfolio.copyUsdt || 0 },
-              { name: 'earn' as const, bal: portfolio.earnUsdt || 0 },
-            ];
-            const totalOtherUSDT = otherAccounts.reduce((sum, item) => sum + item.bal, 0);
 
-            if (totalOtherUSDT >= deficit) {
-              // Find account with highest USDT balance
-              const sortedOther = [...otherAccounts].sort((a, b) => b.bal - a.bal);
-              const bestFromAccount = sortedOther[0].name;
+            addNotification(
+              'warning',
+              'Insufficient Spot Balance',
+              `Required: $${notional.toFixed(2)} USDT. Available: $${availableSpotUSDT.toFixed(2)} USDT. Please transfer funds.`
+            );
 
-              addNotification(
-                'warning',
-                'Low Spot Wallet Balance',
-                `Required: $${notional.toFixed(2)} USDT. You only have $${availableSpotUSDT.toFixed(2)} USDT in Spot. Pre-filling transfer of $${deficit.toFixed(2)} USDT to Spot Wallet.`
-              );
-
-              setPendingOrder(orderData);
-              setTransferModal({
-                isOpen: true,
-                initialFrom: bestFromAccount,
-                initialTo: 'spot',
-                initialAsset: 'USDT',
-                initialAmount: deficit.toFixed(2),
-              });
-            } else {
-              addNotification(
-                'error',
-                'Insufficient Total Balance',
-                `Required: $${notional.toFixed(2)} USDT. Total USDT across all wallets is $${(availableSpotUSDT + totalOtherUSDT).toFixed(2)}. Please claim via Faucet.`
-              );
-            }
+            setPendingOrder({ ...orderData, symbol: orderSymbol });
+            setInsufficientFundsModal({
+              isOpen: true,
+              requiredAmount: notional,
+              currentBalance: availableSpotUSDT,
+              deficit,
+              targetAccount: 'spot',
+              symbol: orderSymbol,
+            });
             return;
           }
         } else {
@@ -723,39 +724,22 @@ export default function App() {
         const availableFuturesUSDT = portfolio.usdtBalance || 0;
         if (availableFuturesUSDT < requiredMargin) {
           const deficit = requiredMargin - availableFuturesUSDT;
-          const otherAccounts = [
-            { name: 'spot' as const, bal: portfolio.spotBalances?.USDT || 0 },
-            { name: 'funding' as const, bal: portfolio.fundingUsdt || 0 },
-            { name: 'copy' as const, bal: portfolio.copyUsdt || 0 },
-            { name: 'earn' as const, bal: portfolio.earnUsdt || 0 },
-          ];
-          const totalOtherUSDT = otherAccounts.reduce((sum, item) => sum + item.bal, 0);
 
-          if (totalOtherUSDT >= deficit) {
-            const sortedOther = [...otherAccounts].sort((a, b) => b.bal - a.bal);
-            const bestFromAccount = sortedOther[0].name;
+          addNotification(
+            'warning',
+            'Insufficient Margin Balance',
+            `Required Margin: $${requiredMargin.toFixed(2)} USDT. Available: $${availableFuturesUSDT.toFixed(2)} USDT. Please transfer funds.`
+          );
 
-            addNotification(
-              'warning',
-              'Low Futures Margin Balance',
-              `Required: $${requiredMargin.toFixed(2)} USDT. You only have $${availableFuturesUSDT.toFixed(2)} USDT in Futures. Pre-filling transfer of $${deficit.toFixed(2)} USDT to Futures Account.`
-            );
-
-            setPendingOrder(orderData);
-            setTransferModal({
-              isOpen: true,
-              initialFrom: bestFromAccount,
-              initialTo: 'futures',
-              initialAsset: 'USDT',
-              initialAmount: deficit.toFixed(2),
-            });
-          } else {
-            addNotification(
-              'error',
-              'Insufficient Total Balance',
-              `Required Margin: $${requiredMargin.toFixed(2)} USDT. Total USDT across all wallets is $${(availableFuturesUSDT + totalOtherUSDT).toFixed(2)}. Please claim via Faucet.`
-            );
-          }
+          setPendingOrder({ ...orderData, symbol: orderSymbol });
+          setInsufficientFundsModal({
+            isOpen: true,
+            requiredAmount: requiredMargin,
+            currentBalance: availableFuturesUSDT,
+            deficit,
+            targetAccount: 'futures',
+            symbol: orderSymbol,
+          });
           return;
         }
       }
@@ -1135,12 +1119,85 @@ export default function App() {
     addNotification('success', 'Transfer Completed', `Transferred ${amount} ${asset} from ${fromAcc.toUpperCase()} to ${toAcc.toUpperCase()}`);
 
     // Auto-execute pending order if user was prompted to transfer margin for order placement
-    if (pendingOrder) {
+    if (pendingOrder && !insufficientFundsModal.isOpen) {
       const targetOrder = pendingOrder;
       setPendingOrder(null);
       setTimeout(() => {
         handleSubmitOrder(targetOrder, true);
       }, 150);
+    }
+  };
+
+  const handleInsufficientTransferAndExecute = (
+    fromAcc: string,
+    toAcc: string,
+    asset: string,
+    amount: number
+  ) => {
+    handleTransferAsset(fromAcc, toAcc, asset, amount);
+
+    if (pendingOrder) {
+      const targetOrder = { ...pendingOrder };
+      setPendingOrder(null);
+      setInsufficientFundsModal((prev) => ({ ...prev, isOpen: false }));
+      setIsTradeModalOpen(false);
+
+      setTimeout(() => {
+        handleSubmitOrder(targetOrder, true);
+
+        // Route user to positions tab
+        setActiveDockTab('futures');
+        setMobileTab('trades');
+
+        setTimeout(() => {
+          const posElement = document.getElementById('positions-section');
+          if (posElement) {
+            posElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+        }, 150);
+      }, 100);
+    }
+  };
+
+  const handleInsufficientFaucetAndExecute = (refillAmount: number) => {
+    const targetAcc = insufficientFundsModal.targetAccount;
+    setPortfolio((prev) => {
+      const next = { ...prev };
+      if (targetAcc === 'futures') {
+        next.usdtBalance = (next.usdtBalance || 0) + refillAmount;
+      } else if (targetAcc === 'spot') {
+        if (!next.spotBalances) next.spotBalances = {};
+        next.spotBalances.USDT = (next.spotBalances.USDT || 0) + refillAmount;
+      } else if (targetAcc === 'funding') {
+        next.fundingUsdt = (next.fundingUsdt || 0) + refillAmount;
+      }
+      localStorage.setItem('tradex_portfolio', JSON.stringify(next));
+      return next;
+    });
+
+    soundFx.playOrderFilled();
+    addNotification('success', 'Testnet Deposit Added', `Added +$${refillAmount.toLocaleString()} USDT to ${targetAcc.toUpperCase()} account`);
+
+    if (pendingOrder) {
+      const targetOrder = { ...pendingOrder };
+      setPendingOrder(null);
+      setInsufficientFundsModal((prev) => ({ ...prev, isOpen: false }));
+      setIsTradeModalOpen(false);
+
+      setTimeout(() => {
+        handleSubmitOrder(targetOrder, true);
+
+        // Route user to positions tab
+        setActiveDockTab('futures');
+        setMobileTab('trades');
+
+        setTimeout(() => {
+          const posElement = document.getElementById('positions-section');
+          if (posElement) {
+            posElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          }
+        }, 150);
+      }, 100);
     }
   };
 
@@ -1457,6 +1514,20 @@ export default function App() {
         initialAsset={transferModal.initialAsset}
         initialAmount={transferModal.initialAmount}
         onTransferAsset={handleTransferAsset}
+      />
+
+      <InsufficientFundsModal
+        isOpen={insufficientFundsModal.isOpen}
+        onClose={() => setInsufficientFundsModal((prev) => ({ ...prev, isOpen: false }))}
+        portfolio={portfolio}
+        pendingOrder={pendingOrder}
+        requiredAmount={insufficientFundsModal.requiredAmount}
+        currentBalance={insufficientFundsModal.currentBalance}
+        deficit={insufficientFundsModal.deficit}
+        targetAccount={insufficientFundsModal.targetAccount}
+        symbol={insufficientFundsModal.symbol}
+        onTransferAndExecute={handleInsufficientTransferAndExecute}
+        onFaucetRefillAndExecute={handleInsufficientFaucetAndExecute}
       />
 
       <TradeModal

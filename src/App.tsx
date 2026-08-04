@@ -659,19 +659,72 @@ export default function App() {
     marginMode: MarginMode;
     takeProfit?: number;
     stopLoss?: number;
-  }) => {
+  }, skipBalanceCheck: boolean = false) => {
     if (transferModal.isOpen) return; // Prevent duplicate transfer modal calls
     const notional = orderData.price * orderData.amount;
     const requiredMargin = orderData.mode === 'spot' ? notional : notional / orderData.leverage;
 
     // Specific Account Balance Checking
-    if (orderData.mode === 'spot') {
-      if (orderData.side === 'buy') {
-        const availableSpotUSDT = portfolio.spotBalances?.USDT || 0;
-        if (availableSpotUSDT < notional) {
-          const deficit = notional - availableSpotUSDT;
+    if (!skipBalanceCheck) {
+      if (orderData.mode === 'spot') {
+        if (orderData.side === 'buy') {
+          const availableSpotUSDT = portfolio.spotBalances?.USDT || 0;
+          if (availableSpotUSDT < notional) {
+            const deficit = notional - availableSpotUSDT;
+            const otherAccounts = [
+              { name: 'futures' as const, bal: portfolio.usdtBalance || 0 },
+              { name: 'funding' as const, bal: portfolio.fundingUsdt || 0 },
+              { name: 'copy' as const, bal: portfolio.copyUsdt || 0 },
+              { name: 'earn' as const, bal: portfolio.earnUsdt || 0 },
+            ];
+            const totalOtherUSDT = otherAccounts.reduce((sum, item) => sum + item.bal, 0);
+
+            if (totalOtherUSDT >= deficit) {
+              // Find account with highest USDT balance
+              const sortedOther = [...otherAccounts].sort((a, b) => b.bal - a.bal);
+              const bestFromAccount = sortedOther[0].name;
+
+              addNotification(
+                'warning',
+                'Low Spot Wallet Balance',
+                `Required: $${notional.toFixed(2)} USDT. You only have $${availableSpotUSDT.toFixed(2)} USDT in Spot. Pre-filling transfer of $${deficit.toFixed(2)} USDT to Spot Wallet.`
+              );
+
+              setPendingOrder(orderData);
+              setTransferModal({
+                isOpen: true,
+                initialFrom: bestFromAccount,
+                initialTo: 'spot',
+                initialAsset: 'USDT',
+                initialAmount: deficit.toFixed(2),
+              });
+            } else {
+              addNotification(
+                'error',
+                'Insufficient Total Balance',
+                `Required: $${notional.toFixed(2)} USDT. Total USDT across all wallets is $${(availableSpotUSDT + totalOtherUSDT).toFixed(2)}. Please claim via Faucet.`
+              );
+            }
+            return;
+          }
+        } else {
+          // Spot Sell: Check base asset
+          const availableBaseAsset = portfolio.spotBalances?.[activePair.baseAsset] || 0;
+          if (availableBaseAsset < orderData.amount) {
+            addNotification(
+              'error',
+              'Insufficient Base Asset',
+              `You do not have enough ${activePair.baseAsset} to sell. Available: ${availableBaseAsset.toFixed(4)}, Required: ${orderData.amount.toFixed(4)}.`
+            );
+            return;
+          }
+        }
+      } else if (orderData.mode === 'futures') {
+        const availableFuturesUSDT = portfolio.usdtBalance || 0;
+        if (availableFuturesUSDT < requiredMargin) {
+          const deficit = requiredMargin - availableFuturesUSDT;
           const otherAccounts = [
-            { name: 'futures' as const, bal: portfolio.usdtBalance || 0 },
+            { name: 'spot' as const, bal: portfolio.spotBalances?.USDT || 0 },
             { name: 'funding' as const, bal: portfolio.fundingUsdt || 0 },
             { name: 'copy' as const, bal: portfolio.copyUsdt || 0 },
             { name: 'earn' as const, bal: portfolio.earnUsdt || 0 },
@@ -679,21 +732,20 @@ export default function App() {
           const totalOtherUSDT = otherAccounts.reduce((sum, item) => sum + item.bal, 0);
 
           if (totalOtherUSDT >= deficit) {
-            // Find account with highest USDT balance
             const sortedOther = [...otherAccounts].sort((a, b) => b.bal - a.bal);
             const bestFromAccount = sortedOther[0].name;
 
             addNotification(
               'warning',
-              'Low Spot Wallet Balance',
-              `Required: $${notional.toFixed(2)} USDT. You only have $${availableSpotUSDT.toFixed(2)} USDT in Spot. Pre-filling transfer of $${deficit.toFixed(2)} USDT to Spot Wallet.`
+              'Low Futures Margin Balance',
+              `Required: $${requiredMargin.toFixed(2)} USDT. You only have $${availableFuturesUSDT.toFixed(2)} USDT in Futures. Pre-filling transfer of $${deficit.toFixed(2)} USDT to Futures Account.`
             );
 
             setPendingOrder(orderData);
             setTransferModal({
               isOpen: true,
               initialFrom: bestFromAccount,
-              initialTo: 'spot',
+              initialTo: 'futures',
               initialAsset: 'USDT',
               initialAmount: deficit.toFixed(2),
             });
@@ -701,61 +753,11 @@ export default function App() {
             addNotification(
               'error',
               'Insufficient Total Balance',
-              `Required: $${notional.toFixed(2)} USDT. Total USDT across all wallets is $${(availableSpotUSDT + totalOtherUSDT).toFixed(2)}. Please claim via Faucet.`
+              `Required Margin: $${requiredMargin.toFixed(2)} USDT. Total USDT across all wallets is $${(availableFuturesUSDT + totalOtherUSDT).toFixed(2)}. Please claim via Faucet.`
             );
           }
           return;
         }
-      } else {
-        // Spot Sell: Check base asset
-        const availableBaseAsset = portfolio.spotBalances?.[activePair.baseAsset] || 0;
-        if (availableBaseAsset < orderData.amount) {
-          addNotification(
-            'error',
-            'Insufficient Base Asset',
-            `You do not have enough ${activePair.baseAsset} to sell. Available: ${availableBaseAsset.toFixed(4)}, Required: ${orderData.amount.toFixed(4)}.`
-          );
-          return;
-        }
-      }
-    } else if (orderData.mode === 'futures') {
-      const availableFuturesUSDT = portfolio.usdtBalance || 0;
-      if (availableFuturesUSDT < requiredMargin) {
-        const deficit = requiredMargin - availableFuturesUSDT;
-        const otherAccounts = [
-          { name: 'spot' as const, bal: portfolio.spotBalances?.USDT || 0 },
-          { name: 'funding' as const, bal: portfolio.fundingUsdt || 0 },
-          { name: 'copy' as const, bal: portfolio.copyUsdt || 0 },
-          { name: 'earn' as const, bal: portfolio.earnUsdt || 0 },
-        ];
-        const totalOtherUSDT = otherAccounts.reduce((sum, item) => sum + item.bal, 0);
-
-        if (totalOtherUSDT >= deficit) {
-          const sortedOther = [...otherAccounts].sort((a, b) => b.bal - a.bal);
-          const bestFromAccount = sortedOther[0].name;
-
-          addNotification(
-            'warning',
-            'Low Futures Margin Balance',
-            `Required: $${requiredMargin.toFixed(2)} USDT. You only have $${availableFuturesUSDT.toFixed(2)} USDT in Futures. Pre-filling transfer of $${deficit.toFixed(2)} USDT to Futures Account.`
-          );
-
-          setPendingOrder(orderData);
-          setTransferModal({
-            isOpen: true,
-            initialFrom: bestFromAccount,
-            initialTo: 'futures',
-            initialAsset: 'USDT',
-            initialAmount: deficit.toFixed(2),
-          });
-        } else {
-          addNotification(
-            'error',
-            'Insufficient Total Balance',
-            `Required Margin: $${requiredMargin.toFixed(2)} USDT. Total USDT across all wallets is $${(availableFuturesUSDT + totalOtherUSDT).toFixed(2)}. Please claim via Faucet.`
-          );
-        }
-        return;
       }
     }
 
@@ -1137,7 +1139,7 @@ export default function App() {
       const targetOrder = pendingOrder;
       setPendingOrder(null);
       setTimeout(() => {
-        handleSubmitOrder(targetOrder);
+        handleSubmitOrder(targetOrder, true);
       }, 150);
     }
   };
